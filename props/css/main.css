@@ -2,9 +2,9 @@
 /* No media query for `xs` since this is the default in Bootstrap */
 
 /* Small devices (landscape phones, 576px and up) */
-@media (min-width: 1440px) {
+@media (min-width: 1200px) and (max-width: 1440px) {
 	.servants hr {
-		margin: auto 35.4%;
+		margin: auto 370px;
 		margin-top: 3px;
 	}
 
@@ -28,8 +28,8 @@
 	}
 
 	.schedule-panel {
-		padding-left: 110px;
-		padding-right: 110px;
+		padding-left: 20px;
+		padding-right: 20px;
 	}
 
 	.bullet {
@@ -37,7 +37,7 @@
 	}
 
 	.info-loc hr {
-		margin: 5px 90px;
+		margin: 5px 48px;
 	}
 
 	.address p {
@@ -53,20 +53,22 @@
 	}
 
 	.info-sess hr {
-		margin: 0 90px;
+		margin: 0 48px;
 	}
 
 	.social-medias {
-		margin: 5px 155px;
+		margin: 5px 110px;
 	}
 
 	.youtube {
 		font-size: 12px;
+		padding-top: 3px;
 	}
 
 	.facebook {
 		font-size: 12px;
 		padding-right: 0;
+		padding-top: 3px;
 	}
 
 	.via-text {
@@ -80,7 +82,7 @@
 	}
 }
 
-@media (max-width: 1024px) {
+@media (min-width: 992px) and (max-width: 1199px) {
 	.schedule-panel .schedule {
 		padding-left: 200px;
 	}
@@ -109,6 +111,10 @@
 		margin: 5px 0px;
 	}
 
+	.servants hr {
+		margin: auto 278px;
+	}
+
 	.address p {
 		font-size: 12.4px;
 	}
@@ -122,7 +128,7 @@
 	}
 
 	.info-sess hr {
-		margin: 0 45px;
+		margin: 5px 0px;
 	}
 
 	.social-medias {
@@ -150,7 +156,7 @@
 }
 
 /* Medium devices (tablets, 768px and up) */
-@media (max-width: 768px) {
+@media (min-width: 768px) and (max-width: 991px) {
 	.invite-fnt {
 		font-size: 14px !important;
 		margin-bottom: 10px !important;
@@ -249,7 +255,7 @@
 	}
 }
 
-@media (max-width: 425px) {
+@media (min-width: 425px) and (max-width: 767px) {
 	.invite-fnt {
 		font-size: 14px !important;
 		margin-bottom: 10px !important;
@@ -260,7 +266,7 @@
 	}
 
 	.arial-fnt {
-		font-size: 28px;
+		font-size: 26px;
 		transform: scale(1, 0.8);
 	}
 
@@ -328,15 +334,18 @@
 
 	.youtube {
 		font-size: 9px;
+		padding-top: 3px;
 	}
 
 	.facebook {
 		font-size: 9px;
+		padding-top: 3px;
+		padding-right: 0px;
 	}
 
 	.via-text {
 		font-size: 10px;
-		padding-top: 5px;
+		padding-top: 3px;
 	}
 
 	.sessions {
@@ -345,7 +354,7 @@
 	}
 }
 
-@media (max-width: 375px) {
+@media (min-width: 375px) and (max-width: 424px) {
 	.invite-fnt {
 		font-size: 12px !important;
 		margin-bottom: 10px !important;
@@ -425,16 +434,19 @@
 	}
 
 	.youtube {
-		font-size: 6px;
+		font-size: 7px;
+		padding-top: 5px;
 	}
 
 	.facebook {
-		font-size: 6px;
+		font-size: 7px;
+		padding-top: 5px;
+		padding-right: 0px;
 	}
 
 	.via-text {
 		font-size: 8px;
-		padding-top: 4px;
+		padding: 4px;
 	}
 
 	.sessions {
@@ -443,7 +455,7 @@
 	}
 }
 
-@media (max-width: 320px) {
+@media (min-width: 320px) and (max-width: 374px) {
 	.invite-fnt {
 		font-size: 10.6px !important;
 		margin-bottom: 5px !important;
@@ -523,74 +535,34 @@
 	}
 
 	.youtube {
-		font-size: 6px;
-		padding-top: 7px;
+		font-size: 5px;
+		padding-top: 3px;
 	}
 
 	.facebook {
-		font-size: 6px;
-		padding-top: 7px;
-		padding-right: 5px;
+		font-size: 5px;
+		padding-top: 3px;
+		padding-right: 0px;
 	}
 
 	.via-text {
-		font-size: 8px;
-		padding-top: 5px;
+		font-size: 6px;
+		padding-top: 3px;
 	}
 
 	.sessions {
 		font-size: 6.7px;
 		margin-top: 6px;
 	}
+
+	#session-day,
+	#countdown {
+		font-size: 11px;
+	}
 }
 
 /* Large devices (desktops, 992px and up) */
 @media (min-width: 992px) {}
-
-/* X-Large devices (large desktops, 1200px and up) */
-@media (min-width: 1025px) and (max-width: 1119px) {
-	.schedule-panel {
-		padding-left: 255px;
-		padding-right: 255px;
-	}
-
-	.servants hr {
-		margin: auto 280px;
-	}
-	
-	.address {
-		font-size: 12.5px;
-	}
-
-	.sessions {
-		font-size: 12.5px;
-	}
-
-	.info-loc hr {
-		margin: 5px 0px;
-	}
-
-	.social-medias {
-		margin: 5px 70px;
-	}
-
-	.via-text {
-		font-size: 13px;
-	}
-
-	.youtube {
-		font-size: 11px;
-	}
-
-	.facebook {
-		font-size: 11px;
-		padding-right: 0px;
-	}
-
-	.info-sess hr {
-		margin: 0;
-	}
-}
 
 /* XX-Large devices (larger desktops, 1400px and up) */
 @media (min-width: 1400px) {}

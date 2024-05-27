@@ -1,0 +1,344 @@
+
+@media (min-width: 1025px) and (max-width: 1119px) {
+	.schedule-panel {
+		padding-left: 255px;
+		padding-right: 255px;
+	}
+
+	.servants hr {
+		margin: auto 280px;
+	}
+	
+	.address {
+		font-size: 12.5px;
+	}
+
+	.sessions {
+		font-size: 12.5px;
+	}
+
+	.info-loc hr {
+		margin: 5px 0px;
+	}
+
+	.social-medias {
+		margin: 5px 70px;
+	}
+
+	.via-text {
+		font-size: 13px;
+	}
+
+	.youtube {
+		font-size: 11px;
+	}
+
+	.facebook {
+		font-size: 11px;
+		padding-right: 0px;
+	}
+
+	.info-sess hr {
+		margin: 0;
+	}
+}
+
+@media (min-width: 412px) and (max-width: 424px) {
+	.invite-fnt {
+		font-size: 10.6px !important;
+		margin-bottom: 5px !important;
+	}
+
+	.times-font {
+		font-size: 65px;
+		line-height: 0.8;
+		margin-bottom: 5px !important;
+	}
+
+	.arial-fnt {
+		font-size: 21px;
+		margin-bottom: 5px !important;
+	}
+
+	.servants {
+		font-size: 8.3px;
+		transform: scale(1.2, 1);
+	}
+
+	.servants hr {
+		margin: 3px 101px;
+	}
+
+	.schedule-panel .schedule .small {
+		vertical-align: 7px !important;
+	}
+
+	.schedule-panel .schedule {
+		padding-left: 16px !important;
+	}
+
+	.schedule-panel .daytime {
+		font-size: 11.5px;
+		padding-right: 16px !important;
+	}
+
+	.date-value {
+		font-size: 10px;
+		margin: auto 5px;
+		vertical-align: 0px;
+	}
+
+	.schedule-panel {
+		padding-left: 78px;
+		padding-right: 78px;
+	}
+
+	.bullet {
+		font-size: 1rem;
+	}
+
+	.info-loc hr {
+		margin: 0px 82px 2px;
+	}
+
+	.address p {
+		font-size: 6.4px;
+	}
+
+	.locale {
+		font-size: 9px;
+	}
+
+	.muzon {
+		font-size: 12px;
+	}
+
+	.info-sess hr {
+		margin: -5px 82px;
+	}
+
+	.social-medias {
+		margin: 0px 115px;
+	}
+
+	.youtube {
+		font-size: 6px;
+		padding-top: 5px;
+	}
+
+	.facebook {
+		font-size: 6px;
+		padding-top: 5px;
+		padding-right: 5px;
+	}
+
+	.via-text {
+		font-size: 7px;
+		padding-top: 3px;
+	}
+
+	.sessions {
+		font-size: 6.7px;
+		margin-top: 6px;
+	}
+
+	#session-day, #countdown {
+		font-size: 11px;
+	}
+}
+
+@media (min-width: 425px) and (max-width: 767px) {
+	.invite-fnt {
+		font-size: 14px !important;
+		margin-bottom: 10px !important;
+	}
+
+	.times-font {
+		font-size: 90px;
+	}
+
+	.arial-fnt {
+		font-size: 28px;
+		transform: scale(1, 0.8);
+	}
+
+	.servants {
+		font-size: 12px;
+		transform: scale(1.23, 1.23);
+	}
+
+	.servants hr {
+		margin: auto 115px;
+		margin-top: 3px;
+	}
+
+	.schedule-panel .schedule .small {
+		vertical-align: 1px !important;
+	}
+
+	.schedule-panel .schedule {
+		padding-left: 3px !important;
+	}
+
+	.schedule-panel .daytime {
+		font-size: 17px;
+		padding-right: 3px !important;
+	}
+
+	.date-value {
+		font-size: 12px;
+		margin: auto 25px;
+		vertical-align: 0px;
+	}
+
+	.schedule-panel {
+		padding-left: 93px;
+		padding-right: 93px;
+	}
+
+	.bullet {
+		font-size: 1rem;
+	}
+
+	.info-loc hr {
+		margin: 5px 82px;
+	}
+
+	.address p {
+		font-size: 9.6px;
+	}
+
+	.locale {
+		font-size: 14.5px;
+	}
+
+	.muzon {
+		font-size: 17px;
+	}
+
+	.info-sess hr {
+		margin: 0 82px;
+	}
+
+	.social-medias {
+		margin: 5px 130px;
+	}
+
+	.youtube {
+		font-size: 10px;
+	}
+
+	.facebook {
+		font-size: 10px;
+	}
+
+	.via-text {
+		font-size: 10px;
+		padding-top: 3px;
+	}
+
+	.sessions {
+		font-size: 10px;
+		margin-top: 5px;
+	}
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+	.invite-fnt {
+		font-size: 14px !important;
+		margin-bottom: 10px !important;
+	}
+
+	.times-font {
+		font-size: 90px;
+	}
+
+	.arial-fnt {
+		font-size: 28px;
+		transform: scale(1, 0.8);
+	}
+
+	.servants {
+		font-size: 12px;
+		transform: scale(1.24, 1.24);
+	}
+
+	.servants hr {
+		margin: auto 29.6%;
+		margin-top: 3px;
+	}
+
+	.schedule-panel .schedule .small {
+		vertical-align: 1px !important;
+	}
+
+	.schedule-panel .schedule {
+		padding-left: 140px !important;
+	}
+
+	.schedule-panel .daytime {
+		font-size: 17.3px;
+		padding-right: 140px !important;
+	}
+
+	.date-value {
+		font-size: 13px;
+		margin: auto 25px;
+		vertical-align: 0px;
+	}
+
+	.schedule-panel {
+		padding-left: 45px;
+		padding-right: 45px;
+	}
+
+	.bullet {
+		font-size: 1rem;
+	}
+
+	.info-loc hr {
+		margin: 5px -9px;
+	}
+
+	.address p {
+		font-size: 9.5px;
+	}
+
+	.locale {
+		font-size: 14px;
+	}
+
+	.muzon {
+		font-size: 17.3px;
+	}
+
+	.info-sess hr {
+		margin: 0 -9px;
+	}
+
+	.social-medias {
+		margin: 5px 42px;
+	}
+
+	.youtube {
+		font-size: 9px;
+		padding-top: 6px;
+	}
+
+	.facebook {
+		font-size: 9px;
+		padding-top: 6px;
+		padding-right: 5px;
+	}
+
+	.via-text {
+		font-size: 10px;
+		padding: 5px;
+	}
+
+	.sessions {
+		font-size: 10px;
+		margin-top: 6px;
+	}
+
+}
