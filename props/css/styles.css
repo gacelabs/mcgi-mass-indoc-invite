@@ -1,0 +1,207 @@
+p {
+	margin-bottom: 10px !important;
+}
+
+.invite-fnt {
+	line-height: 0.7;
+	margin-bottom: 15px !important;
+	font-weight: 500;
+	font-size: 19px;
+}
+
+.times-font {
+	font-family: 'Times New Roman', Times, serif;
+	font-size: 115px;
+	line-height: 0.7;
+	font-weight: bold;
+	color: navy;
+	background-color: navy;
+	background-image: linear-gradient(170deg, #4a4aa5, navy);
+	background-size: 100%;
+	background-repeat: no-repeat;
+	background-clip: text;
+	-webkit-text-fill-color: transparent;
+	-moz-background-clip: text;
+	-moz-text-fill-color: transparent;
+}
+
+.arial-fnt {
+	font-size: 40px;
+	font-weight: bolder;
+	transform: scale(0.9, 0.8);
+	line-height: 0.8;
+	font-family: Verdana, Geneva, Tahoma, sans-serif;
+	background-color: red;
+	background-image: linear-gradient(255deg, #f3ec78, #ff9300);
+	background-size: 100%;
+	background-repeat: repeat;
+	background-clip: text;
+	-webkit-text-fill-color: transparent;
+	-moz-background-clip: text;
+	-moz-text-fill-color: transparent;
+}
+
+.servants {
+	transform: scale(1.2, 1.2);
+	font-weight: 500;
+	margin-bottom: 5px !important;
+}
+
+.servants hr {
+	margin: auto 368px;
+	width: auto;
+	margin-top: 3px;
+	color: #ff9300;
+}
+
+.hero {
+	background: url('../images/bg.png') center center no-repeat;
+	background-size: cover;
+}
+
+/* .strokeme {
+  color: white;
+  background-color: white;
+  text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff;
+} */
+
+.small {
+	font-size: 8px !important;
+	vertical-align: -3px !important;
+}
+
+.schedule {
+	/* display: inline-block; */
+	float: inline-start;
+}
+
+.daytime {
+	font-size: 21.8px;
+	float: inline-end;
+}
+
+.bullet {
+	color: #ff7c07;
+	font-size: 30px;
+	line-height: 0;
+}
+
+.info-loc hr {
+	margin: 5px 45px;
+}
+
+.address {
+	line-height: 1;
+	font-size: 13.5px;
+}
+
+.address p {
+	margin: 0 !important;
+	font-weight: 500;
+}
+
+.locale {
+	font-weight: 500;
+	font-size: 18.5px;
+}
+
+.muzon {
+	font-weight: bold;
+	font-size: 22.5px;
+}
+
+.info-sess hr {
+	margin: 0 45px;
+}
+
+.sessions {
+	font-size: 14px;
+}
+
+.social-medias {
+	margin: 5px 95px;
+}
+
+.via-text {
+	background: red;
+	color: white;
+	font-weight: 500;
+}
+
+.youtube {
+	background: #000070;
+	color: white;
+	font-size: 12px;
+	padding-top: 2px;
+	padding-right: 0;
+	font-weight: 500;
+}
+
+.facebook {
+	background: #000070;
+	color: white;
+	font-size: 12px;
+	padding-top: 2px;
+	padding-left: 0;
+	font-weight: 500;
+}
+
+.bg-image {
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+}
+
+a {
+	text-decoration: none !important;
+	color: #000070;
+}
+
+.social-medias a {
+	color: white !important;
+}
+
+.date-value {
+	font-size: large;
+	margin: auto 25px;
+	vertical-align: -3px;
+}
+
+.schedule-panel {
+	padding-left: 343px;
+	padding-right: 343px;
+}
+
+#countdown-container {
+	text-align: center;
+	background-color: #3b3f45;
+	padding: 20px;
+	border-radius: 10px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+#countdown {
+	/* font-size: 2em; */
+	margin: 0;
+}
+
+.countdown-segment {
+	display: inline-block;
+	margin: 0 10px;
+}
+
+.countdown-number {
+	font-size: 2.5em;
+	display: block;
+	margin-top: -10px;
+}
+
+.countdown-label {
+	font-size: 0.8em;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+}

@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>MCGI MASS INDOCTRINATION</title>
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+		<link rel="stylesheet" href="props/css/styles.css">
+		<link rel="stylesheet" href="props/css/main.css">
+	</head>
+
+	<body>
+		<main>
+			<section class="page-section position-relative">
+				<img src="props/images/bg.png" alt="Background" class="bg-image">
+				<div class="container position-relative" style="z-index: 1;">
+					<div class="row text-center pt-5">
+						<p class="invite-fnt">We cordially invite you to attend our</p>
+						<p class="times-font">MCGI</p>
+						<p class="arial-fnt strokeme">MASS INDOCTRINATION</p>
+						<div class="servants">WITH BRO. ELI SORIANO AND BRO. DANIEL RAZON<hr></div>
+					</div>
+					<div class="row justify-content-center fw-bold">
+						<div class="col-lg-12 col-md-12 col-sm-12 schedule-panel">
+							<div class="schedule">
+								<small class="small">DATE: <span class="date-value">&nbsp;</span></small>
+							</div>
+							<div class="text-end daytime">
+								<span class="bullet">•</span> <span class="weekday">MONDAY</span> <span class="bullet">•</span> 7 PM PHT
+							</div>
+						</div>
+					</div>
+					<div class="row text-center">
+						<div class="col-md-6 offset-md-3 info-loc">
+							<hr>
+							<address class="address">
+								<span class="locale">LOCALE OF</span> <span class="muzon">MUZON</span>
+								<p>SITIO 40 MUZONVILLE, BRGY MUZON SJDM BULACAN</p>
+								<p>CONTACT #: 0942 008 7231</p>
+							</address>
+						</div>
+					</div>
+					<div class="row text-center">
+						<div class="col-md-6 offset-md-3 info-sess">
+							<hr>
+							<div class="sessions">
+								Watch all nightly sessions on <a href="https://www.youtube.com/@MCGIChannel" target="_blank"><strong><a href="https://www.youtube.com/@MCGIChannel" target="_blank">MCGI Channel</strong></a> on YouTube <br>
+								and our official social media pages.
+							</div>
+							<div class="row social-medias">
+								<div class="col via-text">STREAM VIA</div>
+								<div class="col youtube"><a href="https://www.youtube.com/@MCGIChannel" target="_blank"><i class="fab fa-youtube"></i> MCGIChannel</a></div>
+								<div class="col facebook"><a href="https://www.facebook.com/MCGI.org" target="_blank"><i class="fab fa-facebook"></i> MCGI.org</a></div>
+							</div>
+						</div>
+					</div>
+					<div class="row text-center pb-5">
+						<div class="text-center" id="session-day"></div>
+						<div id="countdown"></div>
+					</div>
+				</div>
+			</section>
+		</main>
+	</body>
+	<script>
+		window.addEventListener('DOMContentLoaded', setDateEvent);
+
+		function getDaySuffix(day) {
+			if (day >= 11 && day <= 13) {
+				return day + 'th';
+			}
+			switch (day % 10) {
+				case 1: return day + 'st';
+				case 2: return day + 'nd';
+				case 3: return day + 'rd';
+				default: return day + 'th';
+			}
+		}
+
+		function getDayCount(startDate, endDate) {
+			var count = 0;
+			var currentDate = new Date(startDate);
+
+			while (currentDate <= endDate) {
+				var dayOfWeek = currentDate.getDay();
+				if (dayOfWeek !== 6 && dayOfWeek !== 0) { // Exclude Saturday (6) and Sunday (0)
+					count++;
+				}
+				currentDate.setDate(currentDate.getDate() + 1); // Move to the next day
+			}
+
+			// document.getElementById("session-day").innerHTML = '<strong>' + getDaySuffix(count) + ' Session, Started ' + formatDateToFJY(startDate) + '</strong>';
+			document.getElementById("session-day").innerHTML = '<strong>Day ' + count + ', Started ' + formatDateToFJY(startDate) + '</strong>';
+		}
+
+		function addDaysToDate(date, days) {
+			var result = new Date(date);
+			result.setDate(result.getDate() + days);
+			return result;
+		}
+
+		function formatDateToFJY(date) {
+			var options = { month: 'short', day: 'numeric', year: 'numeric'/* , weekday: 'long' */ };
+			return new Intl.DateTimeFormat('en-US', options).format(date);
+		}
+
+		function countMonths(startDate) {
+			var today = new Date();
+			var start = new Date(startDate);
+
+			var startYear = start.getFullYear();
+			var startMonth = start.getMonth();
+
+			var todayYear = today.getFullYear();
+			var todayMonth = today.getMonth();
+
+			var monthsDifference = (todayYear - startYear) * 12 + (todayMonth - startMonth);
+
+			return monthsDifference;
+		}
+
+		function addDotAfterThirdCharacter(str) {
+			return str.slice(0, 3) + '.' + str.slice(3);
+		}
+
+		function startCountdown(startDate) {
+			var now = new Date();
+			var start = new Date(startDate);
+			var pass = now > start;
+			var end;
+
+			if (pass) {
+				// If the start date is in the future, set the countdown to 7 PM on the start date
+				end = new Date(now);
+				end.setHours(19, 0, 0, 0);
+			} else {
+				// If the start date is in the past or today, set the countdown to 8 days from the start date
+				end = new Date(start.getTime() + 8 * 24 * 60 * 60 * 1000); // Add 8 days to start date
+			}
+
+			function updateCountdown() {
+				var now = new Date().getTime();
+				var distance = end - now;
+
+				if (distance < 0) {
+					document.getElementById("countdown").innerHTML = "Countdown has ended.";
+					clearInterval(interval);
+					return;
+				}
+
+				var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+				var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+				var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+				var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+				if (pass) {
+					if (hours != 0 && minutes != 0 && seconds != 0) {
+						getDayCount(start, end);
+						document.getElementById("countdown").innerHTML =
+						`<div class="countdown-segment"><span class="countdown-label">Hours</span><span class="countdown-number">${hours}</span></div>` +
+						`<div class="countdown-segment"><span class="countdown-label">Minutes</span><span class="countdown-number">${minutes}</span></div>` +
+						`<div class="countdown-segment"><span class="countdown-label">Seconds</span><span class="countdown-number">${seconds}</span></div>` +
+						`<div style="margin-top: -10px;"><span class="countdown-label">Hour(s) to go</span></div>`;
+					}
+				} else {
+					if (days != 0 && hours != 0 && minutes != 0 && seconds != 0) {
+						document.getElementById("countdown").innerHTML =
+						`<div class="countdown-segment"><span class="countdown-label">Days</span><span class="countdown-number">${days}</span></div>` +
+						`<div class="countdown-segment"><span class="countdown-label">Hours</span><span class="countdown-number">${hours}</span></div>` +
+						`<div class="countdown-segment"><span class="countdown-label">Minutes</span><span class="countdown-number">${minutes}</span></div>` +
+						`<div class="countdown-segment"><span class="countdown-label">Seconds</span><span class="countdown-number">${seconds}</span></div>` +
+						`<div style="margin-top: -10px;"><span class="countdown-label">Day(s) to go</span></div>`;
+					}
+				}
+
+			}
+
+			// updateCountdown();
+			var interval = setInterval(updateCountdown, 1000);
+		}
+
+		function setDateEvent() {
+			var sStringData = '05/20/2024';
+			var monthsCount = countMonths(sStringData);
+			// var monthsCount = 2;
+			var givenDate = new Date(sStringData);
+			var options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+			sStringData = new Intl.DateTimeFormat('en-US', options).format(givenDate);
+			// console.log(sStringData);
+
+			if (monthsCount) {
+				for (let index = 0; index < monthsCount; index++) {
+					var givenDate = new Date(sStringData);
+					var dateAfter28Days = addDaysToDate(givenDate, 28);
+					sStringData = new Intl.DateTimeFormat('en-US', options).format(dateAfter28Days);
+				}
+			}
+			var start = new Date(sStringData);
+			var formattedDate = formatDateToFJY(start);
+			// console.log(start, formattedDate);
+			var dateTextContent = formattedDate;
+			if (start.getMonth() != 4) {
+				dateTextContent = addDotAfterThirdCharacter(formattedDate);
+			}
+
+			var now = new Date();
+			var pass = now > start;
+			if (pass) {
+				document.getElementsByClassName('weekday')[0].textContent = new Intl.DateTimeFormat('en-US', { weekday: 'long' }).format(now);
+				var formattedDate = formatDateToFJY(now);
+				var dateTextContent = formattedDate;
+				if (start.getMonth() != 4) {
+					dateTextContent = addDotAfterThirdCharacter(formattedDate);
+				}
+			}
+
+			document.getElementsByClassName('date-value')[0].textContent = dateTextContent;
+			startCountdown(sStringData);
+		}
+	</script>
+
+	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
+</html>
