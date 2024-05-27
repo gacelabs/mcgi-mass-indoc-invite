@@ -202,7 +202,7 @@ function showNotification(title, body, redirectUrl) {
 
 	var options = {
 		body: body,
-		icon: '/props/images/logo.png'
+		icon: '/mcgi-mass-indoc-invite/props/images/logo.png'
 	};
 
 	// Check if the user has granted permission to show notifications
