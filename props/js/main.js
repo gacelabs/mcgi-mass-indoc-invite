@@ -13,7 +13,7 @@ function getDaySuffix(day) {
 	}
 }
 
-function getDayCount(startDate, endDate) {
+function getDayCount(startDate, endDate, bEnded) {
 	var count = 0;
 	var currentDate = new Date(startDate);
 
@@ -26,7 +26,17 @@ function getDayCount(startDate, endDate) {
 	}
 
 	// document.getElementById("session-day").innerHTML = '<strong>' + getDaySuffix(count) + ' Session, Started ' + formatDateToFJY(startDate) + '</strong>';
-	document.getElementById("session-day").innerHTML = '<strong>Day ' + count + ', Started ' + formatDateToFJY(startDate) + '</strong>';
+	if (bEnded) {
+		document.getElementById("session-day").innerHTML = '<strong>Day ' + (count + 1) + ', Tune-in tomorrow</strong>';
+		var nextDay = new Date(new Date().getTime() + 1 * 24 * 60 * 60 * 1000);
+		var formattedDate = formatDateToFJY(nextDay);
+		var dateTextContent = addDotAfterThirdCharacter(formattedDate);
+		document.getElementsByClassName("date-value")[0].textContent = dateTextContent;
+		document.getElementsByClassName('weekday')[0].textContent = new Intl.DateTimeFormat('en-US', { weekday: 'long' }).format(nextDay);
+		startCountdown(nextDay, true);
+	} else {
+		document.getElementById("session-day").innerHTML = '<strong>Day ' + count + ', Started ' + formatDateToFJY(startDate) + '</strong>';
+	}
 }
 
 function addDaysToDate(date, days) {
@@ -59,16 +69,21 @@ function addDotAfterThirdCharacter(str) {
 	return str.slice(0, 3) + '.' + str.slice(3);
 }
 
-function startCountdown(startDate) {
+var notificationShown = false;
+function startCountdown(startDate, bForce) {
 	var now = new Date();
 	var start = new Date(startDate);
 	var pass = now > start;
 	var end;
 	var cnt = 0;
 
-	if (pass) {
-		// If the start date is in the future, set the countdown to 7 PM on the start date
-		end = new Date(now);
+	if (pass || bForce) {
+		if (bForce) {
+			end = new Date(start);
+		} else {
+			// If the start date is in the future, set the countdown to 7 PM on the start date
+			end = new Date(now);
+		}
 		end.setHours(19, 0, 0, 0);
 	} else {
 		// If the start date is in the past or today, set the countdown to 8 days from the start date
@@ -80,9 +95,18 @@ function startCountdown(startDate) {
 		var distance = end - now;
 
 		if (distance < 0) {
-			getDayCount(start, end);
-			document.getElementById("countdown").innerHTML = "On going";
-			clearInterval(interval);
+			// console.log(new Date(now), now, end.getTime(), end);
+			if (now < end.getTime()) {
+				getDayCount(start, end);
+				document.getElementById("countdown").innerHTML = "On going";
+				clearInterval(interval);
+			} else {
+				getDayCount(start, end, true);
+			}
+			if (notificationShown == false) {
+				notificationShown = true;
+				showNotification('Session started', 'Watch via MCGI YouTube Channel', 'https://www.youtube.com/@MCGIChannel');
+			}
 			return;
 		}
 
@@ -91,9 +115,11 @@ function startCountdown(startDate) {
 		var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
 		var seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-		if (pass) {
+		if (pass || bForce) {
 			if (hours != 0 || minutes != 0 || seconds != 0) {
-				getDayCount(start, end);
+				if (bForce == undefined) {
+					getDayCount(start, end);
+				}
 				document.getElementById("countdown").innerHTML =
 					`<div class="countdown-segment"><span class="countdown-label">Hours</span><span class="countdown-number">${hours}</span></div>` +
 					`<div class="countdown-segment"><span class="countdown-label">Minutes</span><span class="countdown-number">${minutes}</span></div>` +
@@ -147,7 +173,7 @@ function setDateEvent() {
 	}
 	var start = new Date(sStringData);
 	var formattedDate = formatDateToFJY(start);
-	console.log(start, formattedDate);
+	// console.log(start, formattedDate);
 	var dateTextContent = formattedDate;
 	if (start.getMonth() != 4) {
 		dateTextContent = addDotAfterThirdCharacter(formattedDate);
@@ -166,4 +192,44 @@ function setDateEvent() {
 
 	document.getElementsByClassName('date-value')[0].textContent = dateTextContent;
 	startCountdown(sStringData);
+}
+
+function showNotification(title, body, redirectUrl) {
+	if (("Notification" in window) == false) {
+		console.error("This browser does not support desktop notification");
+		return;
+	}
+
+	var options = {
+		body: body,
+		icon: '/props/images/logo.png'
+	};
+
+	// Check if the user has granted permission to show notifications
+	if (Notification.permission === "granted") {
+		// If permission is granted, create a notification
+		var notification = new Notification(title, options);
+
+		notification.onclick = function (event) {
+			event.preventDefault(); // Prevent the browser from focusing the Notification's tab
+			window.open(redirectUrl, '_blank');
+			notification.close();
+		};
+
+	} else if (Notification.permission !== "denied") {
+		// If permission has not been denied, request permission
+		Notification.requestPermission().then(function (permission) {
+			if (permission === "granted") {
+				var notification = new Notification(title, options);
+
+				notification.onclick = function (event) {
+					event.preventDefault(); // Prevent the browser from focusing the Notification's tab
+					window.open(redirectUrl, '_blank');
+					notification.close();
+				};
+			}
+		});
+	} else {
+		console.error('Cannot accept Notifications, site must be secured and on HTTPS protocol.');
+	}
 }
