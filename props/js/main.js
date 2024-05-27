@@ -99,13 +99,16 @@ function startCountdown(startDate, bForce) {
 			if (now < end.getTime()) {
 				getDayCount(start, end);
 				document.getElementById("countdown").innerHTML = "On going";
+				var sTitle = 'Session started';
 				clearInterval(interval);
 			} else {
 				getDayCount(start, end, true);
+				var sTitle = 'Tune-in tomorrow';
 			}
+
 			if (notificationShown == false) {
 				notificationShown = true;
-				showNotification('Session started', 'Watch via MCGI YouTube Channel', 'https://www.youtube.com/@MCGIChannel');
+				showNotification(sTitle, 'Watch via MCGI YouTube Channel', 'https://www.youtube.com/@MCGIChannel');
 			}
 			return;
 		}
