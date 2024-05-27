@@ -140,7 +140,7 @@ function startCountdown(startDate, bForce) {
 		cnt++;
 
 		if (cnt == 59) {
-			console.info('reset ram every 60 seconds');
+			// console.info('reset ram every 60 seconds');
 			cnt = 0;
 			clearInterval(interval);
 			interval = setInterval(function () {
