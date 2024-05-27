@@ -3,7 +3,7 @@ p {
 }
 
 .invite-fnt {
-	line-height: 0.7;
+	line-height: 0.8;
 	margin-bottom: 15px !important;
 	font-weight: 500;
 	font-size: 19px;
@@ -12,7 +12,7 @@ p {
 .times-font {
 	font-family: 'Times New Roman', Times, serif;
 	font-size: 115px;
-	line-height: 0.7;
+	line-height: 0.8;
 	font-weight: bold;
 	color: navy;
 	background-color: navy;
@@ -48,9 +48,8 @@ p {
 }
 
 .servants hr {
-	margin: auto 368px;
-	width: auto;
-	margin-top: 3px;
+	width: 380px;
+	margin: 3px;
 	color: #ff9300;
 }
 
@@ -87,12 +86,14 @@ p {
 }
 
 .info-loc hr {
-	margin: 5px 45px;
+	width: 455px;
+	margin: 5px;
 }
 
 .address {
-	line-height: 1;
+	line-height: 1.1;
 	font-size: 13.5px;
+	margin-bottom: 5px;
 }
 
 .address p {
@@ -111,7 +112,8 @@ p {
 }
 
 .info-sess hr {
-	margin: 0 45px;
+	margin: 0;
+	width: 455px;
 }
 
 .sessions {
@@ -119,7 +121,7 @@ p {
 }
 
 .social-medias {
-	margin: 5px 95px;
+	width: 100%;
 }
 
 .via-text {
@@ -172,8 +174,7 @@ a {
 }
 
 .schedule-panel {
-	padding-left: 343px;
-	padding-right: 343px;
+	width: 100%;
 }
 
 #countdown-container {

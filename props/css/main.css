@@ -1,13 +1,28 @@
-/* X-Small devices (portrait phones, less than 576px) */
-/* No media query for `xs` since this is the default in Bootstrap */
-
-/* Small devices (landscape phones, 576px and up) */
-@media (min-width: 1200px) and (max-width: 1440px) {
-	.servants hr {
-		margin: auto 370px;
-		margin-top: 3px;
+@media (min-width: 1400px) {
+	.schedule-panel {
+		padding-left: 435px;
+		padding-right: 435px;
 	}
 
+	.servants hr {
+		margin: auto 458px;
+	}
+
+	.info-loc hr {
+		margin: 5px 90px;
+	}
+
+	.info-sess hr {
+		margin: 0 90px;
+	}
+
+	.social-medias {
+		margin: 6px 0px;
+		width: 350px;
+	}
+}
+
+@media (min-width: 1200px) and (max-width: 1399px) {
 	.schedule-panel .schedule {
 		padding-left: 5px;
 		right: -320px;
@@ -36,10 +51,6 @@
 		font-size: 1rem;
 	}
 
-	.info-loc hr {
-		margin: 5px 48px;
-	}
-
 	.address p {
 		font-size: 12.5px;
 	}
@@ -52,12 +63,9 @@
 		font-size: 22.5px;
 	}
 
-	.info-sess hr {
-		margin: 0 48px;
-	}
-
 	.social-medias {
-		margin: 5px 110px;
+		margin: 6px 0px;
+		width: 330px;
 	}
 
 	.youtube {
@@ -132,7 +140,7 @@
 	}
 
 	.social-medias {
-		margin: 5px 65px;
+		width: 330px;
 	}
 
 	.youtube {
@@ -155,7 +163,6 @@
 	}
 }
 
-/* Medium devices (tablets, 768px and up) */
 @media (min-width: 768px) and (max-width: 991px) {
 	.invite-fnt {
 		font-size: 14px !important;
@@ -177,8 +184,7 @@
 	}
 
 	.servants hr {
-		margin: auto 29.6%;
-		margin-top: 3px;
+		width: 285px;
 	}
 
 	.schedule-panel .schedule .small {
@@ -201,8 +207,7 @@
 	}
 
 	.schedule-panel {
-		padding-left: 45px;
-		padding-right: 45px;
+		width: 655px;
 	}
 
 	.bullet {
@@ -210,7 +215,7 @@
 	}
 
 	.info-loc hr {
-		margin: 5px -9px;
+		width: 355px;
 	}
 
 	.address p {
@@ -226,11 +231,12 @@
 	}
 
 	.info-sess hr {
-		margin: 0 -9px;
+		width: 355px;
 	}
 
 	.social-medias {
-		margin: 5px 42px;
+		margin-top: 3px;
+		width: 250px;
 	}
 
 	.youtube {
@@ -276,8 +282,7 @@
 	}
 
 	.servants hr {
-		margin: auto 15%;
-		margin-top: 3px;
+		width: 285px;
 	}
 
 	.schedule-panel .schedule .small {
@@ -300,8 +305,7 @@
 	}
 
 	.schedule-panel {
-		padding-left: 35px;
-		padding-right: 35px;
+		width: 378px;
 	}
 
 	.bullet {
@@ -309,7 +313,7 @@
 	}
 
 	.info-loc hr {
-		margin: 5px 25px;
+		width: 352px;
 	}
 
 	.address p {
@@ -325,11 +329,12 @@
 	}
 
 	.info-sess hr {
-		margin: 0 25px;
+		width: 352px;
 	}
 
 	.social-medias {
-		margin: 5px 75px;
+		width: 255px;
+		margin-top: 2px;
 	}
 
 	.youtube {
@@ -377,8 +382,7 @@
 	}
 
 	.servants hr {
-		margin: auto 10%;
-		margin-top: 3px;
+		width: 285px;
 	}
 
 	.schedule-panel .schedule .small {
@@ -401,8 +405,7 @@
 	}
 
 	.schedule-panel {
-		padding-left: 32px;
-		padding-right: 32px;
+		width: 335px;
 	}
 
 	.bullet {
@@ -410,7 +413,7 @@
 	}
 
 	.info-loc hr {
-		margin: 5px 35px;
+		width: 285px;
 	}
 
 	.address p {
@@ -426,11 +429,12 @@
 	}
 
 	.info-sess hr {
-		margin: 0 35px;
+		width: 285px;
 	}
 
 	.social-medias {
-		margin: 5px 75px;
+		width: 205px;
+		margin-top: 2px;
 	}
 
 	.youtube {
@@ -478,8 +482,7 @@
 	}
 
 	.servants hr {
-		margin: auto 17%;
-		margin-top: 3px;
+		width: 200px;
 	}
 
 	.schedule-panel .schedule .small {
@@ -502,8 +505,7 @@
 	}
 
 	.schedule-panel {
-		padding-left: 27px;
-		padding-right: 27px;
+		width: 290px;
 	}
 
 	.bullet {
@@ -511,7 +513,8 @@
 	}
 
 	.info-loc hr {
-		margin: 0px 30px 2px;
+		width: 240px;
+		margin: 0;
 	}
 
 	.address p {
@@ -527,11 +530,13 @@
 	}
 
 	.info-sess hr {
-		margin: -5px 30px;
+		width: 240px;
+		margin: 0;
 	}
 
 	.social-medias {
-		margin: 3px 63px;
+		width: 170px;
+		margin-top: 2px;
 	}
 
 	.youtube {
@@ -546,8 +551,8 @@
 	}
 
 	.via-text {
-		font-size: 6px;
-		padding-top: 3px;
+		font-size: 7px;
+		padding-top: 1px;
 	}
 
 	.sessions {
@@ -560,9 +565,3 @@
 		font-size: 11px;
 	}
 }
-
-/* Large devices (desktops, 992px and up) */
-@media (min-width: 992px) {}
-
-/* XX-Large devices (larger desktops, 1400px and up) */
-@media (min-width: 1400px) {}
