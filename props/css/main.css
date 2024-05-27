@@ -4,6 +4,10 @@
 		padding-right: 435px;
 	}
 
+	.servants {
+		font-size: 19.2px;
+	}
+
 	.servants hr {
 		margin: auto 458px;
 	}
@@ -23,6 +27,14 @@
 }
 
 @media (min-width: 1200px) and (max-width: 1399px) {
+	.servants {
+		font-size: 19.2px;
+	}
+
+	.servants hr {
+		width: 455px
+	}
+
 	.schedule-panel .schedule {
 		padding-left: 5px;
 		right: -320px;
@@ -91,6 +103,13 @@
 }
 
 @media (min-width: 992px) and (max-width: 1199px) {
+	.servants {
+		font-size: 19.2px;
+	}
+	.servants hr {
+		width: 455px;
+	}
+
 	.schedule-panel .schedule {
 		padding-left: 200px;
 	}
@@ -120,7 +139,7 @@
 	}
 
 	.servants hr {
-		margin: auto 278px;
+		width: 455px;
 	}
 
 	.address p {
@@ -174,17 +193,15 @@
 	}
 
 	.arial-fnt {
-		font-size: 28px;
-		transform: scale(1, 0.8);
+		font-size: 32px;
 	}
 
 	.servants {
-		font-size: 12px;
-		transform: scale(1.24, 1.24);
+		font-size: 15px;
 	}
 
 	.servants hr {
-		width: 285px;
+		width: 355px;
 	}
 
 	.schedule-panel .schedule .small {
@@ -273,16 +290,14 @@
 
 	.arial-fnt {
 		font-size: 26px;
-		transform: scale(1, 0.8);
 	}
 
 	.servants {
-		font-size: 12px;
-		transform: scale(1.23, 1.23);
+		font-size: 15px;
 	}
 
 	.servants hr {
-		width: 285px;
+		width: 350px;
 	}
 
 	.schedule-panel .schedule .small {
@@ -373,12 +388,10 @@
 	.arial-fnt {
 		font-size: 25px;
 		margin-bottom: 5px !important;
-		transform: scale(0.9, 0.8);
 	}
 
 	.servants {
 		font-size: 12px;
-		transform: scale(1, 1);
 	}
 
 	.servants hr {
@@ -477,12 +490,11 @@
 	}
 
 	.servants {
-		font-size: 8.3px;
-		transform: scale(1.2, 1);
+		font-size: 10px;
 	}
 
 	.servants hr {
-		width: 200px;
+		width: 240px;
 	}
 
 	.schedule-panel .schedule .small {

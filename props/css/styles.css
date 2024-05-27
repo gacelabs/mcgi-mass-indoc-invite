@@ -42,7 +42,6 @@ p {
 }
 
 .servants {
-	transform: scale(1.2, 1.2);
 	font-weight: 500;
 	margin-bottom: 5px !important;
 }
