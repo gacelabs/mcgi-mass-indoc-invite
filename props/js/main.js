@@ -30,12 +30,12 @@
 		var localeName = prompt('Please enter MCGI Locale name?');
 		console.log(localeName);
 		if (localeName && localeName.length) {
-			document.getElementsByClassName('locale-name')[0].textContent = localeName.toUpperCase();
 			var localeAddress = prompt('Please enter MCGI Locale address?');
 			if (localeAddress && localeAddress.length) {
-				document.getElementsByClassName('locale-address')[0].textContent = localeAddress.toUpperCase();
 				var localeContacts = prompt('Please enter MCGI Locale contact numbers? (Separated with comma if many)');
 				if (localeContacts && localeContacts.length) {
+					document.getElementsByClassName('locale-name')[0].textContent = localeName.toUpperCase();
+					document.getElementsByClassName('locale-address')[0].textContent = localeAddress.toUpperCase();
 					var localeData = { name: localeName, address: localeAddress, contacts: localeContacts };
 					popContacts(localeData);
 					sessionStorage.setItem('locale-informations', JSON.stringify(localeData));
