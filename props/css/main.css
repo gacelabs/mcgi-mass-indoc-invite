@@ -106,6 +106,7 @@
 	.servants {
 		font-size: 19.2px;
 	}
+
 	.servants hr {
 		width: 455px;
 	}
@@ -219,7 +220,7 @@
 
 	.date-value {
 		font-size: 13px;
-		margin: auto 25px;
+		margin: auto 30px;
 		vertical-align: 0px;
 	}
 
@@ -315,7 +316,7 @@
 
 	.date-value {
 		font-size: 12px;
-		margin: auto 25px;
+		margin: auto 35px;
 		vertical-align: 0px;
 	}
 
@@ -413,7 +414,7 @@
 
 	.date-value {
 		font-size: 11px;
-		margin: auto 15px;
+		margin: auto 20px;
 		vertical-align: 0px;
 	}
 
@@ -512,7 +513,7 @@
 
 	.date-value {
 		font-size: 10px;
-		margin: auto 5px;
+		margin: auto 10px;
 		vertical-align: 0px;
 	}
 

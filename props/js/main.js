@@ -1,5 +1,33 @@
 
-window.addEventListener('DOMContentLoaded', setDateEvent);
+(function () {
+	if (window.location.host.indexOf('local.') >= 0) {
+		var arLiveLinks = document.querySelectorAll('[href*="/mcgi-mass-indoc-invite/"], [src*="/mcgi-mass-indoc-invite/"], [content*="/mcgi-mass-indoc-invite/"]');
+		if (arLiveLinks.length) {
+			// console.log(arLiveLinks);
+			arLiveLinks.forEach(function (element) {
+				// console.log(element.tagName.toLowerCase());
+				switch (element.tagName.toLowerCase()) {
+					case 'link':
+						if (element.rel != 'canonical') {
+							element.href = element.href.replace('/mcgi-mass-indoc-invite/', '/');
+						}
+						break;
+					case 'img':
+						element.src = element.src.replace('/mcgi-mass-indoc-invite/', '/');
+						break;
+					case 'meta':
+						if (element.property != "og:url") {
+							element.content = element.content.replace('/mcgi-mass-indoc-invite/', '/');
+						}
+						break;
+				}
+			});
+		}
+	}
+
+	window.addEventListener('DOMContentLoaded', setDateEvent);
+})();
+
 
 function getDaySuffix(day) {
 	if (day >= 11 && day <= 13) {

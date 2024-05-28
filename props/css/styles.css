@@ -10,8 +10,9 @@ p {
 }
 
 .times-font {
-	font-family: 'Times New Roman', Times, serif;
-	font-size: 115px;
+	font-family: 'Crimson Text', serif;
+	/* font-family: "Times New Roman", Times, serif; */
+	font-size: 135px;
 	line-height: 0.8;
 	font-weight: bold;
 	color: navy;
@@ -27,10 +28,11 @@ p {
 
 .arial-fnt {
 	font-size: 40px;
-	font-weight: bolder;
 	transform: scale(0.9, 0.8);
 	line-height: 0.8;
-	font-family: Verdana, Geneva, Tahoma, sans-serif;
+	font-family: "PT Sans", sans-serif;
+	font-weight: bolder;
+	font-style: normal;
 	background-color: red;
 	background-image: linear-gradient(255deg, #f3ec78, #ff9300);
 	background-size: 100%;
@@ -39,6 +41,7 @@ p {
 	-webkit-text-fill-color: transparent;
 	-moz-background-clip: text;
 	-moz-text-fill-color: transparent;
+	transform: scale(1.23, 0.95);
 }
 
 .servants {
@@ -168,7 +171,7 @@ a {
 
 .date-value {
 	font-size: large;
-	margin: auto 25px;
+	margin: auto 35px;
 	vertical-align: -3px;
 }
 
