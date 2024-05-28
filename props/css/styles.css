@@ -24,10 +24,11 @@ p {
 	-webkit-text-fill-color: transparent;
 	-moz-background-clip: text;
 	-moz-text-fill-color: transparent;
+	margin-bottom: 0 !important;
 }
 
 .arial-fnt {
-	font-size: 40px;
+	font-size: 55px;
 	transform: scale(0.9, 0.8);
 	line-height: 0.8;
 	font-family: "PT Sans", sans-serif;
@@ -41,7 +42,7 @@ p {
 	-webkit-text-fill-color: transparent;
 	-moz-background-clip: text;
 	-moz-text-fill-color: transparent;
-	transform: scale(1.23, 0.95);
+	margin-bottom: 0 !important;
 }
 
 .servants {

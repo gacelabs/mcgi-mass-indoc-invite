@@ -190,11 +190,11 @@
 	}
 
 	.times-font {
-		font-size: 90px;
+		font-size: 105px;
 	}
 
 	.arial-fnt {
-		font-size: 32px;
+		font-size: 42px;
 	}
 
 	.servants {
@@ -290,15 +290,15 @@
 	}
 
 	.arial-fnt {
-		font-size: 26px;
+		font-size: 37px;
 	}
 
 	.servants {
-		font-size: 15px;
+		font-size: 13px;
 	}
 
 	.servants hr {
-		width: 350px;
+		width: 310px;
 	}
 
 	.schedule-panel .schedule .small {
@@ -316,12 +316,12 @@
 
 	.date-value {
 		font-size: 12px;
-		margin: auto 35px;
+		margin: auto 15px;
 		vertical-align: 0px;
 	}
 
 	.schedule-panel {
-		width: 378px;
+		width: 335px;
 	}
 
 	.bullet {
@@ -329,7 +329,7 @@
 	}
 
 	.info-loc hr {
-		width: 352px;
+		width: 310px;
 	}
 
 	.address p {
@@ -345,7 +345,7 @@
 	}
 
 	.info-sess hr {
-		width: 352px;
+		width: 310px;
 	}
 
 	.social-medias {
@@ -387,7 +387,7 @@
 	}
 
 	.arial-fnt {
-		font-size: 25px;
+		font-size: 34px;
 		margin-bottom: 5px !important;
 	}
 
@@ -486,7 +486,7 @@
 	}
 
 	.arial-fnt {
-		font-size: 21px;
+		font-size: 28px;
 		margin-bottom: 5px !important;
 	}
 
