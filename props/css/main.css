@@ -24,6 +24,10 @@
 		margin: 6px 0px;
 		width: 350px;
 	}
+
+	.daytime {
+		font-size: 18.8px;
+	}
 }
 
 @media (min-width: 1200px) and (max-width: 1399px) {
@@ -42,7 +46,7 @@
 	}
 
 	.schedule-panel .daytime {
-		font-size: 22.5px;
+		font-size: 18.5px;
 		padding-right: 5px;
 		left: -320px;
 		position: relative;
@@ -115,7 +119,7 @@
 	}
 
 	.schedule-panel .daytime {
-		font-size: 22.6px;
+		font-size: 20.6px;
 		padding-right: 200px;
 	}
 
@@ -212,7 +216,7 @@
 	}
 
 	.schedule-panel .daytime {
-		font-size: 17.3px;
+		font-size: 15.3px;
 		padding-right: 140px !important;
 	}
 
@@ -308,7 +312,7 @@
 	}
 
 	.schedule-panel .daytime {
-		font-size: 17px;
+		font-size: 14px;
 		padding-right: 3px !important;
 	}
 
@@ -406,7 +410,7 @@
 	}
 
 	.schedule-panel .daytime {
-		font-size: 13.8px;
+		font-size: 11.8px;
 		padding-right: 15px !important;
 	}
 
@@ -505,7 +509,7 @@
 	}
 
 	.schedule-panel .daytime {
-		font-size: 11.5px;
+		font-size: 9.5px;
 		padding-right: 16px !important;
 	}
 

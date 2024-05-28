@@ -160,11 +160,6 @@ function getDayCount(startDate, endDate, bEnded) {
 		document.getElementsByClassName("date-value")[0].textContent = dateTextContent;
 		var sWeekDay = new Intl.DateTimeFormat('en-US', { weekday: 'long' }).format(nextDay);
 		document.getElementsByClassName('weekday')[0].textContent = sWeekDay;
-		if (sWeekDay.toLowerCase() == 'wednesday') {
-			document.getElementsByClassName('weekday')[0].style.fontSize = '21px';
-		} else {
-			document.getElementsByClassName('date-value')[0].removeAttribute('style');
-		}
 		startCountdown(nextDay, true);
 	} else {
 		document.getElementById("session-day").innerHTML = '<strong>Day ' + count + ', Started ' + formatDateToFJY(startDate) + '</strong>';
@@ -321,11 +316,6 @@ function setDateEvent() {
 	if (pass) {
 		var sWeekDay = new Intl.DateTimeFormat('en-US', { weekday: 'long' }).format(now);
 		document.getElementsByClassName('weekday')[0].textContent = sWeekDay;
-		if (sWeekDay.toLowerCase() == 'wednesday') {
-			document.getElementsByClassName('weekday')[0].style.fontSize = '21px';
-		} else {
-			document.getElementsByClassName('date-value')[0].removeAttribute('style');
-		}
 		var formattedDate = formatDateToFJY(now);
 		var dateTextContent = formattedDate;
 		if (start.getMonth() != 4) {
