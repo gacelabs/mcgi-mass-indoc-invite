@@ -60,7 +60,7 @@
 		// console.log(numberOfClicks);
 		if (numberOfClicks === 4) {
 			numberOfClicks = 0;
-			console.log('Third Click!');
+			// console.log('Forth Click!');
 			runLocaleChangeEvent();
 		} else if (numberOfClicks == 2) {
 			secondsResetClick(1);
