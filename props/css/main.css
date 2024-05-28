@@ -1,7 +1,6 @@
 @media (min-width: 1400px) {
 	.schedule-panel {
-		padding-left: 435px;
-		padding-right: 435px;
+		width: 475px;
 	}
 
 	.servants {
@@ -10,6 +9,7 @@
 
 	.servants hr {
 		margin: auto 458px;
+		width: 455px;
 	}
 
 	.info-loc hr {
@@ -55,8 +55,7 @@
 	}
 
 	.schedule-panel {
-		padding-left: 20px;
-		padding-right: 20px;
+		width: 70rem;
 	}
 
 	.bullet {
@@ -127,8 +126,7 @@
 	}
 
 	.schedule-panel {
-		padding-left: 54px;
-		padding-right: 54px;
+		width: 55rem;
 	}
 
 	.bullet {
