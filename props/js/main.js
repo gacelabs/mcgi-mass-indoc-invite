@@ -36,8 +36,8 @@
 				document.getElementsByClassName('locale-address')[0].textContent = localeAddress.toUpperCase();
 				var localeContacts = prompt('Please enter MCGI Locale contact numbers? (Separated with comma if many)');
 				if (localeContacts && localeContacts.length) {
-					popContacts(localeInfos);
 					var localeData = { name: localeName, address: localeAddress, contacts: localeContacts };
+					popContacts(localeData);
 					sessionStorage.setItem('locale-informations', JSON.stringify(localeData));
 					var urlParams = new URLSearchParams(localeData).toString();
 					window.history.pushState({}, '', '?' + urlParams);
