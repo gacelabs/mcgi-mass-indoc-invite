@@ -38,7 +38,7 @@
 				if (localeContacts && localeContacts.length) {
 					popContacts(localeInfos);
 					var localeData = { name: localeName, address: localeAddress, contacts: localeContacts };
-					localStorage.setItem('locale-informations', JSON.stringify(localeData));
+					sessionStorage.setItem('locale-informations', JSON.stringify(localeData));
 					var urlParams = new URLSearchParams(localeData).toString();
 					window.history.pushState({}, '', '?' + urlParams);
 				}
@@ -46,19 +46,19 @@
 		}
 	});
 
-	var localeInfos = localStorage.getItem('locale-informations');
+	var localeInfos = sessionStorage.getItem('locale-informations');
 	if (window.location.search) {
-		console.log('search');
+		// console.log('search');
 		var search = decodeURIComponent(location.search.replace(/[+]/g, ' ')).substring(1);
 		var localeInfosSearch = JSON.parse('{"' + decodeURI(search).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"') + '"}');
 		if (localeInfosSearch) {
 			document.getElementsByClassName('locale-name')[0].textContent = localeInfosSearch.name.toUpperCase();
 			document.getElementsByClassName('locale-address')[0].textContent = localeInfosSearch.address.toUpperCase();
 			popContacts(localeInfosSearch);
-			localStorage.setItem('locale-informations', JSON.stringify(localeInfosSearch));
+			sessionStorage.setItem('locale-informations', JSON.stringify(localeInfosSearch));
 		}
 	} else if (localeInfos != null) {
-		console.log('localStorage');
+		// console.log('sessionStorage');
 		localeInfos = JSON.parse(localeInfos);
 		document.getElementsByClassName('locale-name')[0].textContent = localeInfos.name.toUpperCase();
 		document.getElementsByClassName('locale-address')[0].textContent = localeInfos.address.toUpperCase();
