@@ -366,3 +366,15 @@ function showNotification(title, body, redirectUrl) {
 		console.error('Cannot accept Notifications, site must be secured and on HTTPS protocol.');
 	}
 }
+
+function openInNewTab(ui) {
+	if (ui) {
+		// console.log(ui.tagName, ui.textContent, ui.classList.value);
+		var sPrepend = '';
+		if (ui.classList.value == 'locale') {
+			sPrepend = 'MCGI ';
+		}
+		var url = 'https://www.google.com/maps/dir/My+Location/' + encodeURIComponent(sPrepend + ui.textContent);
+		window.open(url, '_blank').focus();
+	}
+}
