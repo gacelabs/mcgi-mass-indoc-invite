@@ -34,7 +34,7 @@
 			document.getElementsByClassName('locale-name')[0].textContent = localeInfosSearch.name.toUpperCase();
 			document.getElementsByClassName('locale-address')[0].textContent = localeInfosSearch.address.toUpperCase();
 			popContacts(localeInfosSearch);
-			sessionStorage.setItem('locale-informations', JSON.stringify(localeInfosSearch));
+			// sessionStorage.setItem('locale-informations', JSON.stringify(localeInfosSearch));
 		}
 	} else if (localeInfos != null) {
 		// console.log('sessionStorage');
@@ -80,7 +80,7 @@ function runLocaleChangeEvent() {
 		hasPressed = true;
 		changeLocaleBtn.addEventListener('click', function (e) {
 			var localeName = prompt('Please enter MCGI Locale name?');
-			console.log(localeName);
+			// console.log(localeName);
 			if (localeName && localeName.length) {
 				var localeAddress = prompt('Please enter MCGI Locale address?');
 				if (localeAddress && localeAddress.length) {
