@@ -25,27 +25,6 @@
 		}
 	}
 
-	var changeLocaleBtn = document.getElementById('change-locale');
-	changeLocaleBtn.addEventListener('click', function (e) {
-		var localeName = prompt('Please enter MCGI Locale name?');
-		console.log(localeName);
-		if (localeName && localeName.length) {
-			var localeAddress = prompt('Please enter MCGI Locale address?');
-			if (localeAddress && localeAddress.length) {
-				var localeContacts = prompt('Please enter MCGI Locale contact numbers? (Separated with comma if many)');
-				if (localeContacts && localeContacts.length) {
-					document.getElementsByClassName('locale-name')[0].textContent = localeName.toUpperCase();
-					document.getElementsByClassName('locale-address')[0].textContent = localeAddress.toUpperCase();
-					var localeData = { name: localeName, address: localeAddress, contacts: localeContacts };
-					popContacts(localeData);
-					sessionStorage.setItem('locale-informations', JSON.stringify(localeData));
-					var urlParams = new URLSearchParams(localeData).toString();
-					window.history.pushState({}, '', '?' + urlParams);
-				}
-			}
-		}
-	});
-
 	var localeInfos = sessionStorage.getItem('locale-informations');
 	if (window.location.search) {
 		// console.log('search');
@@ -68,6 +47,41 @@
 	}
 
 	window.addEventListener('DOMContentLoaded', setDateEvent);
+
+	var changeLocaleBtn = document.getElementById('change-locale');
+	var hasPressed = false;
+	document.addEventListener('keypress', function (e) {
+		console.log(e);
+		if (e.ctrlKey && e.code == "KeyM") {
+			if (changeLocaleBtn.style.display == 'none') {
+				changeLocaleBtn.style.display = 'block';
+			} else {
+				changeLocaleBtn.style.display = 'none';
+			}
+			if (hasPressed == false) {
+				hasPressed = true;
+				changeLocaleBtn.addEventListener('click', function (e) {
+					var localeName = prompt('Please enter MCGI Locale name?');
+					console.log(localeName);
+					if (localeName && localeName.length) {
+						var localeAddress = prompt('Please enter MCGI Locale address?');
+						if (localeAddress && localeAddress.length) {
+							var localeContacts = prompt('Please enter MCGI Locale contact numbers? (Separated with comma if many)');
+							if (localeContacts && localeContacts.length) {
+								document.getElementsByClassName('locale-name')[0].textContent = localeName.toUpperCase();
+								document.getElementsByClassName('locale-address')[0].textContent = localeAddress.toUpperCase();
+								var localeData = { name: localeName, address: localeAddress, contacts: localeContacts };
+								popContacts(localeData);
+								sessionStorage.setItem('locale-informations', JSON.stringify(localeData));
+								var urlParams = new URLSearchParams(localeData).toString();
+								window.history.pushState({}, '', '?' + urlParams);
+							}
+						}
+					}
+				});
+			}
+		}
+	});
 })();
 
 function popContacts(localeInfos) {
