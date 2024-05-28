@@ -169,7 +169,7 @@ function addDaysToDate(date, days) {
 }
 
 function formatDateToFJY(date) {
-	var options = { month: 'short', day: 'numeric', year: 'numeric'/* , weekday: 'long' */ };
+	var options = { month: 'short', day: 'numeric', year: 'numeric' };
 	return new Intl.DateTimeFormat('en-US', options).format(date);
 }
 
@@ -218,8 +218,9 @@ function startCountdown(startDate, bForce) {
 		var distance = end - now;
 
 		if (distance < 0) {
-			// console.log(new Date(now), now, end.getTime(), end);
-			if (now < end.getTime()) {
+			var programDuration = new Date(end.getTime() + 2 * 60 * 60 * 1000); // plus two hours to end time
+			// console.log(new Date(now), now, end.getTime(), end, programDuration);
+			if (now > end.getTime() && now < programDuration) {
 				getDayCount(start, end);
 				document.getElementById("countdown").innerHTML = "On going";
 				var sTitle = 'Session started';
@@ -308,7 +309,13 @@ function setDateEvent() {
 	var now = new Date();
 	var pass = now > start;
 	if (pass) {
-		document.getElementsByClassName('weekday')[0].textContent = new Intl.DateTimeFormat('en-US', { weekday: 'long' }).format(now);
+		var sWeekDay = new Intl.DateTimeFormat('en-US', { weekday: 'long' }).format(now);
+		document.getElementsByClassName('weekday')[0].textContent = sWeekDay;
+		if (sWeekDay.toLowerCase() == 'wednesday') {
+			document.getElementsByClassName('date-value')[0].style.margin = 'auto 0px';
+		} else {
+			document.getElementsByClassName('date-value')[0].removeAttribute('style');
+		}
 		var formattedDate = formatDateToFJY(now);
 		var dateTextContent = formattedDate;
 		if (start.getMonth() != 4) {
