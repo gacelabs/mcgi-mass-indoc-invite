@@ -153,9 +153,18 @@ function getDayCount(startDate, endDate, bEnded) {
 		document.getElementById("session-day").innerHTML = '<strong>Day ' + (count + 1) + ', Tune-in tomorrow</strong>';
 		var nextDay = new Date(new Date().getTime() + 1 * 24 * 60 * 60 * 1000);
 		var formattedDate = formatDateToFJY(nextDay);
-		var dateTextContent = addDotAfterThirdCharacter(formattedDate);
+		var dateTextContent = formattedDate;
+		if (nextDay.getMonth() != 4) {
+			dateTextContent = addDotAfterThirdCharacter(formattedDate);
+		}
 		document.getElementsByClassName("date-value")[0].textContent = dateTextContent;
-		document.getElementsByClassName('weekday')[0].textContent = new Intl.DateTimeFormat('en-US', { weekday: 'long' }).format(nextDay);
+		var sWeekDay = new Intl.DateTimeFormat('en-US', { weekday: 'long' }).format(nextDay);
+		document.getElementsByClassName('weekday')[0].textContent = sWeekDay;
+		if (sWeekDay.toLowerCase() == 'wednesday') {
+			document.getElementsByClassName('weekday')[0].style.fontSize = '21px';
+		} else {
+			document.getElementsByClassName('date-value')[0].removeAttribute('style');
+		}
 		startCountdown(nextDay, true);
 	} else {
 		document.getElementById("session-day").innerHTML = '<strong>Day ' + count + ', Started ' + formatDateToFJY(startDate) + '</strong>';
@@ -225,6 +234,7 @@ function startCountdown(startDate, bForce) {
 				document.getElementById("countdown").innerHTML = "On going";
 				var sTitle = 'Session started';
 				clearInterval(interval);
+				startCountdown(start);
 			} else {
 				getDayCount(start, end, true);
 				var sTitle = 'Tune-in tomorrow';
@@ -312,7 +322,7 @@ function setDateEvent() {
 		var sWeekDay = new Intl.DateTimeFormat('en-US', { weekday: 'long' }).format(now);
 		document.getElementsByClassName('weekday')[0].textContent = sWeekDay;
 		if (sWeekDay.toLowerCase() == 'wednesday') {
-			document.getElementsByClassName('date-value')[0].style.margin = 'auto 0px';
+			document.getElementsByClassName('weekday')[0].style.fontSize = '21px';
 		} else {
 			document.getElementsByClassName('date-value')[0].removeAttribute('style');
 		}
