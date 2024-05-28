@@ -25,9 +25,52 @@
 		}
 	}
 
+	var changeLocaleBtn = document.getElementById('change-locale');
+	changeLocaleBtn.addEventListener('click', function (e) {
+		var localeName = prompt('Please enter MCGI Locale name?');
+		console.log(localeName);
+		if (localeName && localeName.length) {
+			document.getElementsByClassName('locale-name')[0].textContent = localeName.toUpperCase();
+			var localeAddress = prompt('Please enter MCGI Locale address?');
+			if (localeAddress && localeAddress.length) {
+				document.getElementsByClassName('locale-address')[0].textContent = localeAddress.toUpperCase();
+				var localeContacts = prompt('Please enter MCGI Locale contact numbers? (Separated with comma if many)');
+				if (localeContacts && localeContacts.length) {
+					popContacts(localeInfos);
+					var localeData = { name: localeName, address: localeAddress, contacts: localeContacts };
+					localStorage.setItem('locale-informations', JSON.stringify(localeData));
+				}
+			}
+		}
+	});
+
+	var localeInfos = localStorage.getItem('locale-informations');
+	if (localeInfos != null) {
+		localeInfos = JSON.parse(localeInfos);
+		document.getElementsByClassName('locale-name')[0].textContent = localeInfos.name.toUpperCase();
+		document.getElementsByClassName('locale-address')[0].textContent = localeInfos.address.toUpperCase();
+		popContacts(localeInfos);
+	}
+
 	window.addEventListener('DOMContentLoaded', setDateEvent);
 })();
 
+function popContacts(localeInfos) {
+	var contacts = localeInfos.contacts.split(',');
+	var uiContacts = document.getElementsByClassName('locale-contacts');
+	uiContacts[0].textContent = '';
+	for (var key in contacts) {
+		if (Object.hasOwnProperty.call(contacts, key)) {
+			var number = contacts[key];
+			var a = document.createElement('a');
+			var comma = '';
+			if (key != 0) comma = ', ';
+			a.textContent = comma + number.trim();
+			a.href = 'tel:' + number.trim();
+			uiContacts[0].appendChild(a);
+		}
+	}
+}
 
 function getDaySuffix(day) {
 	if (day >= 11 && day <= 13) {

@@ -109,7 +109,7 @@ p {
 	font-size: 18.5px;
 }
 
-.muzon {
+.locale-name {
 	font-weight: bold;
 	font-size: 22.5px;
 }
@@ -208,4 +208,8 @@ a {
 	font-size: 0.8em;
 	text-transform: uppercase;
 	letter-spacing: 1px;
+}
+
+a.locale-contacts {
+	color: black !important;
 }
