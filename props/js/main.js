@@ -370,6 +370,12 @@ function showNotification(title, body, redirectUrl) {
 function openInNewTab(ui) {
 	if (ui) {
 		if (mobileCheck()) {
+			// console.log(ui.tagName, ui.textContent, ui.classList.value);
+			var sPrepend = '';
+			if (ui.classList.value == 'locale')  sPrepend = 'MCGI ';
+			var url = 'https://www.google.com/maps/dir/Your+location/' + encodeURIComponent(sPrepend + ui.textContent);
+			window.open(url, '_blank').focus();
+		} else {
 			var xhr = new XMLHttpRequest();
 			xhr.open('GET', 'https://ipinfo.io/json', true);
 			xhr.onload = function () {
@@ -393,12 +399,6 @@ function openInNewTab(ui) {
 				console.error('Request failed!');
 			};
 			xhr.send();
-		} else {
-			// console.log(ui.tagName, ui.textContent, ui.classList.value);
-			var sPrepend = '';
-			if (ui.classList.value == 'locale')  sPrepend = 'MCGI ';
-			var url = 'https://www.google.com/maps/dir/Your+location/' + encodeURIComponent(sPrepend + ui.textContent);
-			window.open(url, '_blank').focus();
 		}
 	}
 }
