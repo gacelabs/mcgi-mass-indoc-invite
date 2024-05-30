@@ -369,12 +369,53 @@ function showNotification(title, body, redirectUrl) {
 
 function openInNewTab(ui) {
 	if (ui) {
+		getDirections();
 		// console.log(ui.tagName, ui.textContent, ui.classList.value);
 		var sPrepend = '';
 		if (ui.classList.value == 'locale') {
 			sPrepend = 'MCGI ';
 		}
-		var url = 'https://www.google.com/maps/dir/My+Location/' + encodeURIComponent(sPrepend + ui.textContent);
+		var url = 'https://www.google.com/maps/dir/Your+location/' + encodeURIComponent(sPrepend + ui.textContent);
 		window.open(url, '_blank').focus();
+	}
+}
+
+function getDirections() {
+	// Check if Geolocation is supported
+	if (navigator.geolocation) {
+		navigator.geolocation.getCurrentPosition(showPosition, showError);
+	} else {
+		console.error("Geolocation is not supported by this browser.");
+	}
+}
+
+function showPosition(position) {
+	const latitude = position.coords.latitude;
+	const longitude = position.coords.longitude;
+
+	// Example destination coordinates (you can change this)
+	const destinationLatitude = 40.712776;
+	const destinationLongitude = -74.005974;
+
+	// Redirect to Google Maps with the current location and destination
+	const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${latitude},${longitude}&destination=${destinationLatitude},${destinationLongitude}`;
+	// window.location.href = googleMapsUrl;
+	console.log(googleMapsUrl);
+}
+
+function showError(error) {
+	switch (error.code) {
+		case error.PERMISSION_DENIED:
+			console.error("User denied the request for Geolocation.");
+			break;
+		case error.POSITION_UNAVAILABLE:
+			console.error("Location information is unavailable.");
+			break;
+		case error.TIMEOUT:
+			console.error("The request to get user location timed out.");
+			break;
+		case error.UNKNOWN_ERROR:
+			console.error("An unknown error occurred.");
+			break;
 	}
 }
