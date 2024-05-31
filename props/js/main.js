@@ -308,32 +308,40 @@ function startCountdown(startDate, bForce, tillNextMonday) {
 }
 
 function setDateEvent() {
-	var sStringData = '04/22/2024';
-	var monthsCount = countMonths(sStringData);
+	var sDefaultStartDate = '04/22/2024';
+	var monthsCount = countMonths(sDefaultStartDate);
 	// console.log(monthsCount);
 	// var monthsCount = 2;
-	var givenDate = new Date(sStringData);
+	var givenDate = new Date(sDefaultStartDate);
 	var options = { year: 'numeric', month: '2-digit', day: '2-digit' };
-	sStringData = new Intl.DateTimeFormat('en-US', options).format(givenDate);
-	// console.log(sStringData);
+	sDefaultStartDate = new Intl.DateTimeFormat('en-US', options).format(givenDate);
+	// console.log(sDefaultStartDate);
 
 	if (monthsCount) {
-		var nextSessionDay = new Date();		
+		var nextSessionDay = new Date();
 		var session_count = 0;
-		while (givenDate <= nextSessionDay) {
-			var dayOfWeek = givenDate.getDay();
+
+		for (let index = 0; index < monthsCount; index++) {
+			var givenDate = new Date(sDefaultStartDate);
+			var dateAfter28Days = addDaysToDate(givenDate, 28);
+			sDefaultStartDate = new Intl.DateTimeFormat('en-US', options).format(dateAfter28Days);
+		}
+
+		var currStartSession = new Date(sDefaultStartDate);
+		currStartSession.setDate(currStartSession.getDate() - (monthsCount * 14));
+		console.log('Current session start date:', currStartSession);
+		while (currStartSession <= nextSessionDay) {
+			var dayOfWeek = currStartSession.getDay();
 			if (dayOfWeek !== 6 && dayOfWeek !== 0) { // Exclude Saturday (6) and Sunday (0)
 				session_count++;
 			}
-			givenDate.setDate(givenDate.getDate() + 1); // Move to the next day
+			currStartSession.setDate(currStartSession.getDate() + 1); // Move to the next day
 		}
-		// console.log(nextSessionDay, givenDate, session_count);
-		if (session_count % 14 === 0) { // 14th session has passed
-			for (let index = 0; index < monthsCount; index++) {
-				var givenDate = new Date(sStringData);
-				var dateAfter28Days = addDaysToDate(givenDate, 28);
-				sStringData = new Intl.DateTimeFormat('en-US', options).format(dateAfter28Days);
-			}
+		console.log('Current date:', nextSessionDay, 'Current day count:', session_count);
+		console.log('Next session start date:', new Date(sDefaultStartDate));
+
+		if (session_count % 14 === 0) {
+			// 14th session has passed
 		} else {
 			var isWeekend = nextSessionDay.getDay() === 6 || nextSessionDay.getDay() === 0;
 			if (isWeekend) {
@@ -365,12 +373,12 @@ function setDateEvent() {
 				return;
 			}
 
-			sStringData = new Intl.DateTimeFormat('en-US', options).format(nextSessionDay);
+			sDefaultStartDate = new Intl.DateTimeFormat('en-US', options).format(nextSessionDay);
 		}
 	}
-	// console.log(sStringData);
+	// console.log(sDefaultStartDate);
 
-	var start = new Date(sStringData);
+	var start = new Date(sDefaultStartDate);
 	var formattedDate = formatDateToFJY(start);
 	// console.log(start, formattedDate);
 	var dateTextContent = formattedDate;
@@ -391,7 +399,7 @@ function setDateEvent() {
 	}
 
 	document.getElementsByClassName('date-value')[0].textContent = dateTextContent;
-	startCountdown(sStringData);
+	startCountdown(sDefaultStartDate);
 }
 
 function showNotification(title, body, redirectUrl) {
