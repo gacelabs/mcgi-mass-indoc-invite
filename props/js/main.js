@@ -318,7 +318,7 @@ function setDateEvent() {
 	// console.log(sStringData);
 
 	if (monthsCount) {
-		var nextDay = new Date();		
+		var nextSessionDay = new Date();		
 		var session_count = 0;
 		while (givenDate <= new Date()) {
 			var dayOfWeek = givenDate.getDay();
@@ -327,39 +327,40 @@ function setDateEvent() {
 			}
 			givenDate.setDate(givenDate.getDate() + 1); // Move to the next day
 		}
-		// console.log(nextDay, session_count);
-		if (session_count % 14 === 0) {
+		// console.log(nextSessionDay, session_count);
+		if (session_count % 14 === 0) { // 14th session has passed
 			for (let index = 0; index < monthsCount; index++) {
 				var givenDate = new Date(sStringData);
 				var dateAfter28Days = addDaysToDate(givenDate, 28);
 				sStringData = new Intl.DateTimeFormat('en-US', options).format(dateAfter28Days);
 			}
 		} else {
-			var isWeekend = nextDay.getDay() === 6 || nextDay.getDay() === 0;
+			var isWeekend = nextSessionDay.getDay() === 6 || nextSessionDay.getDay() === 0;
 			if (isWeekend) {
 				var tillNextMonday = 0;
 				// Got to weekdays when next day is Saturday (6) or Sunday (0)
 				do {
-					nextDay.setDate(nextDay.getDate() + 1); // Move to the next day
+					nextSessionDay.setDate(nextSessionDay.getDate() + 1); // Move to the next day
 					tillNextMonday++;
-				} while (nextDay.getDay() === 0 || nextDay.getDay() === 6);
-				// console.log(nextDay);
-				sStringData = new Intl.DateTimeFormat('en-US', options).format(nextDay);
+				} while (nextSessionDay.getDay() === 0 || nextSessionDay.getDay() === 6);
+				// console.log(nextSessionDay);
+				sStringData = new Intl.DateTimeFormat('en-US', options).format(nextSessionDay);
+
 				document.getElementById("session-day").innerHTML = '<strong>Day ' + (session_count + 1) + ', Tune-in Monday</strong>';
 				if (notificationShown == false) {
 					notificationShown = true;
 					showNotification('Tune-in Monday', 'Watch via MCGI YouTube Channel', 'https://www.youtube.com/@MCGIChannel');
 				}
-				var formattedDate = formatDateToFJY(nextDay);
+				var formattedDate = formatDateToFJY(nextSessionDay);
 				var dateTextContent = formattedDate;
-				if (nextDay.getMonth() != 4) {
+				if (nextSessionDay.getMonth() != 4) {
 					dateTextContent = addDotAfterThirdCharacter(formattedDate);
 				}
 				document.getElementsByClassName("date-value")[0].textContent = dateTextContent;
-				var sWeekDay = new Intl.DateTimeFormat('en-US', { weekday: 'long' }).format(nextDay);
+				var sWeekDay = new Intl.DateTimeFormat('en-US', { weekday: 'long' }).format(nextSessionDay);
 				document.getElementsByClassName('weekday')[0].textContent = sWeekDay;
 				clearInterval(interval);
-				startCountdown(nextDay, true, (tillNextMonday > 0));
+				startCountdown(nextSessionDay, true, (tillNextMonday > 0));
 				return;
 			}
 		}
