@@ -62,13 +62,21 @@
 		width: 70rem;
 	}
 
+	.small {
+		font-size: 12px !important;
+	}
+
 	.bullet {
 		vertical-align: 0px;
 		font-size: 1rem;
 	}
 
-	.address p {
-		font-size: 12.5px;
+	.address span {
+		font-size: 13.5px;
+	}
+
+	.address .locale-name {
+		font-size: 18px;
 	}
 
 	.locale {
@@ -81,27 +89,27 @@
 
 	.social-medias {
 		margin: 6px 0px;
-		width: 330px;
+		width: 340px;
 	}
 
 	.youtube {
-		font-size: 12px;
+		font-size: 13px;
 		padding-top: 3px;
 	}
 
 	.facebook {
-		font-size: 12px;
+		font-size: 13px;
 		padding-right: 0;
 		padding-top: 3px;
 	}
 
 	.via-text {
-		font-size: 14px;
+		font-size: 15px;
 		padding: 2px;
 	}
 
 	.sessions {
-		font-size: 13px;
+		font-size: 13.5px;
 		margin-top: 4px;
 	}
 }
@@ -134,6 +142,10 @@
 		width: 55rem;
 	}
 
+	.small {
+		font-size: 11px !important;
+	}
+
 	.bullet {
 		vertical-align: -2px;
 		font-size: 2rem;
@@ -147,8 +159,12 @@
 		width: 455px;
 	}
 
-	.address p {
-		font-size: 12.4px;
+	.address span {
+		font-size: 18.2px;
+	}
+
+	.address .locale-name {
+		font-size: 23px;
 	}
 
 	.locale {
@@ -164,25 +180,25 @@
 	}
 
 	.social-medias {
-		width: 330px;
+		width: 450px;
 	}
 
 	.youtube {
-		font-size: 13px;
+		font-size: 17px;
 	}
 
 	.facebook {
-		font-size: 13px;
+		font-size: 17px;
 		padding-right: 0px;
 	}
 
 	.via-text {
-		font-size: 14px;
+		font-size: 18px;
 		padding: 2px;
 	}
 
 	.sessions {
-		font-size: 13px;
+		font-size: 18px;
 		margin-top: 3px;
 	}
 }
@@ -232,6 +248,10 @@
 		width: 655px;
 	}
 
+	.small {
+		font-size: 10px !important;
+	}
+
 	.bullet {
 		vertical-align: -2px;
 		font-size: 1rem;
@@ -241,8 +261,12 @@
 		width: 355px;
 	}
 
-	.address p {
-		font-size: 9.5px;
+	.address span {
+		font-size: 14.1px;
+	}
+
+	.address .locale-name {
+		font-size: 18px;
 	}
 
 	.locale {
@@ -259,27 +283,27 @@
 
 	.social-medias {
 		margin-top: 3px;
-		width: 250px;
+		width: 355px;
 	}
 
 	.youtube {
-		font-size: 9px;
+		font-size: 14px;
 		padding-top: 6px;
 	}
 
 	.facebook {
-		font-size: 9px;
+		font-size: 14px;
 		padding-top: 6px;
 		padding-right: 5px;
 	}
 
 	.via-text {
-		font-size: 10px;
+		font-size: 16px;
 		padding: 5px;
 	}
 
 	.sessions {
-		font-size: 10px;
+		font-size: 14px;
 		margin-top: 6px;
 	}
 }
@@ -338,8 +362,12 @@
 		width: 310px;
 	}
 
-	.address p {
-		font-size: 9.6px;
+	.address span {
+		font-size: 12.3px;
+	}
+
+	.address .locale-name {
+		font-size: 16px;
 	}
 
 	.locale {
@@ -355,28 +383,28 @@
 	}
 
 	.social-medias {
-		width: 255px;
+		width: 310px;
 		margin-top: 2px;
 	}
 
 	.youtube {
-		font-size: 9px;
+		font-size: 11px;
 		padding-top: 3px;
 	}
 
 	.facebook {
-		font-size: 9px;
+		font-size: 11px;
 		padding-top: 3px;
 		padding-right: 0px;
 	}
 
 	.via-text {
-		font-size: 10px;
-		padding-top: 3px;
+		font-size: 14px;
+		padding-top: 0px;
 	}
 
 	.sessions {
-		font-size: 10px;
+		font-size: 12.3px;
 		margin-top: 5px;
 	}
 }
@@ -437,8 +465,12 @@
 		width: 285px;
 	}
 
-	.address p {
-		font-size: 7.7px;
+	.address span {
+		font-size: 11.3px;
+	}
+
+	.address .locale-name {
+		font-size: 14px;
 	}
 
 	.locale {
@@ -454,28 +486,28 @@
 	}
 
 	.social-medias {
-		width: 205px;
+		width: 285px;
 		margin-top: 2px;
 	}
 
 	.youtube {
-		font-size: 7px;
+		font-size: 11px;
 		padding-top: 5px;
 	}
 
 	.facebook {
-		font-size: 7px;
+		font-size: 11px;
 		padding-top: 5px;
 		padding-right: 0px;
 	}
 
 	.via-text {
-		font-size: 8px;
+		font-size: 12px;
 		padding: 4px;
 	}
 
 	.sessions {
-		font-size: 8px;
+		font-size: 11.3px;
 		margin-top: 3px;
 	}
 }
@@ -538,8 +570,12 @@
 		margin: 0;
 	}
 
-	.address p {
-		font-size: 6.4px;
+	.address span {
+		font-size: 9.4px;
+	}
+
+	.address .locale-name {
+		font-size: 12px;
 	}
 
 	.locale {
@@ -556,28 +592,28 @@
 	}
 
 	.social-medias {
-		width: 170px;
+		width: 235px;
 		margin-top: 2px;
 	}
 
 	.youtube {
-		font-size: 5px;
+		font-size: 7px;
 		padding-top: 3px;
 	}
 
 	.facebook {
-		font-size: 5px;
+		font-size: 7px;
 		padding-top: 3px;
 		padding-right: 0px;
 	}
 
 	.via-text {
-		font-size: 7px;
+		font-size: 10px;
 		padding-top: 1px;
 	}
 
 	.sessions {
-		font-size: 6.7px;
+		font-size: 9.4px;
 		margin-top: 6px;
 	}
 

@@ -99,9 +99,13 @@ p {
 	margin-bottom: 5px;
 }
 
-.address p {
+.address span {
 	margin: 0 !important;
 	font-weight: 500;
+}
+
+.address .locale-name {
+	font-size: 14.1px;
 }
 
 .locale {
