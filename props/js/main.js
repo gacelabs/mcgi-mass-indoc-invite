@@ -163,6 +163,12 @@ function getDayCount(startDate, endDate, bEnded) {
 		}
 
 		document.getElementById("session-day").innerHTML = '<strong>Day ' + (count + 1) + ', Tune-in ' + (isWeekend ? 'Monday' : 'tomorrow') + '</strong>';
+		if (notificationShown == false) {
+			notificationShown = true;
+			var sTitle = 'Tune-in ' + (isWeekend ? 'Monday' : 'tomorrow');
+			showNotification(sTitle, 'Watch via MCGI YouTube Channel', 'https://www.youtube.com/@MCGIChannel');
+		}
+
 		var formattedDate = formatDateToFJY(nextDay);
 		var dateTextContent = formattedDate;
 		if (nextDay.getMonth() != 4) {
@@ -172,10 +178,14 @@ function getDayCount(startDate, endDate, bEnded) {
 		var sWeekDay = new Intl.DateTimeFormat('en-US', { weekday: 'long' }).format(nextDay);
 		document.getElementsByClassName('weekday')[0].textContent = sWeekDay;
 		clearInterval(interval);
-		startCountdown(nextDay, true, tillNextMonday > 0);
+		startCountdown(nextDay, true, (tillNextMonday > 0));
 		// console.log(nextDay, true, tillNextMonday);
 	} else {
 		document.getElementById("session-day").innerHTML = '<strong>Day ' + count + ', Started ' + formatDateToFJY(startDate) + '</strong>';
+		if (notificationShown == false) {
+			notificationShown = true;
+			showNotification('Session started', 'Watch via MCGI YouTube Channel', 'https://www.youtube.com/@MCGIChannel');
+		}
 	}
 }
 
@@ -240,21 +250,15 @@ function startCountdown(startDate, bForce, tillNextMonday) {
 
 		if (distance < 0) {
 			var programDuration = new Date(end.getTime() + 2 * 60 * 60 * 1000); // plus two hours to end time
-			// console.log(new Date(now), now, end.getTime(), end, programDuration);
+			// console.log(new Date(now), now, end.getTime(), end, programDuration, tillNextMonday);
 			if (now > end.getTime() && now < programDuration) {
 				getDayCount(start, end);
 				document.getElementById("countdown").innerHTML = "On going";
-				var sTitle = 'Session started';
+				/* reset and update counter when program ended */
 				clearInterval(interval);
 				startCountdown(start);
 			} else {
 				getDayCount(start, end, true);
-				var sTitle = 'Tune-in ' + (tillNextMonday ? 'Monday' : 'tomorrow');
-			}
-
-			if (notificationShown == false) {
-				notificationShown = true;
-				showNotification(sTitle, 'Watch via MCGI YouTube Channel', 'https://www.youtube.com/@MCGIChannel');
 			}
 			return;
 		}
@@ -298,10 +302,8 @@ function startCountdown(startDate, bForce, tillNextMonday) {
 		}
 	}
 
-	// updateCountdown();
 	interval = setInterval(function () {
-		// console.log(tillNextMonday);
-		updateCountdown(end, tillNextMonday);
+		updateCountdown(end);
 	}, 1000);
 }
 
