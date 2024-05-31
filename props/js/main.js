@@ -152,12 +152,12 @@ function getDayCount(startDate, endDate, bEnded) {
 	if (bEnded) {
 		var nextDay = new Date(new Date().getTime() + 1 * 24 * 60 * 60 * 1000);
 		var isWeekend = nextDay.getDay() === 6 || nextDay.getDay() === 0;
-		var nextMonday = 0;
+		var tillNextMonday = 0;
 		if (isWeekend) {
 			// Got to weekdays when next day is Saturday (6) or Sunday (0)
 			do {
 				nextDay.setDate(nextDay.getDate() + 1); // Move to the next day
-				nextMonday++;
+				tillNextMonday++;
 			} while (nextDay.getDay() === 0 || nextDay.getDay() === 6);
 			// console.log(nextDay);
 		}
@@ -172,8 +172,8 @@ function getDayCount(startDate, endDate, bEnded) {
 		var sWeekDay = new Intl.DateTimeFormat('en-US', { weekday: 'long' }).format(nextDay);
 		document.getElementsByClassName('weekday')[0].textContent = sWeekDay;
 		clearInterval(interval);
-		startCountdown(nextDay, true, nextMonday > 0);
-		// console.log(nextDay, true, nextMonday);
+		startCountdown(nextDay, true, tillNextMonday > 0);
+		// console.log(nextDay, true, tillNextMonday);
 	} else {
 		document.getElementById("session-day").innerHTML = '<strong>Day ' + count + ', Started ' + formatDateToFJY(startDate) + '</strong>';
 	}
@@ -210,7 +210,7 @@ function addDotAfterThirdCharacter(str) {
 }
 
 var notificationShown = false, interval;
-function startCountdown(startDate, bForce, nextMonday) {
+function startCountdown(startDate, bForce, tillNextMonday) {
 	var now = new Date();
 	var start = new Date(startDate);
 	var pass = now > start;
@@ -224,7 +224,7 @@ function startCountdown(startDate, bForce, nextMonday) {
 			// If the start date is in the future, set the countdown to 7 PM on the start date
 			end = new Date(now);
 		}
-		if (nextMonday == undefined) {
+		if (tillNextMonday == undefined) {
 			end.setHours(19, 0, 0, 0);
 		} else {
 			bForce = false;
@@ -234,7 +234,7 @@ function startCountdown(startDate, bForce, nextMonday) {
 		end = new Date(start.getTime() + 8 * 24 * 60 * 60 * 1000); // Add 8 days to start date
 	}
 
-	function updateCountdown(end) {
+	function updateCountdown(end, tillNextMonday) {
 		var now = new Date().getTime();
 		var distance = end - now;
 
@@ -249,7 +249,7 @@ function startCountdown(startDate, bForce, nextMonday) {
 				startCountdown(start);
 			} else {
 				getDayCount(start, end, true);
-				var sTitle = 'Tune-in ' + (nextMonday ? 'Monday' : 'tomorrow');
+				var sTitle = 'Tune-in ' + (tillNextMonday ? 'Monday' : 'tomorrow');
 			}
 
 			if (notificationShown == false) {
@@ -293,14 +293,15 @@ function startCountdown(startDate, bForce, nextMonday) {
 			cnt = 0;
 			clearInterval(interval);
 			interval = setInterval(function () {
-				updateCountdown(end);
+				updateCountdown(end, tillNextMonday);
 			}, 1000);
 		}
 	}
 
 	// updateCountdown();
 	interval = setInterval(function () {
-		updateCountdown(end);
+		// console.log(tillNextMonday);
+		updateCountdown(end, tillNextMonday);
 	}, 1000);
 }
 
