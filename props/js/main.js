@@ -150,8 +150,19 @@ function getDayCount(startDate, endDate, bEnded) {
 
 	// document.getElementById("session-day").innerHTML = '<strong>' + getDaySuffix(count) + ' Session, Started ' + formatDateToFJY(startDate) + '</strong>';
 	if (bEnded) {
-		document.getElementById("session-day").innerHTML = '<strong>Day ' + (count + 1) + ', Tune-in tomorrow</strong>';
 		var nextDay = new Date(new Date().getTime() + 1 * 24 * 60 * 60 * 1000);
+		var isWeekend = nextDay.getDay() === 6 || nextDay.getDay() === 0;
+		var nextMonday = 0;
+		if (isWeekend) {
+			// Got to weekdays when next day is Saturday (6) or Sunday (0)
+			do {
+				nextDay.setDate(nextDay.getDate() + 1); // Move to the next day
+				nextMonday++;
+			} while (nextDay.getDay() === 0 || nextDay.getDay() === 6);
+			// console.log(nextDay);
+		}
+
+		document.getElementById("session-day").innerHTML = '<strong>Day ' + (count + 1) + ', Tune-in ' + (isWeekend ? 'Monday' : 'tomorrow') + '</strong>';
 		var formattedDate = formatDateToFJY(nextDay);
 		var dateTextContent = formattedDate;
 		if (nextDay.getMonth() != 4) {
@@ -160,7 +171,9 @@ function getDayCount(startDate, endDate, bEnded) {
 		document.getElementsByClassName("date-value")[0].textContent = dateTextContent;
 		var sWeekDay = new Intl.DateTimeFormat('en-US', { weekday: 'long' }).format(nextDay);
 		document.getElementsByClassName('weekday')[0].textContent = sWeekDay;
-		startCountdown(nextDay, true);
+		clearInterval(interval);
+		startCountdown(nextDay, true, nextMonday > 0);
+		// console.log(nextDay, true, nextMonday);
 	} else {
 		document.getElementById("session-day").innerHTML = '<strong>Day ' + count + ', Started ' + formatDateToFJY(startDate) + '</strong>';
 	}
@@ -196,8 +209,8 @@ function addDotAfterThirdCharacter(str) {
 	return str.slice(0, 3) + '.' + str.slice(3);
 }
 
-var notificationShown = false;
-function startCountdown(startDate, bForce) {
+var notificationShown = false, interval;
+function startCountdown(startDate, bForce, nextMonday) {
 	var now = new Date();
 	var start = new Date(startDate);
 	var pass = now > start;
@@ -211,7 +224,11 @@ function startCountdown(startDate, bForce) {
 			// If the start date is in the future, set the countdown to 7 PM on the start date
 			end = new Date(now);
 		}
-		end.setHours(19, 0, 0, 0);
+		if (nextMonday == undefined) {
+			end.setHours(19, 0, 0, 0);
+		} else {
+			bForce = false;
+		}
 	} else {
 		// If the start date is in the past or today, set the countdown to 8 days from the start date
 		end = new Date(start.getTime() + 8 * 24 * 60 * 60 * 1000); // Add 8 days to start date
@@ -232,7 +249,7 @@ function startCountdown(startDate, bForce) {
 				startCountdown(start);
 			} else {
 				getDayCount(start, end, true);
-				var sTitle = 'Tune-in tomorrow';
+				var sTitle = 'Tune-in ' + (isWeekend ? 'Monday' : 'tomorrow');
 			}
 
 			if (notificationShown == false) {
@@ -282,7 +299,7 @@ function startCountdown(startDate, bForce) {
 	}
 
 	// updateCountdown();
-	var interval = setInterval(function () {
+	interval = setInterval(function () {
 		updateCountdown(end);
 	}, 1000);
 }
