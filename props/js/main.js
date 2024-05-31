@@ -62,7 +62,7 @@
 			numberOfClicks = 0;
 			// console.log('Forth Click!');
 			runLocaleChangeEvent();
-		} else if (numberOfClicks == 2) {
+		} else if (numberOfClicks < 3) {
 			secondsResetClick(1);
 		}
 	});
@@ -308,8 +308,9 @@ function startCountdown(startDate, bForce, tillNextMonday) {
 }
 
 function setDateEvent() {
-	var sStringData = '05/20/2024';
+	var sStringData = '04/22/2024';
 	var monthsCount = countMonths(sStringData);
+	// console.log(monthsCount);
 	// var monthsCount = 2;
 	var givenDate = new Date(sStringData);
 	var options = { year: 'numeric', month: '2-digit', day: '2-digit' };
@@ -317,11 +318,52 @@ function setDateEvent() {
 	// console.log(sStringData);
 
 	if (monthsCount) {
-		for (let index = 0; index < monthsCount; index++) {
-			var givenDate = new Date(sStringData);
-			var dateAfter28Days = addDaysToDate(givenDate, 28);
-			sStringData = new Intl.DateTimeFormat('en-US', options).format(dateAfter28Days);
+		var nextDay = new Date();		
+		var session_count = 0;
+		while (givenDate <= new Date()) {
+			var dayOfWeek = givenDate.getDay();
+			if (dayOfWeek !== 6 && dayOfWeek !== 0) { // Exclude Saturday (6) and Sunday (0)
+				session_count++;
+			}
+			givenDate.setDate(givenDate.getDate() + 1); // Move to the next day
 		}
+		// console.log(nextDay, session_count);
+		if (session_count % 14 === 0) {
+			for (let index = 0; index < monthsCount; index++) {
+				var givenDate = new Date(sStringData);
+				var dateAfter28Days = addDaysToDate(givenDate, 28);
+				sStringData = new Intl.DateTimeFormat('en-US', options).format(dateAfter28Days);
+			}
+		} else {
+			var isWeekend = nextDay.getDay() === 6 || nextDay.getDay() === 0;
+			if (isWeekend) {
+				var tillNextMonday = 0;
+				// Got to weekdays when next day is Saturday (6) or Sunday (0)
+				do {
+					nextDay.setDate(nextDay.getDate() + 1); // Move to the next day
+					tillNextMonday++;
+				} while (nextDay.getDay() === 0 || nextDay.getDay() === 6);
+				// console.log(nextDay);
+				sStringData = new Intl.DateTimeFormat('en-US', options).format(nextDay);
+				document.getElementById("session-day").innerHTML = '<strong>Day ' + (session_count + 1) + ', Tune-in Monday</strong>';
+				if (notificationShown == false) {
+					notificationShown = true;
+					showNotification('Tune-in Monday', 'Watch via MCGI YouTube Channel', 'https://www.youtube.com/@MCGIChannel');
+				}
+				var formattedDate = formatDateToFJY(nextDay);
+				var dateTextContent = formattedDate;
+				if (nextDay.getMonth() != 4) {
+					dateTextContent = addDotAfterThirdCharacter(formattedDate);
+				}
+				document.getElementsByClassName("date-value")[0].textContent = dateTextContent;
+				var sWeekDay = new Intl.DateTimeFormat('en-US', { weekday: 'long' }).format(nextDay);
+				document.getElementsByClassName('weekday')[0].textContent = sWeekDay;
+				clearInterval(interval);
+				startCountdown(nextDay, true, (tillNextMonday > 0));
+				return;
+			}
+		}
+
 	}
 	var start = new Date(sStringData);
 	var formattedDate = formatDateToFJY(start);
