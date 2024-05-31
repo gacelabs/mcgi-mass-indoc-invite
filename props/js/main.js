@@ -249,7 +249,7 @@ function startCountdown(startDate, bForce, nextMonday) {
 				startCountdown(start);
 			} else {
 				getDayCount(start, end, true);
-				var sTitle = 'Tune-in ' + (isWeekend ? 'Monday' : 'tomorrow');
+				var sTitle = 'Tune-in ' + (nextMonday ? 'Monday' : 'tomorrow');
 			}
 
 			if (notificationShown == false) {
