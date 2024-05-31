@@ -320,14 +320,14 @@ function setDateEvent() {
 	if (monthsCount) {
 		var nextSessionDay = new Date();		
 		var session_count = 0;
-		while (givenDate <= new Date()) {
+		while (givenDate <= nextSessionDay) {
 			var dayOfWeek = givenDate.getDay();
 			if (dayOfWeek !== 6 && dayOfWeek !== 0) { // Exclude Saturday (6) and Sunday (0)
 				session_count++;
 			}
 			givenDate.setDate(givenDate.getDate() + 1); // Move to the next day
 		}
-		// console.log(nextSessionDay, session_count);
+		// console.log(nextSessionDay, givenDate, session_count);
 		if (session_count % 14 === 0) { // 14th session has passed
 			for (let index = 0; index < monthsCount; index++) {
 				var givenDate = new Date(sStringData);
@@ -337,6 +337,7 @@ function setDateEvent() {
 		} else {
 			var isWeekend = nextSessionDay.getDay() === 6 || nextSessionDay.getDay() === 0;
 			if (isWeekend) {
+				// console.log(isWeekend);
 				var tillNextMonday = 0;
 				// Got to weekdays when next day is Saturday (6) or Sunday (0)
 				do {
@@ -344,13 +345,13 @@ function setDateEvent() {
 					tillNextMonday++;
 				} while (nextSessionDay.getDay() === 0 || nextSessionDay.getDay() === 6);
 				// console.log(nextSessionDay);
-				sStringData = new Intl.DateTimeFormat('en-US', options).format(nextSessionDay);
 
 				document.getElementById("session-day").innerHTML = '<strong>Day ' + (session_count + 1) + ', Tune-in Monday</strong>';
 				if (notificationShown == false) {
 					notificationShown = true;
 					showNotification('Tune-in Monday', 'Watch via MCGI YouTube Channel', 'https://www.youtube.com/@MCGIChannel');
 				}
+
 				var formattedDate = formatDateToFJY(nextSessionDay);
 				var dateTextContent = formattedDate;
 				if (nextSessionDay.getMonth() != 4) {
@@ -363,9 +364,12 @@ function setDateEvent() {
 				startCountdown(nextSessionDay, true, (tillNextMonday > 0));
 				return;
 			}
-		}
 
+			sStringData = new Intl.DateTimeFormat('en-US', options).format(nextSessionDay);
+		}
 	}
+	// console.log(sStringData);
+
 	var start = new Date(sStringData);
 	var formattedDate = formatDateToFJY(start);
 	// console.log(start, formattedDate);
@@ -392,7 +396,7 @@ function setDateEvent() {
 
 function showNotification(title, body, redirectUrl) {
 	if (("Notification" in window) == false) {
-		console.error("This browser does not support desktop notification");
+		console.warn("This browser does not support desktop notification");
 		return;
 	}
 
@@ -426,7 +430,7 @@ function showNotification(title, body, redirectUrl) {
 			}
 		});
 	} else {
-		console.error('Cannot accept Notifications, site must be secured and on HTTPS protocol.');
+		console.warn('Cannot accept Notifications, site must be secured and on HTTPS protocol.');
 	}
 }
 
@@ -455,11 +459,11 @@ function openInNewTab(ui) {
 					var url = `https://www.google.com/maps/dir/?api=1&origin=${latitude},${longitude}&destination=` + encodeURIComponent(sPrepend + ui.textContent) + '&avoid=ferries';
 					window.open(url, '_blank').focus();
 				} else {
-					console.error('Error fetching coordinates:', xhr.statusText);
+					console.warn('Error fetching coordinates:', xhr.statusText);
 				}
 			};
 			xhr.onerror = function () {
-				console.error('Request failed!');
+				console.warn('Request failed!');
 			};
 			xhr.send();
 		}
