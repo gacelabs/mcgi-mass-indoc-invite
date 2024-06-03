@@ -249,6 +249,7 @@ function addDotAfterThirdCharacter(str) {
 }
 
 var notificationShown = false, interval, savedStartSession, savedEndSession;
+var notificationHourShown = false;
 function startCountdown(startDate, bForce, tillNextMonday) {
 	var now = new Date();
 	var start = new Date(startDate);
@@ -316,6 +317,11 @@ function startCountdown(startDate, bForce, tillNextMonday) {
 					`<div class="countdown-segment"><span class="countdown-label">Seconds</span><span class="countdown-number">${seconds}</span></div>` +
 					`<div style="margin-top: -10px;"><span class="countdown-label">Day(s) to go</span></div>`;
 			}
+		}
+
+		if (hours == 0 && notificationHourShown == false) {
+			notificationHourShown = true;
+			showNotification('Starting soon - Standby', 'Watch via MCGI YouTube Channel', specificYoutubeChannel);
 		}
 		// console.log(cnt);
 		cnt++;
