@@ -274,7 +274,7 @@ function startCountdown(startDate, bForce, tillNextMonday) {
 				if (bForce == undefined) {
 					getDayCount(start, end);
 				} else if (bForce == false) {
-					getDayCount(savedStartSession, end);
+					getDayCount(savedStartSession, end, pass);
 				}
 				document.getElementById("countdown").innerHTML =
 					`<div class="countdown-segment"><span class="countdown-label">Hours</span><span class="countdown-number hours">${hours}</span></div>` +
