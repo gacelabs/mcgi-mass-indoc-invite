@@ -434,6 +434,9 @@ function reqNotification(title, body, redirectUrl) {
 					console.warn('Service Worker registration not found');
 					document.getElementsByClassName('errors').innerHTML += 'Service Worker registration not found<br>';
 				}
+			}).catch(function (error) {
+				console.error('Error getting Service Worker registration:', error);
+				document.getElementsByClassName('errors').innerHTML += error + '<br>';
 			});
 		} else {
 			console.warn('Notification permission denied');
@@ -445,8 +448,9 @@ if ('serviceWorker' in navigator && 'PushManager' in window) {
 	navigator.serviceWorker.register('https://gacelabs.github.io/mcgi-mass-indoc-invite/props/js/service-worker.js')
 	.then(function (registration) {
 		console.log('Service Worker registered with scope:', registration.scope);
+		registration.update(); // Ensure the service worker is up to date
 	}).catch(function (error) {
-		console.warn('Service Worker registration failed:', error);
+		console.error('Service Worker registration failed:', error);
 	});
 }
 
@@ -457,7 +461,7 @@ function showNotification(title, body, redirectUrl) {
 	}
 
 	try {
-		if ('serviceWorker' in navigator && 'PushManager' in window) {
+		if (('serviceWorker' in navigator && 'PushManager' in window) && mobileCheck()) {
 			reqNotification(title, body, redirectUrl);
 		} else {
 			var options = {
