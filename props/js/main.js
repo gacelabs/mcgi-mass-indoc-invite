@@ -346,7 +346,7 @@ function setDateEvent() {
 		console.log('Next session start date:', new Date(sDefaultStartDate));
 
 		if (session_count % 14 === 0) {
-			// 14th session has passed
+			// 14th session has passed, render new session dates
 		} else {
 			var isWeekend = nextSessionDay.getDay() === 6 || nextSessionDay.getDay() === 0;
 			if (isWeekend) {
@@ -415,37 +415,43 @@ function showNotification(title, body, redirectUrl) {
 		return;
 	}
 
-	var options = {
-		body: body,
-		icon: '/mcgi-mass-indoc-invite/props/images/logo.png'
-	};
-
-	// Check if the user has granted permission to show notifications
-	if (Notification.permission === "granted") {
-		// If permission is granted, create a notification
-		var notification = new Notification(title, options);
-
-		notification.onclick = function (event) {
-			event.preventDefault(); // Prevent the browser from focusing the Notification's tab
-			window.open(redirectUrl, '_blank');
-			notification.close();
+	try {
+		var options = {
+			body: body,
+			icon: '/mcgi-mass-indoc-invite/props/images/logo.png'
 		};
 
-	} else if (Notification.permission !== "denied") {
-		// If permission has not been denied, request permission
-		Notification.requestPermission().then(function (permission) {
-			if (permission === "granted") {
-				var notification = new Notification(title, options);
+		// Check if the user has granted permission to show notifications
+		if (Notification.permission === "granted") {
+			// If permission is granted, create a notification
+			var notification = new Notification(title, options);
 
-				notification.onclick = function (event) {
-					event.preventDefault(); // Prevent the browser from focusing the Notification's tab
-					window.open(redirectUrl, '_blank');
-					notification.close();
-				};
-			}
-		});
-	} else {
-		console.warn('Cannot accept Notifications, site must be secured and on HTTPS protocol.');
+			notification.onclick = function (event) {
+				event.preventDefault(); // Prevent the browser from focusing the Notification's tab
+				window.open(redirectUrl, '_blank');
+				notification.close();
+			};
+
+		} else if (Notification.permission !== "denied") {
+			// If permission has not been denied, request permission
+			Notification.requestPermission().then(function (permission) {
+				if (permission === "granted") {
+					var notification = new Notification(title, options);
+
+					notification.onclick = function (event) {
+						event.preventDefault(); // Prevent the browser from focusing the Notification's tab
+						window.open(redirectUrl, '_blank');
+						notification.close();
+					};
+				}
+			});
+		} else {
+			console.warn('Cannot accept Notifications, site must be secured and on HTTPS protocol.');
+			alert('Cannot accept Notifications, site must be secured and on HTTPS protocol.');
+		}
+	} catch (error) {
+		console.warn(error);
+		alert(error);
 	}
 }
 
