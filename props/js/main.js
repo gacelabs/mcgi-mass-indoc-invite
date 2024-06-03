@@ -74,8 +74,12 @@ window.mobileCheck = function () {
 	return check;
 };
 
-var specificYoutubeChannel = ((mobileCheck()) ? 'youtube://channel/' : 'https://www.youtube.com/') + '@MCGIChannel';
-var specificFacebookChannel = ((mobileCheck()) ? 'fb://page/' : 'https://www.facebook.com/') + 'MCGI.org';
+/* var specificYoutubeChannel = ((mobileCheck()) ? 'youtube://channel/' : 'https://www.youtube.com/') + '@MCGIChannel';
+var specificFacebookChannel = ((mobileCheck()) ? 'fb://page/' : 'https://www.facebook.com/') + 'MCGI.org'; */
+
+var specificYoutubeChannel = 'https://m.youtube.com/@MCGIChannel';
+var specificFacebookChannel = 'https://m.facebook.com/MCGI.org';
+
 var hasPressed = false;
 var changeLocaleBtn = document.getElementById('change-locale');
 
