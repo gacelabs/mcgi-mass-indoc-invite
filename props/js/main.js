@@ -424,19 +424,23 @@ function reqNotification(title, body, redirectUrl) {
 					reg.showNotification(title, options)
 					.then(function () {
 						console.warn('Notification displayed successfully');
-						document.getElementsByClassName('errors').innerHTML += 'Notification displayed successfully<br>';
+						document.getElementsByClassName('errors')[0].style.display = 'block';
+						document.getElementsByClassName('errors')[0].innerHTML += 'Notification displayed successfully<br>';
 					})
 					.catch(function (error) {
 						console.warn('Error displaying notification:', error);
-						document.getElementsByClassName('errors').innerHTML += error + '<br>';
+						document.getElementsByClassName('errors')[0].style.display = 'block';
+						document.getElementsByClassName('errors')[0].innerHTML += error + '<br>';
 					});
 				} else {
 					console.warn('Service Worker registration not found');
-					document.getElementsByClassName('errors').innerHTML += 'Service Worker registration not found<br>';
+					document.getElementsByClassName('errors')[0].style.display = 'block';
+					document.getElementsByClassName('errors')[0].innerHTML += 'Service Worker registration not found<br>';
 				}
 			}).catch(function (error) {
 				console.error('Error getting Service Worker registration:', error);
-				document.getElementsByClassName('errors').innerHTML += error + '<br>';
+				document.getElementsByClassName('errors')[0].style.display = 'block';
+				document.getElementsByClassName('errors')[0].innerHTML += error + '<br>';
 			});
 		} else {
 			console.warn('Notification permission denied');
@@ -502,7 +506,8 @@ function showNotification(title, body, redirectUrl) {
 		}
 	} catch (error) {
 		console.warn(error);
-		document.getElementsByClassName('errors').innerHTML += error + '<br>';
+		if (mobileCheck()) document.getElementsByClassName('errors')[0].style.display = 'block';
+		document.getElementsByClassName('errors')[0].innerHTML += error + '<br>';
 		// alert(error);
 	}
 }
