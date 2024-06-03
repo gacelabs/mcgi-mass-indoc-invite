@@ -68,6 +68,7 @@
 	});
 })();
 
+var specificAppUrl = ((mobileCheck()) ? 'myapp://' : 'https://') + 'www.youtube.com/@MCGIChannel';
 var hasPressed = false;
 var changeLocaleBtn = document.getElementById('change-locale');
 function runLocaleChangeEvent() {
@@ -166,7 +167,7 @@ function getDayCount(startDate, endDate, bEnded) {
 		if (notificationShown == false) {
 			notificationShown = true;
 			var sTitle = 'Tune-in ' + (isWeekend ? 'Monday' : 'tomorrow');
-			showNotification(sTitle, 'Watch via MCGI YouTube Channel', 'https://www.youtube.com/@MCGIChannel');
+			showNotification(sTitle, 'Watch via MCGI YouTube Channel', specificAppUrl);
 		}
 
 		var formattedDate = formatDateToFJY(nextDay);
@@ -200,7 +201,7 @@ function getDayCount(startDate, endDate, bEnded) {
 		}
 		if (notificationShown == false) {
 			notificationShown = true;
-			showNotification(sTitle, 'Watch via MCGI YouTube Channel', 'https://www.youtube.com/@MCGIChannel');
+			showNotification(sTitle, 'Watch via MCGI YouTube Channel', specificAppUrl);
 		}
 	}
 }
@@ -379,7 +380,7 @@ function setDateEvent() {
 				document.getElementById("session-day").innerHTML = '<strong>Day ' + (session_count + 1) + ', Tune-in Monday</strong>';
 				if (notificationShown == false) {
 					notificationShown = true;
-					showNotification('Tune-in Monday', 'Watch via MCGI YouTube Channel', 'https://www.youtube.com/@MCGIChannel');
+					showNotification('Tune-in Monday', 'Watch via MCGI YouTube Channel', specificAppUrl);
 				}
 
 				var formattedDate = formatDateToFJY(nextSessionDay);
