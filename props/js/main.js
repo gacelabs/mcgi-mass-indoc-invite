@@ -417,7 +417,7 @@ function reqNotification(title, body, redirectUrl) {
 	Notification.requestPermission().then(function (permission) {
 		if (permission === 'granted') {
 			navigator.serviceWorker.getRegistration().then(function (reg) {
-				if (reg) {
+				if (reg.length) {
 					const options = {
 						body: body,
 						icon: '/mcgi-mass-indoc-invite/props/images/logo.png',
@@ -425,7 +425,7 @@ function reqNotification(title, body, redirectUrl) {
 							redirectUrl: redirectUrl // Pass the redirect URL to the notification data
 						}
 					};
-					reg.showNotification(title, options)
+					reg[0].showNotification(title, options)
 					.then(function () {
 						console.warn('Notification displayed successfully');
 						document.getElementsByClassName('errors')[0].style.display = 'block';
