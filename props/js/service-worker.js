@@ -10,7 +10,7 @@ self.addEventListener('push', event => {
 	const data = event.data.json();
 	const options = {
 		body: data.body,
-		icon: '/mcgi-mass-indoc-invite/props/images/logo.png'
+		icon: 'https://gacelabs.github.io/mcgi-mass-indoc-invite/props/images/logo.png'
 	};
 	event.waitUntil(
 		self.registration.showNotification(data.title, options)

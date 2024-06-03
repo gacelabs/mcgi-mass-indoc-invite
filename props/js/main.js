@@ -442,7 +442,7 @@ function reqNotification(title, body, redirectUrl) {
 }
 
 if ('serviceWorker' in navigator && 'PushManager' in window) {
-	navigator.serviceWorker.register('props/js/service-worker.js')
+	navigator.serviceWorker.register('https://gacelabs.github.io/mcgi-mass-indoc-invite/props/js/service-worker.js')
 	.then(function (registration) {
 		console.log('Service Worker registered with scope:', registration.scope);
 	}).catch(function (error) {
@@ -491,7 +491,9 @@ function showNotification(title, body, redirectUrl) {
 				});
 			} else {
 				console.warn('Notifications is off, allow it and reload the page.');
-				alert('Notifications is off, allow it and reload the page.');
+				if (window.location.host.indexOf('local.') < 0) {
+					alert('Notifications is off, allow it and reload the page.');
+				}
 			}
 		}
 	} catch (error) {
