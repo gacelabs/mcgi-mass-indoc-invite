@@ -18,6 +18,7 @@ self.addEventListener('push', event => {
 });
 
 self.addEventListener('notificationclick', event => {
+	event.notification.close();
 	// Add custom behavior for when the notification is clicked, if needed.
 	e.waitUntil(
 		clients.matchAll({ type: "window" }).then((clientsArr) => {
@@ -27,6 +28,8 @@ self.addEventListener('notificationclick', event => {
 				? (windowClient.focus(), true)
 				: false,
 			);
+			alert(hadWindowToFocus);
+			alert(event.notification.data.redirectUrl);
 			// Otherwise, open a new tab to the applicable URL and focus it.
 			if (!hadWindowToFocus)
 				clients
@@ -34,6 +37,4 @@ self.addEventListener('notificationclick', event => {
 				.then((windowClient) => (windowClient ? windowClient.focus() : null));
 		}),
 	);
-
-	event.notification.close();
 });
