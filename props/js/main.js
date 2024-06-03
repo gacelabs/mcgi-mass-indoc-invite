@@ -427,32 +427,34 @@ function reqNotification(title, body, redirectUrl) {
 		if (permission === 'granted') {
 			navigator.serviceWorker.getRegistrations().then(function (reg) {
 				if (reg && reg.length) {
-					const options = {
-						body: body,
-						icon: '/mcgi-mass-indoc-invite/props/images/logo.png',
-						data: {
-							redirectUrl: redirectUrl // Pass the redirect URL to the notification data
+					for (const key in reg) {
+						if (Object.hasOwnProperty.call(reg, key)) {
+							const registration = reg[key];
+							if (registration.scope == 'https://gacelabs.github.io/mcgi-mass-indoc-invite/props/js/') {
+								const options = {
+									body: body,
+									icon: '/mcgi-mass-indoc-invite/props/images/logo.png',
+									data: {
+										redirectUrl: redirectUrl // Pass the redirect URL to the notification data
+									}
+								};
+								registration.showNotification(title, options)
+								.then(function () {
+									console.warn('Notification displayed successfully');
+								})
+								.catch(function (error) {
+									console.warn('Error displaying notification:', error);
+									document.getElementsByClassName('errors')[0].innerHTML += error + '<br>';
+								});
+							}
 						}
-					};
-					reg[0].showNotification(title, options)
-					.then(function () {
-						console.warn('Notification displayed successfully');
-						document.getElementsByClassName('errors')[0].style.display = 'block';
-						document.getElementsByClassName('errors')[0].innerHTML += 'Notification displayed successfully<br>';
-					})
-					.catch(function (error) {
-						console.warn('Error displaying notification:', error);
-						document.getElementsByClassName('errors')[0].style.display = 'block';
-						document.getElementsByClassName('errors')[0].innerHTML += error + '<br>';
-					});
+					}
 				} else {
 					console.warn('Service Worker registration not found');
-					document.getElementsByClassName('errors')[0].style.display = 'block';
 					document.getElementsByClassName('errors')[0].innerHTML += 'Service Worker registration not found<br>';
 				}
 			}).catch(function (error) {
 				console.error('Error getting Service Worker registration:', error);
-				document.getElementsByClassName('errors')[0].style.display = 'block';
 				document.getElementsByClassName('errors')[0].innerHTML += error + '<br>';
 			});
 		} else {
@@ -521,7 +523,6 @@ function showNotification(title, body, redirectUrl) {
 		}
 	} catch (error) {
 		console.warn(error);
-		if (mobileCheck()) document.getElementsByClassName('errors')[0].style.display = 'block';
 		document.getElementsByClassName('errors')[0].innerHTML += error + '<br>';
 		// alert(error);
 	}
