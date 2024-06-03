@@ -274,7 +274,7 @@ function startCountdown(startDate, bForce, tillNextMonday) {
 					getDayCount(start, end);
 				}
 				document.getElementById("countdown").innerHTML =
-					`<div class="countdown-segment"><span class="countdown-label">Hours</span><span class="countdown-number">${hours}</span></div>` +
+					`<div class="countdown-segment"><span class="countdown-label">Hours</span><span class="countdown-number hours">${hours}</span></div>` +
 					`<div class="countdown-segment"><span class="countdown-label">Minutes</span><span class="countdown-number">${minutes}</span></div>` +
 					`<div class="countdown-segment"><span class="countdown-label">Seconds</span><span class="countdown-number">${seconds}</span></div>` +
 					`<div style="margin-top: -10px;"><span class="countdown-label">Hour(s) to go</span></div>`;
@@ -282,8 +282,8 @@ function startCountdown(startDate, bForce, tillNextMonday) {
 		} else {
 			if (days != 0 || hours != 0 || minutes != 0 || seconds != 0) {
 				document.getElementById("countdown").innerHTML =
-					`<div class="countdown-segment"><span class="countdown-label">Days</span><span class="countdown-number">${days}</span></div>` +
-					`<div class="countdown-segment"><span class="countdown-label">Hours</span><span class="countdown-number">${hours}</span></div>` +
+					`<div class="countdown-segment"><span class="countdown-label">Days</span><span class="countdown-number days">${days}</span></div>` +
+					`<div class="countdown-segment"><span class="countdown-label">Hours</span><span class="countdown-number hours">${hours}</span></div>` +
 					`<div class="countdown-segment"><span class="countdown-label">Minutes</span><span class="countdown-number">${minutes}</span></div>` +
 					`<div class="countdown-segment"><span class="countdown-label">Seconds</span><span class="countdown-number">${seconds}</span></div>` +
 					`<div style="margin-top: -10px;"><span class="countdown-label">Day(s) to go</span></div>`;
@@ -409,6 +409,32 @@ function setDateEvent() {
 	startCountdown(sDefaultStartDate, bForce);
 }
 
+function reqNotification(title, body, redirectUrl) {
+	Notification.requestPermission().then(function (permission) {
+		if (permission === 'granted') {
+			navigator.serviceWorker.getRegistration().then(function (reg) {
+				var options = {
+					body: body,
+					icon: '/mcgi-mass-indoc-invite/props/images/logo.png',
+					redirectUrl: redirectUrl
+				};
+				reg.showNotification(title, options);
+			});
+		} else {
+			console.warn('Notification permission denied');
+		}
+	});
+}
+
+if ('serviceWorker' in navigator && 'PushManager' in window) {
+	navigator.serviceWorker.register('props/js/service-worker.js')
+	.then(function (registration) {
+		console.log('Service Worker registered with scope:', registration.scope);
+	}).catch(function (error) {
+		console.warn('Service Worker registration failed:', error);
+	});
+}
+
 function showNotification(title, body, redirectUrl) {
 	if (("Notification" in window) == false) {
 		console.warn("This browser does not support desktop notification");
@@ -416,42 +442,47 @@ function showNotification(title, body, redirectUrl) {
 	}
 
 	try {
-		var options = {
-			body: body,
-			icon: '/mcgi-mass-indoc-invite/props/images/logo.png'
-		};
-
-		// Check if the user has granted permission to show notifications
-		if (Notification.permission === "granted") {
-			// If permission is granted, create a notification
-			var notification = new Notification(title, options);
-
-			notification.onclick = function (event) {
-				event.preventDefault(); // Prevent the browser from focusing the Notification's tab
-				window.open(redirectUrl, '_blank');
-				notification.close();
+		if ('serviceWorker' in navigator && 'PushManager' in window) {
+			reqNotification(title, body, redirectUrl);
+		} else {
+			var options = {
+				body: body,
+				icon: '/mcgi-mass-indoc-invite/props/images/logo.png'
 			};
 
-		} else if (Notification.permission !== "denied") {
-			// If permission has not been denied, request permission
-			Notification.requestPermission().then(function (permission) {
-				if (permission === "granted") {
-					var notification = new Notification(title, options);
-
-					notification.onclick = function (event) {
-						event.preventDefault(); // Prevent the browser from focusing the Notification's tab
-						window.open(redirectUrl, '_blank');
-						notification.close();
-					};
-				}
-			});
-		} else {
-			console.warn('Cannot accept Notifications, site must be secured and on HTTPS protocol.');
-			alert('Cannot accept Notifications, site must be secured and on HTTPS protocol.');
+			// Check if the user has granted permission to show notifications
+			if (Notification.permission === "granted") {
+				// If permission is granted, create a notification
+				var notification = new Notification(title, options);
+	
+				notification.onclick = function (event) {
+					event.preventDefault(); // Prevent the browser from focusing the Notification's tab
+					window.open(redirectUrl, '_blank');
+					notification.close();
+				};
+	
+			} else if (Notification.permission !== "denied") {
+				// If permission has not been denied, request permission
+				Notification.requestPermission().then(function (permission) {
+					if (permission === "granted") {
+						var notification = new Notification(title, options);
+	
+						notification.onclick = function (event) {
+							event.preventDefault(); // Prevent the browser from focusing the Notification's tab
+							window.open(redirectUrl, '_blank');
+							notification.close();
+						};
+					}
+				});
+			} else {
+				console.warn('Notifications is off, allow it and reload the page.');
+				alert('Notifications is off, allow it and reload the page.');
+			}
 		}
 	} catch (error) {
 		console.warn(error);
-		alert(error);
+		document.getElementsByClassName('errors').textContent = error;
+		// alert(error);
 	}
 }
 
