@@ -267,11 +267,14 @@ function startCountdown(startDate, bForce, tillNextMonday) {
 		var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
 		var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
 		var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-		// console.log(pass, bForce, end, tillNextMonday);
+		console.log(pass, bForce, end, tillNextMonday);
+		console.log((pass || bForce) || tillNextMonday == false);
 		if ((pass || bForce) || tillNextMonday == false) {
 			if (hours != 0 || minutes != 0 || seconds != 0) {
 				if (bForce == undefined) {
 					getDayCount(start, end);
+				} else if (bForce == false) {
+					getDayCount(savedStartSession, end);
 				}
 				document.getElementById("countdown").innerHTML =
 					`<div class="countdown-segment"><span class="countdown-label">Hours</span><span class="countdown-number hours">${hours}</span></div>` +
