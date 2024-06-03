@@ -425,8 +425,8 @@ function setDateEvent() {
 function reqNotification(title, body, redirectUrl) {
 	Notification.requestPermission().then(function (permission) {
 		if (permission === 'granted') {
-			navigator.serviceWorker.getRegistration().then(function (reg) {
-				if (reg.length) {
+			navigator.serviceWorker.getRegistrations().then(function (reg) {
+				if (reg && reg.length) {
 					const options = {
 						body: body,
 						icon: '/mcgi-mass-indoc-invite/props/images/logo.png',
@@ -465,7 +465,9 @@ if ('serviceWorker' in navigator && 'PushManager' in window) {
 	navigator.serviceWorker.register('https://gacelabs.github.io/mcgi-mass-indoc-invite/props/js/service-worker.js')
 	.then(function (registration) {
 		console.log('Service Worker registered with scope:', registration.scope);
-		registration.update(); // Ensure the service worker is up to date
+		setTimeout(() => {
+			registration.update(); // Ensure the service worker is up to date
+		}, 333);
 	}).catch(function (error) {
 		console.error('Service Worker registration failed:', error);
 	});
