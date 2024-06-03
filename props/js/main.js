@@ -181,7 +181,20 @@ function getDayCount(startDate, endDate, bEnded) {
 		startCountdown(nextDay, true, (tillNextMonday > 0));
 		// console.log(nextDay, true, tillNextMonday);
 	} else {
-		document.getElementById("session-day").innerHTML = '<strong>Day ' + count + ', Started ' + formatDateToFJY(startDate) + '</strong>';
+		var programDuration = new Date(endDate.getTime() + 2 * 60 * 60 * 1000); // plus two hours to end time
+		if (startDate > endDate.getTime() && startDate < programDuration) {
+			document.getElementById("session-day").innerHTML = '<strong>Day ' + count + ', Started ' + formatDateToFJY(startDate) + '</strong>';
+		} else {
+			var options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+			var today = new Intl.DateTimeFormat('en-US', options).format(new Date());
+			var end = new Intl.DateTimeFormat('en-US', options).format(endDate);
+			// console.log(today, end);
+			if (end == today) {
+				document.getElementById("session-day").innerHTML = '<strong>Day ' + count + ', Tune-in tonight</strong>';
+			} else {
+				document.getElementById("session-day").innerHTML = '<strong>Day ' + count + ', Tune-in tomorrow</strong>';
+			}
+		}
 		if (notificationShown == false) {
 			notificationShown = true;
 			showNotification('Session started', 'Watch via MCGI YouTube Channel', 'https://www.youtube.com/@MCGIChannel');
@@ -271,11 +284,7 @@ function startCountdown(startDate, bForce, tillNextMonday) {
 		// console.log((pass || bForce) || tillNextMonday == false);
 		if ((pass || bForce) || tillNextMonday == false) {
 			if (hours != 0 || minutes != 0 || seconds != 0) {
-				if (bForce == undefined) {
-					getDayCount(start, end);
-				} else if (bForce == false) {
-					getDayCount(savedStartSession, end, pass);
-				}
+				getDayCount(savedStartSession, end);
 				document.getElementById("countdown").innerHTML =
 					`<div class="countdown-segment"><span class="countdown-label">Hours</span><span class="countdown-number hours">${hours}</span></div>` +
 					`<div class="countdown-segment"><span class="countdown-label">Minutes</span><span class="countdown-number">${minutes}</span></div>` +
