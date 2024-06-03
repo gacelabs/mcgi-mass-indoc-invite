@@ -74,7 +74,7 @@ window.mobileCheck = function () {
 	return check;
 };
 
-var specificAppUrl = ((mobileCheck()) ? 'myapp://' : 'https://') + 'www.youtube.com/@MCGIChannel';
+var specificAppUrl = 'https://www.youtube.com/@MCGIChannel';
 var hasPressed = false;
 var changeLocaleBtn = document.getElementById('change-locale');
 
