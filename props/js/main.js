@@ -258,7 +258,7 @@ function startCountdown(startDate, bForce, tillNextMonday) {
 				clearInterval(interval);
 				startCountdown(start);
 			} else {
-				getDayCount(start, end, true);
+				getDayCount(savedStartSession, end, true);
 			}
 			return;
 		}
@@ -267,8 +267,8 @@ function startCountdown(startDate, bForce, tillNextMonday) {
 		var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
 		var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
 		var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-		if (pass || bForce) {
+		// console.log(pass, bForce, end, tillNextMonday);
+		if ((pass || bForce) || tillNextMonday == false) {
 			if (hours != 0 || minutes != 0 || seconds != 0) {
 				if (bForce == undefined) {
 					getDayCount(start, end);
@@ -303,7 +303,7 @@ function startCountdown(startDate, bForce, tillNextMonday) {
 	}
 
 	interval = setInterval(function () {
-		updateCountdown(end);
+		updateCountdown(end, bForce);
 	}, 1000);
 }
 
@@ -380,7 +380,6 @@ function setDateEvent() {
 				return;
 			} else {
 				bForce = false;
-				getDayCount(savedSessionStartDate, nextSessionDay);
 			}
 			sDefaultStartDate = new Intl.DateTimeFormat('en-US', options).format(nextSessionDay);
 		}
