@@ -219,7 +219,7 @@ function addDotAfterThirdCharacter(str) {
 	return str.slice(0, 3) + '.' + str.slice(3);
 }
 
-var notificationShown = false, interval;
+var notificationShown = false, interval, savedStartSession, savedEndSession;
 function startCountdown(startDate, bForce, tillNextMonday) {
 	var now = new Date();
 	var start = new Date(startDate);
@@ -252,8 +252,8 @@ function startCountdown(startDate, bForce, tillNextMonday) {
 			var programDuration = new Date(end.getTime() + 2 * 60 * 60 * 1000); // plus two hours to end time
 			// console.log(new Date(now), now, end.getTime(), end, programDuration, tillNextMonday);
 			if (now > end.getTime() && now < programDuration) {
-				getDayCount(start, end);
 				document.getElementById("countdown").innerHTML = "On going";
+				getDayCount(savedStartSession, end);
 				/* reset and update counter when program ended */
 				clearInterval(interval);
 				startCountdown(start);
@@ -341,7 +341,9 @@ function setDateEvent() {
 		var dEnd = (new Date(dStart).setDate(new Date(dStart).getDate() + 17)); // calculate end date including weekends
 		var savedSessionEndDate = new Date(dEnd);
 		console.log('Current session start date:', savedSessionStartDate);
+		savedStartSession = savedSessionStartDate;
 		console.log('Current session end date:', savedSessionEndDate);
+		savedEndSession = savedSessionEndDate;
 		console.log('Current date:', nextSessionDay, 'Current day count:', session_count);
 		console.log('Next session start date:', new Date(sDefaultStartDate));
 
