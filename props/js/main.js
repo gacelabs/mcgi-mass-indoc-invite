@@ -413,12 +413,27 @@ function reqNotification(title, body, redirectUrl) {
 	Notification.requestPermission().then(function (permission) {
 		if (permission === 'granted') {
 			navigator.serviceWorker.getRegistration().then(function (reg) {
-				var options = {
-					body: body,
-					icon: '/mcgi-mass-indoc-invite/props/images/logo.png',
-					redirectUrl: redirectUrl
-				};
-				reg.showNotification(title, options);
+				if (reg) {
+					const options = {
+						body: body,
+						icon: '/mcgi-mass-indoc-invite/props/images/logo.png',
+						data: {
+							redirectUrl: redirectUrl // Pass the redirect URL to the notification data
+						}
+					};
+					reg.showNotification(title, options)
+					.then(function () {
+						console.warn('Notification displayed successfully');
+						document.getElementsByClassName('errors').innerHTML += 'Notification displayed successfully<br>';
+					})
+					.catch(function (error) {
+						console.warn('Error displaying notification:', error);
+						document.getElementsByClassName('errors').innerHTML += error + '<br>';
+					});
+				} else {
+					console.warn('Service Worker registration not found');
+					document.getElementsByClassName('errors').innerHTML += 'Service Worker registration not found<br>';
+				}
 			});
 		} else {
 			console.warn('Notification permission denied');
@@ -481,7 +496,7 @@ function showNotification(title, body, redirectUrl) {
 		}
 	} catch (error) {
 		console.warn(error);
-		document.getElementsByClassName('errors').textContent = error;
+		document.getElementsByClassName('errors').innerHTML += error + '<br>';
 		// alert(error);
 	}
 }
