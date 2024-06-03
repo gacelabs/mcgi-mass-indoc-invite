@@ -182,6 +182,7 @@ function getDayCount(startDate, endDate, bEnded) {
 		// console.log(nextDay, true, tillNextMonday);
 	} else {
 		var programDuration = new Date(endDate.getTime() + 2 * 60 * 60 * 1000); // plus two hours to end time
+		var sTitle = 'Session started';
 		if (startDate > endDate.getTime() && startDate < programDuration) {
 			document.getElementById("session-day").innerHTML = '<strong>Day ' + count + ', Started ' + formatDateToFJY(startDate) + '</strong>';
 		} else {
@@ -190,14 +191,16 @@ function getDayCount(startDate, endDate, bEnded) {
 			var end = new Intl.DateTimeFormat('en-US', options).format(endDate);
 			// console.log(today, end);
 			if (end == today) {
+				sTitle = 'Tune-in tonight';
 				document.getElementById("session-day").innerHTML = '<strong>Day ' + count + ', Tune-in tonight</strong>';
 			} else {
+				sTitle = 'Tune-in tomorrow';
 				document.getElementById("session-day").innerHTML = '<strong>Day ' + count + ', Tune-in tomorrow</strong>';
 			}
 		}
 		if (notificationShown == false) {
 			notificationShown = true;
-			showNotification('Session started', 'Watch via MCGI YouTube Channel', 'https://www.youtube.com/@MCGIChannel');
+			showNotification(sTitle, 'Watch via MCGI YouTube Channel', 'https://www.youtube.com/@MCGIChannel');
 		}
 	}
 }
