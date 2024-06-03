@@ -18,7 +18,6 @@ self.addEventListener('push', event => {
 });
 
 self.addEventListener('notificationclick', event => {
-	event.notification.close();
 	// Add custom behavior for when the notification is clicked, if needed.
 	e.waitUntil(
 		clients.matchAll({ type: "window" }).then((clientsArr) => {
@@ -35,4 +34,6 @@ self.addEventListener('notificationclick', event => {
 				.then((windowClient) => (windowClient ? windowClient.focus() : null));
 		}),
 	);
+
+	event.notification.close();
 });
