@@ -312,6 +312,7 @@ function setDateEvent() {
 	var monthsCount = countMonths(sDefaultStartDate);
 	// console.log(monthsCount);
 	// var monthsCount = 2;
+	var bForce = undefined;
 	var givenDate = new Date(sDefaultStartDate);
 	var options = { year: 'numeric', month: '2-digit', day: '2-digit' };
 	sDefaultStartDate = new Intl.DateTimeFormat('en-US', options).format(givenDate);
@@ -328,8 +329,7 @@ function setDateEvent() {
 		}
 
 		var currStartSession = new Date(sDefaultStartDate);
-		currStartSession.setDate(currStartSession.getDate() - (monthsCount * 14));
-		console.log('Current session start date:', currStartSession);
+		var dStart = currStartSession.setDate(currStartSession.getDate() - (monthsCount * 14));
 		while (currStartSession <= nextSessionDay) {
 			var dayOfWeek = currStartSession.getDay();
 			if (dayOfWeek !== 6 && dayOfWeek !== 0) { // Exclude Saturday (6) and Sunday (0)
@@ -337,6 +337,11 @@ function setDateEvent() {
 			}
 			currStartSession.setDate(currStartSession.getDate() + 1); // Move to the next day
 		}
+		var savedSessionStartDate = new Date(dStart);
+		var dEnd = (new Date(dStart).setDate(new Date(dStart).getDate() + 17)); // calculate end date including weekends
+		var savedSessionEndDate = new Date(dEnd);
+		console.log('Current session start date:', savedSessionStartDate);
+		console.log('Current session end date:', savedSessionEndDate);
 		console.log('Current date:', nextSessionDay, 'Current day count:', session_count);
 		console.log('Next session start date:', new Date(sDefaultStartDate));
 
@@ -371,8 +376,10 @@ function setDateEvent() {
 				clearInterval(interval);
 				startCountdown(nextSessionDay, true, (tillNextMonday > 0));
 				return;
+			} else {
+				bForce = false;
+				getDayCount(savedSessionStartDate, nextSessionDay);
 			}
-
 			sDefaultStartDate = new Intl.DateTimeFormat('en-US', options).format(nextSessionDay);
 		}
 	}
@@ -399,7 +406,7 @@ function setDateEvent() {
 	}
 
 	document.getElementsByClassName('date-value')[0].textContent = dateTextContent;
-	startCountdown(sDefaultStartDate);
+	startCountdown(sDefaultStartDate, bForce);
 }
 
 function showNotification(title, body, redirectUrl) {
