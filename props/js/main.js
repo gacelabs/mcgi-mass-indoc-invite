@@ -196,20 +196,25 @@ function getDayCount(startDate, endDate, bEnded) {
 	} else {
 		var programDuration = new Date(endDate.getTime() + 2 * 60 * 60 * 1000); // plus two hours to end time
 		var sTitle = 'Session started';
-		if (startDate > endDate.getTime() && startDate < programDuration) {
+		if (startDate < endDate && endDate > programDuration) {
 			document.getElementById("session-day").innerHTML = '<strong>Day ' + count + ', Started ' + formatDateToFJY(startDate) + '</strong>';
 		} else {
 			var options = { year: 'numeric', month: '2-digit', day: '2-digit' };
 			var today = new Intl.DateTimeFormat('en-US', options).format(new Date());
 			var end = new Intl.DateTimeFormat('en-US', options).format(endDate);
-			// console.log(today, end);
+
 			if (end == today) {
-				sTitle = 'Tune-in tonight';
-				document.getElementById("session-day").innerHTML = '<strong>Day ' + count + ', Tune-in tonight</strong>';
+				if (count % 14 === 0) {
+					sTitle = 'Last session tonight';
+				} else if (count % 15 === 0) {
+					sTitle = 'Doctrine Acceptance';
+				} else {
+					sTitle = 'Tune-in tonight';
+				}
 			} else {
 				sTitle = 'Tune-in tomorrow';
-				document.getElementById("session-day").innerHTML = '<strong>Day ' + count + ', Tune-in tomorrow</strong>';
 			}
+			document.getElementById("session-day").innerHTML = '<strong>Day ' + count + ', ' + sTitle + '</strong>';
 		}
 		if (notificationShown == false) {
 			notificationShown = true;
@@ -249,7 +254,7 @@ function addDotAfterThirdCharacter(str) {
 }
 
 var notificationShown = false, interval, savedStartSession, savedEndSession;
-var notificationHourShown = false;
+var notificationStartSoon = false, baptismDay = false;
 function startCountdown(startDate, bForce, tillNextMonday) {
 	var now = new Date();
 	var start = new Date(startDate);
@@ -264,8 +269,13 @@ function startCountdown(startDate, bForce, tillNextMonday) {
 			// If the start date is in the future, set the countdown to 7 PM on the start date
 			end = new Date(now);
 		}
+
 		if (tillNextMonday == undefined) {
-			end.setHours(19, 0, 0, 0);
+			if (baptismDay == false) {
+				end.setHours(19, 0, 0, 0); // set to 9pm
+			} else {
+				end.setHours(8, 0, 0, 0); // set to 8am
+			}
 		} else {
 			bForce = false;
 		}
@@ -277,7 +287,7 @@ function startCountdown(startDate, bForce, tillNextMonday) {
 	function updateCountdown(end, tillNextMonday) {
 		var now = new Date().getTime();
 		var distance = end - now;
-
+		
 		if (distance < 0) {
 			var programDuration = new Date(end.getTime() + 2 * 60 * 60 * 1000); // plus two hours to end time
 			// console.log(new Date(now), now, end.getTime(), end, programDuration, tillNextMonday);
@@ -319,8 +329,8 @@ function startCountdown(startDate, bForce, tillNextMonday) {
 			}
 		}
 
-		if (hours == 0 && notificationHourShown == false) {
-			notificationHourShown = true;
+		if (hours == 0 && notificationStartSoon == false) {
+			notificationStartSoon = true;
 			showNotification('Starting soon - Standby', 'Watch via MCGI YouTube Channel', specificYoutubeChannel);
 		}
 		// console.log(cnt);
@@ -371,6 +381,7 @@ function setDateEvent() {
 			}
 			currStartSession.setDate(currStartSession.getDate() + 1); // Move to the next day
 		}
+		console.log(currStartSession, nextSessionDay);
 		var savedSessionStartDate = new Date(dStart);
 		var dEnd = (new Date(dStart).setDate(new Date(dStart).getDate() + 17)); // calculate end date including weekends
 		var savedSessionEndDate = new Date(dEnd);
@@ -381,8 +392,15 @@ function setDateEvent() {
 		console.log('Current date:', nextSessionDay, "\nCurrent day count:", session_count);
 		console.log('Next session start date:', new Date(sDefaultStartDate));
 
-		if (session_count % 14 === 0) {
+		if (session_count % 18 === 0) {
 			// 14th session has passed, render new session dates
+		} else if (session_count % 15 === 0) {
+			// mass baptist day at 8am
+			document.getElementsByClassName("arial-fnt")[0].innerHTML = 'MASS BAPTISM';
+			document.getElementsByClassName("info-loc")[0].style.display = 'none';
+			document.querySelector(".info-sess .sessions").style.display = 'none';
+			document.querySelector(".info-sess .social-medias").style.display = 'none';
+			baptismDay = true;
 		} else {
 			var isWeekend = nextSessionDay.getDay() === 6 || nextSessionDay.getDay() === 0;
 			if (isWeekend) {
@@ -537,9 +555,11 @@ function showNotification(title, body, redirectUrl) {
 					}
 				});
 			} else {
-				console.warn('Notifications is off, allow it and reload the page.');
 				if (window.location.host.indexOf('local.') < 0) {
+					console.warn('Notifications is off, allow it and reload the page.');
 					alert('Notifications is off, allow it and reload the page.');
+				} else {
+					console.warn('Notifications not allowed for local environment.');
 				}
 			}
 		}
