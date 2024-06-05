@@ -397,7 +397,7 @@ function setDateEvent() {
 		} else if (session_count % 15 === 0) {
 			// mass baptist day at 8am
 			document.getElementsByClassName("arial-fnt")[0].innerHTML = 'MASS BAPTISM';
-			document.getElementsByClassName("info-loc")[0].style.display = 'none';
+			// document.getElementsByClassName("info-loc")[0].style.display = 'none';
 			document.querySelector(".info-sess .sessions").style.display = 'none';
 			document.querySelector(".info-sess .social-medias").style.display = 'none';
 			baptismDay = true;
