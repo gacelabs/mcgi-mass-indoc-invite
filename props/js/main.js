@@ -204,15 +204,14 @@ function getDayCount(startDate, endDate, bEnded) {
 			var end = new Intl.DateTimeFormat('en-US', options).format(endDate);
 
 			if (end == today) {
-				if (count % 14 === 0) {
-					sTitle = 'Last session tonight';
-				} else if (count % 15 === 0) {
-					sTitle = 'Doctrine Acceptance';
-				} else {
-					sTitle = 'Tune-in tonight';
-				}
+				sTitle = 'Tune-in tonight';
 			} else {
 				sTitle = 'Tune-in tomorrow';
+			}
+			if (count % 14 === 0) {
+				sTitle = 'Last session tonight';
+			} else if (count % 15 === 0) {
+				sTitle = 'Doctrine Acceptance';
 			}
 			document.getElementById("session-day").innerHTML = '<strong>Day ' + count + ', ' + sTitle + '</strong>';
 		}
@@ -278,6 +277,9 @@ function startCountdown(startDate, bForce, tillNextMonday) {
 			}
 		} else {
 			bForce = false;
+			if (baptismDay) {
+				end.setHours(8, 0, 0, 0); // set to 8am
+			}
 		}
 	} else {
 		// If the start date is in the past or today, set the countdown to 8 days from the start date
@@ -394,14 +396,15 @@ function setDateEvent() {
 
 		if (session_count % 18 === 0) {
 			// 14th session has passed, render new session dates
-		} else if (session_count % 15 === 0) {
-			// mass baptist day at 8am
-			document.getElementsByClassName("arial-fnt")[0].innerHTML = 'MASS BAPTISM';
-			// document.getElementsByClassName("info-loc")[0].style.display = 'none';
-			document.querySelector(".info-sess .sessions").style.display = 'none';
-			document.querySelector(".info-sess .social-medias").style.display = 'none';
-			baptismDay = true;
 		} else {
+			if (session_count % 14 === 0 || session_count % 15 === 0) {
+				// mass baptist day at 8am
+				document.getElementsByClassName("arial-fnt")[0].innerHTML = 'MASS BAPTISM';
+				// document.getElementsByClassName("info-loc")[0].style.display = 'none';
+				document.querySelector(".info-sess .sessions").style.display = 'none';
+				document.querySelector(".info-sess .social-medias").style.display = 'none';
+				baptismDay = true;
+			}
 			var isWeekend = nextSessionDay.getDay() === 6 || nextSessionDay.getDay() === 0;
 			if (isWeekend) {
 				// console.log(isWeekend);
