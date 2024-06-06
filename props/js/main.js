@@ -1,4 +1,4 @@
-
+var users = [];
 (function () {
 	if (window.location.host.indexOf('local.') >= 0) {
 		var arLiveLinks = document.querySelectorAll('[href*="/mcgi-mass-indoc-invite/"], [src*="/mcgi-mass-indoc-invite/"], [content*="/mcgi-mass-indoc-invite/"]');
@@ -46,6 +46,24 @@
 		window.history.pushState({}, '', '?' + urlParams);
 	}
 
+	// Create a new XMLHttpRequest object
+	var xhr = new XMLHttpRequest();
+	// Configure the request
+	xhr.open('GET', 'props/data/users.json', true);
+	// Set the response type to JSON
+	xhr.responseType = 'json';
+	// Handle the response
+	xhr.onload = function () {
+		if (xhr.status === 200) {
+			users = xhr.response;
+			// console.log(users);
+		} else {
+			console.error('Request failed. Status: ' + xhr.status);
+		}
+	};
+	// Send the request
+	xhr.send();
+
 	window.addEventListener('DOMContentLoaded', setDateEvent);
 
 	window.addEventListener('keypress', function (e) {
@@ -83,6 +101,17 @@ var specificFacebookChannel = 'https://m.facebook.com/MCGI.org';
 var hasPressed = false;
 var changeLocaleBtn = document.getElementById('change-locale');
 
+/* function generatePassword(length) {
+	var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+	let password = '';
+	for (let i = 0; i < length; i++) {
+		var randomIndex = Math.floor(Math.random() * characters.length);
+		password += characters[randomIndex];
+	}
+	return password;
+} */
+
+var enteredPass = false;
 function runLocaleChangeEvent() {
 	if (changeLocaleBtn.style.display == 'none') {
 		changeLocaleBtn.style.display = 'block';
@@ -92,24 +121,67 @@ function runLocaleChangeEvent() {
 	if (hasPressed == false) {
 		hasPressed = true;
 		changeLocaleBtn.addEventListener('click', function (e) {
-			var localeName = prompt('Please enter MCGI Locale name?');
-			// console.log(localeName);
-			if (localeName && localeName.length) {
-				var localeAddress = prompt('Please enter MCGI Locale address?');
-				if (localeAddress && localeAddress.length) {
-					var localeContacts = prompt('Please enter MCGI Locale contact numbers? (Separated with comma if many)');
-					if (localeContacts && localeContacts.length) {
-						document.getElementsByClassName('locale-name')[0].textContent = localeName.toUpperCase();
-						document.getElementsByClassName('locale-address')[0].textContent = localeAddress.toUpperCase();
-						var localeData = { name: localeName, address: localeAddress, contacts: localeContacts };
-						popContacts(localeData);
-						sessionStorage.setItem('locale-informations', JSON.stringify(localeData));
-						var urlParams = new URLSearchParams(localeData).toString();
-						window.history.pushState({}, '', '?' + urlParams);
+			if (enteredPass == false) {
+				if (confirm('Click OK or Hit Enter to Login')) {
+					var username = prompt('Please enter your email');
+					if (username) {
+						var password = prompt('Please enter your password');
+						var oClass = new JSONQuery(users);
+						var hash = CryptoJS.MD5(password).toString();
+						var oCondition = [
+							{ field: 'username', operator: '=', value: username },
+							{ field: 'password', operator: '=', value: hash },
+						];
+						var query = {
+							select: { fields: '*' },
+							where: { condition: oCondition }
+						};
+						var result = oClass.execute(query);
+						// console.log(result);
+						if (result.data.length) {
+							enteredPass = true;
+							enterNewLocale();
+						}
 					}
+				}
+			} else {
+				var password = prompt('Please enter your password');
+				var oClass = new JSONQuery(users);
+				var hash = CryptoJS.MD5(password).toString();
+				var oCondition = [
+					{ field: 'password', operator: '=', value: hash },
+				];
+				var query = {
+					select: { fields: '*' },
+					where: { condition: oCondition }
+				};
+				var result = oClass.execute(query);
+				// console.log(result);
+				if (result.data.length) {
+					enterNewLocale();
 				}
 			}
 		});
+	}
+}
+
+function enterNewLocale() {
+	var localeName = prompt('Please enter MCGI Locale name?');
+	// console.log(localeName);
+	if (localeName && localeName.length) {
+		var localeAddress = prompt('Please enter MCGI Locale address?');
+		if (localeAddress && localeAddress.length) {
+			var localeContacts = prompt('Please enter MCGI Locale contact numbers? (Separated with comma if many)');
+			if (localeContacts && localeContacts.length) {
+				document.getElementsByClassName('locale-name')[0].textContent = localeName.toUpperCase();
+				document.getElementsByClassName('locale-address')[0].textContent = localeAddress.toUpperCase();
+				var localeData = { name: localeName, address: localeAddress, contacts: localeContacts };
+				popContacts(localeData);
+				sessionStorage.setItem('locale-informations', JSON.stringify(localeData));
+				var urlParams = new URLSearchParams(localeData).toString();
+				window.history.pushState({}, '', '?' + urlParams);
+			}
+		}
 	}
 }
 
@@ -472,11 +544,11 @@ function reqNotification(title, body, redirectUrl) {
 		if (permission === 'granted') {
 			navigator.serviceWorker.getRegistrations().then(function (reg) {
 				if (reg && reg.length) {
-					for (const key in reg) {
+					for (var key in reg) {
 						if (Object.hasOwnProperty.call(reg, key)) {
-							const registration = reg[key];
+							var registration = reg[key];
 							if (registration.scope == 'https://gacelabs.github.io/mcgi-mass-indoc-invite/props/js/') {
-								const options = {
+								var options = {
 									body: body,
 									icon: '/mcgi-mass-indoc-invite/props/images/logo.png',
 									data: {
