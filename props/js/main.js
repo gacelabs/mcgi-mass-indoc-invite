@@ -403,8 +403,10 @@ function setDateEvent() {
 				// document.getElementsByClassName("info-loc")[0].style.display = 'none';
 				document.querySelector(".info-sess .sessions").style.display = 'none';
 				document.querySelector(".info-sess .social-medias").style.display = 'none';
+				document.querySelector(".daytime .weektime").innerHTML = '8 AM PHT';
 				baptismDay = true;
 			}
+
 			var isWeekend = nextSessionDay.getDay() === 6 || nextSessionDay.getDay() === 0;
 			if (isWeekend) {
 				// console.log(isWeekend);
