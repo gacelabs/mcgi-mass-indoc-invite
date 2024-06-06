@@ -519,57 +519,59 @@ if ('serviceWorker' in navigator && 'PushManager' in window) {
 }
 
 function showNotification(title, body, redirectUrl) {
-	if (("Notification" in window) == false) {
-		console.warn("This browser does not support desktop notification");
-		return;
-	}
-
-	try {
-		if (('serviceWorker' in navigator && 'PushManager' in window) && mobileCheck()) {
-			reqNotification(title, body, redirectUrl);
-		} else {
-			var options = {
-				body: body,
-				icon: '/mcgi-mass-indoc-invite/props/images/logo.png'
-			};
-
-			// Check if the user has granted permission to show notifications
-			if (Notification.permission === "granted") {
-				// If permission is granted, create a notification
-				var notification = new Notification(title, options);
+	if (baptismDay == false) {
+		if (("Notification" in window) == false) {
+			console.warn("This browser does not support desktop notification");
+			return;
+		}
 	
-				notification.onclick = function (event) {
-					event.preventDefault(); // Prevent the browser from focusing the Notification's tab
-					window.open(redirectUrl, '_blank');
-					notification.close();
+		try {
+			if (('serviceWorker' in navigator && 'PushManager' in window) && mobileCheck()) {
+				reqNotification(title, body, redirectUrl);
+			} else {
+				var options = {
+					body: body,
+					icon: '/mcgi-mass-indoc-invite/props/images/logo.png'
 				};
 	
-			} else if (Notification.permission !== "denied") {
-				// If permission has not been denied, request permission
-				Notification.requestPermission().then(function (permission) {
-					if (permission === "granted") {
-						var notification = new Notification(title, options);
-	
-						notification.onclick = function (event) {
-							event.preventDefault(); // Prevent the browser from focusing the Notification's tab
-							window.open(redirectUrl, '_blank');
-							notification.close();
-						};
-					}
-				});
-			} else {
-				if (window.location.host.indexOf('local.') < 0) {
-					console.warn('Notifications is off, allow it and reload the page.');
-					alert('Notifications is off, allow it and reload the page.');
+				// Check if the user has granted permission to show notifications
+				if (Notification.permission === "granted") {
+					// If permission is granted, create a notification
+					var notification = new Notification(title, options);
+		
+					notification.onclick = function (event) {
+						event.preventDefault(); // Prevent the browser from focusing the Notification's tab
+						window.open(redirectUrl, '_blank');
+						notification.close();
+					};
+		
+				} else if (Notification.permission !== "denied") {
+					// If permission has not been denied, request permission
+					Notification.requestPermission().then(function (permission) {
+						if (permission === "granted") {
+							var notification = new Notification(title, options);
+		
+							notification.onclick = function (event) {
+								event.preventDefault(); // Prevent the browser from focusing the Notification's tab
+								window.open(redirectUrl, '_blank');
+								notification.close();
+							};
+						}
+					});
 				} else {
-					console.warn('Notifications not allowed for local environment.');
+					if (window.location.host.indexOf('local.') < 0) {
+						console.warn('Notifications is off, allow it and reload the page.');
+						alert('Notifications is off, allow it and reload the page.');
+					} else {
+						console.warn('Notifications not allowed for local environment.');
+					}
 				}
 			}
+		} catch (error) {
+			console.warn(error);
+			document.getElementsByClassName('errors')[0].innerHTML += error + '<br>';
+			// alert(error);
 		}
-	} catch (error) {
-		console.warn(error);
-		document.getElementsByClassName('errors')[0].innerHTML += error + '<br>';
-		// alert(error);
 	}
 }
 
