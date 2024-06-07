@@ -466,17 +466,21 @@ function setDateEvent() {
 			}
 			currStartSession.setDate(currStartSession.getDate() + 1); // Move to the next day
 		}
-		console.log(currStartSession, nextSessionDay);
-		var savedSessionStartDate = new Date(dStart);
-		var dEnd = (new Date(dStart).setDate(new Date(dStart).getDate() + 17)); // calculate end date including weekends
-		var savedSessionEndDate = new Date(dEnd);
+		// console.log(currStartSession, nextSessionDay);
+		var savedSessionStartDate = new Date(new Date(dStart).setHours(19, 0, 0, 0));
+		var dEnd = (new Date(dStart).setDate(new Date(dStart).getDate() + 18)); // calculate end date including weekends
+		var savedSessionEndDate = new Date(new Date(dEnd).setHours(8, 0, 0, 0));
 		savedStartSession = savedSessionStartDate;
 		savedEndSession = savedSessionEndDate;
+		sDefaultStartDate = new Date(new Date(sDefaultStartDate).setHours(19, 0, 0, 0));
+		var sDefaultEndDate = new Date(new Date(sDefaultStartDate).setDate(new Date(sDefaultStartDate).getDate() + 18)); // calculate end date including weekends
+		sDefaultEndDate = new Date(sDefaultEndDate.setHours(8, 0, 0, 0));
 
-		console.log('Current session start date:', savedSessionStartDate);
-		console.log('Current session end date:', savedSessionEndDate);
+		console.log('Previous session start date:', savedSessionStartDate);
+		console.log('Previous session end date:', savedSessionEndDate);
 		console.log('Current date:', nextSessionDay, "\nCurrent day count:", session_count);
-		console.log('Next session start date:', new Date(sDefaultStartDate));
+		console.log('Next session start date:', sDefaultStartDate);
+		console.log('Next session end date:', sDefaultEndDate);
 
 		if (session_count >= 15) {
 			// 14th session has passed, render new session dates
