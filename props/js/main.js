@@ -437,7 +437,7 @@ function startCountdown(startDate, bForce, tillNextMonday) {
 }
 
 function setDateEvent() {
-	var sDefaultStartDate = '04/22/2024';
+	var sDefaultStartDate = '04/22/2024 19:00:00';
 	var monthsCount = countMonths(sDefaultStartDate);
 	// console.log(monthsCount);
 	// var monthsCount = 2;
@@ -634,7 +634,6 @@ function showNotification(title, body, redirectUrl) {
 					body: body,
 					icon: '/mcgi-mass-indoc-invite/props/images/logo.png'
 				};
-	
 				// Check if the user has granted permission to show notifications
 				if (Notification.permission === "granted") {
 					// If permission is granted, create a notification
@@ -645,7 +644,6 @@ function showNotification(title, body, redirectUrl) {
 						window.open(redirectUrl, '_blank');
 						notification.close();
 					};
-		
 				} else if (Notification.permission !== "denied") {
 					// If permission has not been denied, request permission
 					Notification.requestPermission().then(function (permission) {
