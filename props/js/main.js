@@ -329,6 +329,15 @@ var notificationStartSoon = false, baptismDay = false;
 function startCountdown(startDate, bForce, tillNextMonday) {
 	var now = new Date();
 	var start = new Date(startDate);
+
+	var hours = now.getHours();
+	var minutes = now.getMinutes();
+	var seconds = now.getSeconds();
+	// Set the time components to the given date
+	start.setHours(hours);
+	start.setMinutes(minutes);
+	start.setSeconds(seconds);
+
 	var pass = now > start;
 	var end;
 	var cnt = 0;
@@ -343,7 +352,7 @@ function startCountdown(startDate, bForce, tillNextMonday) {
 
 		if (tillNextMonday == undefined) {
 			if (baptismDay == false) {
-				end.setHours(19, 0, 0, 0); // set to 9pm
+				end.setHours(21, 0, 0, 0); // set to 9pm
 			} else {
 				end.setHours(8, 0, 0, 0); // set to 8am
 			}
@@ -355,7 +364,9 @@ function startCountdown(startDate, bForce, tillNextMonday) {
 		}
 	} else {
 		// If the start date is in the past or today, set the countdown to 8 days from the start date
-		end = new Date(start.getTime() + 8 * 24 * 60 * 60 * 1000); // Add 8 days to start date
+		// end = new Date(start.getTime() + 8 * 24 * 60 * 60 * 1000); // Add 8 days to start date
+		end = new Date(new Date(start).setHours(19, 0, 0, 0)); // set to 7pm
+		// console.log(start, end);
 	}
 
 	function updateCountdown(end, tillNextMonday) {
@@ -403,7 +414,7 @@ function startCountdown(startDate, bForce, tillNextMonday) {
 			}
 		}
 
-		if (hours == 0 && notificationStartSoon == false) {
+		if ((days == 0 && hours == 0) && notificationStartSoon == false) {
 			notificationStartSoon = true;
 			showNotification('Starting soon - Standby', 'Watch via MCGI YouTube Channel', specificYoutubeChannel);
 		}
@@ -459,17 +470,29 @@ function setDateEvent() {
 		var savedSessionStartDate = new Date(dStart);
 		var dEnd = (new Date(dStart).setDate(new Date(dStart).getDate() + 17)); // calculate end date including weekends
 		var savedSessionEndDate = new Date(dEnd);
-		console.log('Current session start date:', savedSessionStartDate);
 		savedStartSession = savedSessionStartDate;
-		console.log('Current session end date:', savedSessionEndDate);
 		savedEndSession = savedSessionEndDate;
+
+		console.log('Current session start date:', savedSessionStartDate);
+		console.log('Current session end date:', savedSessionEndDate);
 		console.log('Current date:', nextSessionDay, "\nCurrent day count:", session_count);
 		console.log('Next session start date:', new Date(sDefaultStartDate));
 
-		if (session_count % 18 === 0) {
+		if (session_count >= 15) {
 			// 14th session has passed, render new session dates
+			var d8Am = new Date(nextSessionDay).setHours(8, 0, 0, 0);
+			// console.log(new Date(), new Date(d8Am));
+			if (new Date() < new Date(d8Am)) {
+				// mass baptist day at 8am
+				document.getElementsByClassName("arial-fnt")[0].innerHTML = 'MASS BAPTISM';
+				// document.getElementsByClassName("info-loc")[0].style.display = 'none';
+				document.querySelector(".info-sess .sessions").style.display = 'none';
+				document.querySelector(".info-sess .social-medias").style.display = 'none';
+				document.querySelector(".daytime .weektime").innerHTML = '8 AM PHT';
+				baptismDay = true;
+			}
 		} else {
-			if (session_count % 14 === 0 || session_count % 15 === 0) {
+			if (session_count % 14 === 0) {
 				// mass baptist day at 8am
 				document.getElementsByClassName("arial-fnt")[0].innerHTML = 'MASS BAPTISM';
 				// document.getElementsByClassName("info-loc")[0].style.display = 'none';
