@@ -481,8 +481,11 @@ function setDateEvent() {
 		console.log('Current date:', nextSessionDay, "\nCurrent day count:", session_count);
 		console.log('Next session start date:', sDefaultStartDate);
 		console.log('Next session end date:', sDefaultEndDate);
+		
 		if (session_count >= 15) {
 			// 14th session has passed, render new session dates
+			alert(savedSessionEndDate)
+			alert(nextSessionDay)
 			if (nextSessionDay == savedSessionEndDate) {
 			var d8Am = new Date(nextSessionDay).setHours(8, 0, 0, 0);
 			// console.log(new Date(), new Date(d8Am));
