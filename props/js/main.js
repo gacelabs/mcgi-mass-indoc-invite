@@ -484,6 +484,7 @@ function setDateEvent() {
 
 		if (session_count >= 15) {
 			// 14th session has passed, render new session dates
+			if (session_count == 15) {
 			var d8Am = new Date(nextSessionDay).setHours(8, 0, 0, 0);
 			// console.log(new Date(), new Date(d8Am));
 			if (new Date() < new Date(d8Am)) {
@@ -494,6 +495,7 @@ function setDateEvent() {
 				document.querySelector(".info-sess .social-medias").style.display = 'none';
 				document.querySelector(".daytime .weektime").innerHTML = '8 AM PHT';
 				baptismDay = true;
+			}
 			}
 		} else {
 			if (session_count % 14 === 0) {
