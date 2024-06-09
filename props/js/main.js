@@ -30,7 +30,7 @@ var users = [];
 		// console.log('search');
 		var search = decodeURIComponent(location.search.replace(/[+]/g, ' ')).substring(1);
 		var localeInfosSearch = JSON.parse('{"' + decodeURI(search).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"') + '"}');
-		if (localeInfosSearch) {
+		if (localeInfosSearch && (localeInfosSearch.name && localeInfosSearch.address)) {
 			document.getElementsByClassName('locale-name')[0].textContent = localeInfosSearch.name.toUpperCase();
 			document.getElementsByClassName('locale-address')[0].textContent = localeInfosSearch.address.toUpperCase();
 			popContacts(localeInfosSearch);
