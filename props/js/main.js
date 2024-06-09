@@ -84,6 +84,38 @@ var users = [];
 			secondsResetClick(1);
 		}
 	});
+
+	if (navigator.geolocation) {
+		// Request the user's location
+		navigator.geolocation.getCurrentPosition(
+			function (position) {
+				// Success callback
+				const latitude = position.coords.latitude;
+				const longitude = position.coords.longitude;
+				console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
+			},
+			function (error) {
+				// Error callback
+				switch (error.code) {
+					case error.PERMISSION_DENIED:
+						console.log("User denied the request for Geolocation.");
+						break;
+					case error.POSITION_UNAVAILABLE:
+						console.log("Location information is unavailable.");
+						break;
+					case error.TIMEOUT:
+						console.log("The request to get user location timed out.");
+						break;
+					case error.UNKNOWN_ERROR:
+						console.log("An unknown error occurred.");
+						break;
+				}
+			}
+		);
+	} else {
+		// Geolocation is not supported by this browser
+		console.log("Geolocation is not supported by this browser.");
+	}
 })();
 
 window.mobileCheck = function () {
@@ -485,17 +517,17 @@ function setDateEvent() {
 		if (session_count >= 15) {
 			// 14th session has passed, render new session dates
 			if (nextSessionDay == savedSessionEndDate) {
-			var d8Am = new Date(nextSessionDay).setHours(8, 0, 0, 0);
-			// console.log(new Date(), new Date(d8Am));
-			if (new Date() < new Date(d8Am)) {
-				// mass baptist day at 8am
-				document.getElementsByClassName("arial-fnt")[0].innerHTML = 'MASS BAPTISM';
-				// document.getElementsByClassName("info-loc")[0].style.display = 'none';
-				document.querySelector(".info-sess .sessions").style.display = 'none';
-				document.querySelector(".info-sess .social-medias").style.display = 'none';
-				document.querySelector(".daytime .weektime").innerHTML = '8 AM PHT';
-				baptismDay = true;
-			}
+				var d8Am = new Date(nextSessionDay).setHours(8, 0, 0, 0);
+				// console.log(new Date(), new Date(d8Am));
+				if (new Date() < new Date(d8Am)) {
+					// mass baptist day at 8am
+					document.getElementsByClassName("arial-fnt")[0].innerHTML = 'MASS BAPTISM';
+					// document.getElementsByClassName("info-loc")[0].style.display = 'none';
+					document.querySelector(".info-sess .sessions").style.display = 'none';
+					document.querySelector(".info-sess .social-medias").style.display = 'none';
+					document.querySelector(".daytime .weektime").innerHTML = '8 AM PHT';
+					baptismDay = true;
+				}
 			}
 		} else {
 			if (session_count % 14 === 0) {
