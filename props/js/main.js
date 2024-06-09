@@ -433,7 +433,7 @@ function startCountdown(startDate, bForce, tillNextMonday) {
 					`<div class="countdown-segment"><span class="countdown-label">Hours</span><span class="countdown-number hours">${hours}</span></div>` +
 					`<div class="countdown-segment"><span class="countdown-label">Minutes</span><span class="countdown-number">${minutes}</span></div>` +
 					`<div class="countdown-segment"><span class="countdown-label">Seconds</span><span class="countdown-number">${seconds}</span></div>` +
-					`<div style="margin-top: -10px;"><span class="countdown-label">Hour(s) to go</span></div>`;
+					`<div style="margin-top: -10px;"><span class="countdown-label">To go</span></div>`;
 			}
 		} else {
 			if (days != 0 || hours != 0 || minutes != 0 || seconds != 0) {
@@ -442,7 +442,7 @@ function startCountdown(startDate, bForce, tillNextMonday) {
 					`<div class="countdown-segment"><span class="countdown-label">Hours</span><span class="countdown-number hours">${hours}</span></div>` +
 					`<div class="countdown-segment"><span class="countdown-label">Minutes</span><span class="countdown-number">${minutes}</span></div>` +
 					`<div class="countdown-segment"><span class="countdown-label">Seconds</span><span class="countdown-number">${seconds}</span></div>` +
-					`<div style="margin-top: -10px;"><span class="countdown-label">Day(s) to go</span></div>`;
+					`<div style="margin-top: -10px;"><span class="countdown-label">To go</span></div>`;
 			}
 		}
 
