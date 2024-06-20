@@ -254,18 +254,6 @@ function getDaySuffix(day) {
 }
 
 function getDayCount(startDate, endDate, bEnded) {
-	var count = 0;
-	var currentDate = new Date(startDate);
-
-	while (currentDate <= endDate) {
-		var dayOfWeek = currentDate.getDay();
-		if (dayOfWeek !== 6 && dayOfWeek !== 0) { // Exclude Saturday (6) and Sunday (0)
-			count++;
-		}
-		currentDate.setDate(currentDate.getDate() + 1); // Move to the next day
-	}
-
-	// document.getElementById("session-day").innerHTML = '<strong>' + getDaySuffix(count) + ' Session, Started ' + formatDateToFJY(startDate) + '</strong>';
 	if (bEnded) {
 		var nextDay = new Date(new Date().getTime() + 1 * 24 * 60 * 60 * 1000);
 		var isWeekend = nextDay.getDay() === 6 || nextDay.getDay() === 0;
@@ -279,7 +267,7 @@ function getDayCount(startDate, endDate, bEnded) {
 			// console.log(nextDay);
 		}
 
-		document.getElementById("session-day").innerHTML = '<strong>Day ' + (count + 1) + ', Tune-in ' + (isWeekend ? 'Monday' : 'tomorrow') + '</strong>';
+		document.getElementById("session-day").innerHTML = '<strong>Day ' + session_count + ', Tune-in ' + (isWeekend ? 'Monday' : 'tomorrow') + '</strong>';
 		if (notificationShown == false) {
 			notificationShown = true;
 			var sTitle = 'Tune-in ' + (isWeekend ? 'Monday' : 'tomorrow');
@@ -301,7 +289,7 @@ function getDayCount(startDate, endDate, bEnded) {
 		var programDuration = new Date(endDate.getTime() + 2 * 60 * 60 * 1000); // plus two hours to end time
 		var sTitle = 'Session started';
 		if (startDate < endDate && endDate > programDuration) {
-			document.getElementById("session-day").innerHTML = '<strong>Day ' + count + ', Started ' + formatDateToFJY(startDate) + '</strong>';
+			document.getElementById("session-day").innerHTML = '<strong>Day ' + session_count + ', Started ' + formatDateToFJY(startDate) + '</strong>';
 		} else {
 			var options = { year: 'numeric', month: '2-digit', day: '2-digit' };
 			var today = new Intl.DateTimeFormat('en-US', options).format(new Date());
@@ -312,12 +300,12 @@ function getDayCount(startDate, endDate, bEnded) {
 			} else {
 				sTitle = 'Tune-in tomorrow';
 			}
-			if (count % 14 === 0) {
+			if (session_count % 14 === 0) {
 				sTitle = 'Last session tonight';
-			} else if (count % 15 === 0) {
+			} else if (session_count % 15 === 0) {
 				sTitle = 'Doctrine Acceptance';
 			}
-			document.getElementById("session-day").innerHTML = '<strong>Day ' + count + ', ' + sTitle + '</strong>';
+			document.getElementById("session-day").innerHTML = '<strong>Day ' + session_count + ', ' + sTitle + '</strong>';
 		}
 		if (notificationShown == false) {
 			notificationShown = true;
@@ -356,7 +344,7 @@ function addDotAfterThirdCharacter(str) {
 	return str.slice(0, 3) + '.' + str.slice(3);
 }
 
-var notificationShown = false, interval, savedStartSession, savedEndSession;
+var notificationShown = false, interval, savedStartSession, savedEndSession, savedCurrentDay;
 var notificationStartSoon = false, baptismDay = false;
 function startCountdown(startDate, bForce, tillNextMonday) {
 	var now = new Date();
@@ -404,18 +392,18 @@ function startCountdown(startDate, bForce, tillNextMonday) {
 	function updateCountdown(end, tillNextMonday) {
 		var now = new Date().getTime();
 		var distance = end - now;
-		
+
 		if (distance < 0) {
 			var programDuration = new Date(end.getTime() + 2 * 60 * 60 * 1000); // plus two hours to end time
 			// console.log(new Date(now), now, end.getTime(), end, programDuration, tillNextMonday);
 			if (now > end.getTime() && now < programDuration) {
 				document.getElementById("countdown").innerHTML = "On going";
-				getDayCount(savedStartSession, end);
+				getDayCount(sDefaultStartDate, savedCurrentDay);
 				/* reset and update counter when program ended */
 				clearInterval(interval);
 				startCountdown(start);
 			} else {
-				getDayCount(savedStartSession, end, true);
+				getDayCount(sDefaultStartDate, savedCurrentDay, true);
 			}
 			return;
 		}
@@ -428,7 +416,7 @@ function startCountdown(startDate, bForce, tillNextMonday) {
 		// console.log((pass || bForce) || tillNextMonday == false);
 		if ((pass || bForce) || tillNextMonday == false) {
 			if (hours != 0 || minutes != 0 || seconds != 0) {
-				getDayCount(savedStartSession, end);
+				getDayCount(sDefaultStartDate, savedCurrentDay);
 				document.getElementById("countdown").innerHTML =
 					`<div class="countdown-segment"><span class="countdown-label">Hours</span><span class="countdown-number hours">${hours}</span></div>` +
 					`<div class="countdown-segment"><span class="countdown-label">Minutes</span><span class="countdown-number">${minutes}</span></div>` +
@@ -468,8 +456,9 @@ function startCountdown(startDate, bForce, tillNextMonday) {
 	}, 1000);
 }
 
+var sDefaultStartDate = '04/22/2024 19:00:00';
+var session_count = 0;
 function setDateEvent() {
-	var sDefaultStartDate = '04/22/2024 19:00:00';
 	var monthsCount = countMonths(sDefaultStartDate);
 	// console.log(monthsCount);
 	// var monthsCount = 2;
@@ -481,7 +470,6 @@ function setDateEvent() {
 
 	if (monthsCount) {
 		var nextSessionDay = new Date();
-		var session_count = 0;
 
 		for (let index = 0; index < monthsCount; index++) {
 			var givenDate = new Date(sDefaultStartDate);
@@ -493,9 +481,6 @@ function setDateEvent() {
 		var dStart = currStartSession.setDate(currStartSession.getDate() - (monthsCount * 14));
 		while (currStartSession <= nextSessionDay) {
 			var dayOfWeek = currStartSession.getDay();
-			if (dayOfWeek !== 6 && dayOfWeek !== 0) { // Exclude Saturday (6) and Sunday (0)
-				session_count++;
-			}
 			currStartSession.setDate(currStartSession.getDate() + 1); // Move to the next day
 		}
 		// console.log(currStartSession, nextSessionDay);
@@ -504,16 +489,27 @@ function setDateEvent() {
 		var savedSessionEndDate = new Date(new Date(dEnd).setHours(8, 0, 0, 0));
 		savedStartSession = savedSessionStartDate;
 		savedEndSession = savedSessionEndDate;
+		savedCurrentDay = new Date(new Date(nextSessionDay).setHours(21, 0, 0, 0));
 		sDefaultStartDate = new Date(new Date(sDefaultStartDate).setHours(19, 0, 0, 0));
 		var sDefaultEndDate = new Date(new Date(sDefaultStartDate).setDate(new Date(sDefaultStartDate).getDate() + 18)); // calculate end date including weekends
 		sDefaultEndDate = new Date(sDefaultEndDate.setHours(8, 0, 0, 0));
+		var curSessionDate = new Date(sDefaultStartDate);
+
+		while (curSessionDate <= savedCurrentDay) {
+			var dayOfWeek = curSessionDate.getDay();
+			if (dayOfWeek !== 6 && dayOfWeek !== 0) { // Exclude Saturday (6) and Sunday (0)
+				session_count++;
+			}
+			curSessionDate.setDate(curSessionDate.getDate() + 1); // Move to the next day
+		}
+		// console.log(sDefaultStartDate, savedCurrentDay, session_count);
 
 		console.log('Previous session start date:', savedSessionStartDate);
 		console.log('Previous session end date:', savedSessionEndDate);
 		console.log('Current date:', nextSessionDay, "\nCurrent day count:", session_count);
 		console.log('Next session start date:', sDefaultStartDate);
 		console.log('Next session end date:', sDefaultEndDate);
-		
+
 		if (session_count >= 15) {
 			// 14th session has passed, render new session dates
 			if (nextSessionDay == savedSessionEndDate) {
@@ -617,13 +613,13 @@ function reqNotification(title, body, redirectUrl) {
 									}
 								};
 								registration.showNotification(title, options)
-								.then(function () {
-									console.warn('Notification displayed successfully');
-								})
-								.catch(function (error) {
-									console.warn('Error displaying notification:', error);
-									document.getElementsByClassName('errors')[0].innerHTML += error + '<br>';
-								});
+									.then(function () {
+										console.warn('Notification displayed successfully');
+									})
+									.catch(function (error) {
+										console.warn('Error displaying notification:', error);
+										document.getElementsByClassName('errors')[0].innerHTML += error + '<br>';
+									});
 							}
 						}
 					}
@@ -643,14 +639,14 @@ function reqNotification(title, body, redirectUrl) {
 
 if ('serviceWorker' in navigator && 'PushManager' in window) {
 	navigator.serviceWorker.register('https://gacelabs.github.io/mcgi-mass-indoc-invite/props/js/service-worker.js')
-	.then(function (registration) {
-		console.log('Service Worker registered with scope:', registration.scope);
-		setTimeout(() => {
-			registration.update(); // Ensure the service worker is up to date
-		}, 333);
-	}).catch(function (error) {
-		console.error('Service Worker registration failed:', error);
-	});
+		.then(function (registration) {
+			console.log('Service Worker registered with scope:', registration.scope);
+			setTimeout(() => {
+				registration.update(); // Ensure the service worker is up to date
+			}, 333);
+		}).catch(function (error) {
+			console.error('Service Worker registration failed:', error);
+		});
 }
 
 function showNotification(title, body, redirectUrl) {
@@ -659,7 +655,7 @@ function showNotification(title, body, redirectUrl) {
 			console.warn("This browser does not support desktop notification");
 			return;
 		}
-	
+
 		try {
 			if (('serviceWorker' in navigator && 'PushManager' in window) && mobileCheck()) {
 				reqNotification(title, body, redirectUrl);
@@ -672,7 +668,7 @@ function showNotification(title, body, redirectUrl) {
 				if (Notification.permission === "granted") {
 					// If permission is granted, create a notification
 					var notification = new Notification(title, options);
-		
+
 					notification.onclick = function (event) {
 						event.preventDefault(); // Prevent the browser from focusing the Notification's tab
 						window.open(redirectUrl, '_blank');
@@ -683,7 +679,7 @@ function showNotification(title, body, redirectUrl) {
 					Notification.requestPermission().then(function (permission) {
 						if (permission === "granted") {
 							var notification = new Notification(title, options);
-		
+
 							notification.onclick = function (event) {
 								event.preventDefault(); // Prevent the browser from focusing the Notification's tab
 								window.open(redirectUrl, '_blank');
@@ -713,7 +709,7 @@ function openInNewTab(ui) {
 		if (mobileCheck()) {
 			// console.log(ui.tagName, ui.textContent, ui.classList.value);
 			var sPrepend = '';
-			if (ui.classList.value == 'locale')  sPrepend = 'MCGI ';
+			if (ui.classList.value == 'locale') sPrepend = 'MCGI ';
 			var url = 'https://www.google.com/maps/dir/Your+location/' + encodeURIComponent(sPrepend + ui.textContent);
 			window.open(url, '_blank').focus();
 		} else {
