@@ -456,77 +456,65 @@ function startCountdown(startDate, bForce, tillNextMonday) {
 	}, 1000);
 }
 
-var sDefaultStartDate = '04/22/2024 19:00:00';
+var sDefaultStartDate = /* localStorage.getItem('lastStartDate') == null ?  */new Date(new Date('2024-04-22').setHours(19, 0, 0, 0))/*  : new Date(localStorage.getItem('lastStartDate')) */;
 var session_count = 0;
 function setDateEvent() {
 	var monthsCount = countMonths(sDefaultStartDate);
-	// console.log(monthsCount);
+	// console.log(monthsCount, sDefaultStartDate);
 	// var monthsCount = 2;
 	var bForce = undefined;
 	var givenDate = new Date(sDefaultStartDate);
 	var options = { year: 'numeric', month: '2-digit', day: '2-digit' };
-	sDefaultStartDate = new Intl.DateTimeFormat('en-US', options).format(givenDate);
+	sDefaultStartDate = new Date(new Intl.DateTimeFormat('en-US', options).format(givenDate));
 	// console.log(sDefaultStartDate);
-
+	
+	var nextSessionDay = new Date();
 	if (monthsCount) {
-		var nextSessionDay = new Date();
-
 		for (let index = 0; index < monthsCount; index++) {
 			var givenDate = new Date(sDefaultStartDate);
 			var dateAfter28Days = addDaysToDate(givenDate, 28);
-			sDefaultStartDate = new Intl.DateTimeFormat('en-US', options).format(dateAfter28Days);
+			sDefaultStartDate = new Date(new Intl.DateTimeFormat('en-US', options).format(dateAfter28Days));
 		}
+	}
 
-		var currStartSession = new Date(sDefaultStartDate);
-		var dStart = currStartSession.setDate(currStartSession.getDate() - (monthsCount * 14));
-		while (currStartSession <= nextSessionDay) {
-			var dayOfWeek = currStartSession.getDay();
-			currStartSession.setDate(currStartSession.getDate() + 1); // Move to the next day
+	var currStartSession = new Date(sDefaultStartDate);
+	var dStart = currStartSession.setDate(currStartSession.getDate() - (monthsCount * 14));
+	// console.log(new Date(dStart), nextSessionDay);
+	var savedSessionStartDate = new Date(new Date(dStart).setHours(19, 0, 0, 0));
+	var dEnd = (new Date(dStart).setDate(new Date(dStart).getDate() + 18)); // calculate end date including weekends
+	var savedSessionEndDate = new Date(new Date(dEnd).setHours(8, 0, 0, 0));
+	savedStartSession = savedSessionStartDate;
+	savedEndSession = savedSessionEndDate;
+	savedCurrentDay = new Date(new Date(nextSessionDay).setHours(21, 0, 0, 0));
+	sDefaultStartDate = new Date(new Date(sDefaultStartDate).setHours(19, 0, 0, 0));
+	var sDefaultEndDate = new Date(new Date(sDefaultStartDate).setDate(new Date(sDefaultStartDate).getDate() + 18)); // calculate end date including weekends
+	sDefaultEndDate = new Date(sDefaultEndDate.setHours(8, 0, 0, 0));
+	var curSessionDate = new Date(sDefaultStartDate);
+
+	while (curSessionDate <= savedCurrentDay) {
+		var dayOfWeek = curSessionDate.getDay();
+		if (dayOfWeek !== 6 && dayOfWeek !== 0) { // Exclude Saturday (6) and Sunday (0)
+			session_count++;
 		}
-		// console.log(currStartSession, nextSessionDay);
-		var savedSessionStartDate = new Date(new Date(dStart).setHours(19, 0, 0, 0));
-		var dEnd = (new Date(dStart).setDate(new Date(dStart).getDate() + 18)); // calculate end date including weekends
-		var savedSessionEndDate = new Date(new Date(dEnd).setHours(8, 0, 0, 0));
-		savedStartSession = savedSessionStartDate;
-		savedEndSession = savedSessionEndDate;
-		savedCurrentDay = new Date(new Date(nextSessionDay).setHours(21, 0, 0, 0));
-		sDefaultStartDate = new Date(new Date(sDefaultStartDate).setHours(19, 0, 0, 0));
-		var sDefaultEndDate = new Date(new Date(sDefaultStartDate).setDate(new Date(sDefaultStartDate).getDate() + 18)); // calculate end date including weekends
-		sDefaultEndDate = new Date(sDefaultEndDate.setHours(8, 0, 0, 0));
-		var curSessionDate = new Date(sDefaultStartDate);
+		curSessionDate.setDate(curSessionDate.getDate() + 1); // Move to the next day
+	}
+	// console.log(sDefaultStartDate, savedCurrentDay, session_count);
 
-		while (curSessionDate <= savedCurrentDay) {
-			var dayOfWeek = curSessionDate.getDay();
-			if (dayOfWeek !== 6 && dayOfWeek !== 0) { // Exclude Saturday (6) and Sunday (0)
-				session_count++;
-			}
-			curSessionDate.setDate(curSessionDate.getDate() + 1); // Move to the next day
-		}
-		// console.log(sDefaultStartDate, savedCurrentDay, session_count);
+	console.log('Previous session start date:', savedSessionStartDate);
+	console.log('Previous session end date:', savedSessionEndDate);
+	console.log('Current date:', nextSessionDay, "\nCurrent day count:", session_count);
+	console.log('Next session start date:', sDefaultStartDate);
+	/* if (localStorage.getItem('lastStartDate') == null) {
+		localStorage.setItem('lastStartDate', sDefaultStartDate);
+	} */
+	console.log('Next session end date:', sDefaultEndDate);
 
-		console.log('Previous session start date:', savedSessionStartDate);
-		console.log('Previous session end date:', savedSessionEndDate);
-		console.log('Current date:', nextSessionDay, "\nCurrent day count:", session_count);
-		console.log('Next session start date:', sDefaultStartDate);
-		console.log('Next session end date:', sDefaultEndDate);
-
-		if (session_count >= 15) {
-			// 14th session has passed, render new session dates
-			if (nextSessionDay == savedSessionEndDate) {
-				var d8Am = new Date(nextSessionDay).setHours(8, 0, 0, 0);
-				// console.log(new Date(), new Date(d8Am));
-				if (new Date() < new Date(d8Am)) {
-					// mass baptist day at 8am
-					document.getElementsByClassName("arial-fnt")[0].innerHTML = 'MASS BAPTISM';
-					// document.getElementsByClassName("info-loc")[0].style.display = 'none';
-					document.querySelector(".info-sess .sessions").style.display = 'none';
-					document.querySelector(".info-sess .social-medias").style.display = 'none';
-					document.querySelector(".daytime .weektime").innerHTML = '8 AM PHT';
-					baptismDay = true;
-				}
-			}
-		} else {
-			if (session_count % 14 === 0) {
+	if (session_count >= 15) {
+		// 14th session has passed, render new session dates
+		if (nextSessionDay == savedSessionEndDate) {
+			var d8Am = new Date(nextSessionDay).setHours(8, 0, 0, 0);
+			// console.log(new Date(), new Date(d8Am));
+			if (new Date() < new Date(d8Am)) {
 				// mass baptist day at 8am
 				document.getElementsByClassName("arial-fnt")[0].innerHTML = 'MASS BAPTISM';
 				// document.getElementsByClassName("info-loc")[0].style.display = 'none';
@@ -535,40 +523,50 @@ function setDateEvent() {
 				document.querySelector(".daytime .weektime").innerHTML = '8 AM PHT';
 				baptismDay = true;
 			}
-
-			var isWeekend = nextSessionDay.getDay() === 6 || nextSessionDay.getDay() === 0;
-			if (isWeekend) {
-				// console.log(isWeekend);
-				var tillNextMonday = 0;
-				// Got to weekdays when next day is Saturday (6) or Sunday (0)
-				do {
-					nextSessionDay.setDate(nextSessionDay.getDate() + 1); // Move to the next day
-					tillNextMonday++;
-				} while (nextSessionDay.getDay() === 0 || nextSessionDay.getDay() === 6);
-				// console.log(nextSessionDay);
-
-				document.getElementById("session-day").innerHTML = '<strong>Day ' + (session_count + 1) + ', Tune-in Monday</strong>';
-				if (notificationShown == false) {
-					notificationShown = true;
-					showNotification('Tune-in Monday', 'Watch via MCGI YouTube Channel', specificYoutubeChannel);
-				}
-
-				var formattedDate = formatDateToFJY(nextSessionDay);
-				var dateTextContent = formattedDate;
-				if (nextSessionDay.getMonth() != 4) {
-					dateTextContent = addDotAfterThirdCharacter(formattedDate);
-				}
-				document.getElementsByClassName("date-value")[0].textContent = dateTextContent;
-				var sWeekDay = new Intl.DateTimeFormat('en-US', { weekday: 'long' }).format(nextSessionDay);
-				document.getElementsByClassName('weekday')[0].textContent = sWeekDay;
-				clearInterval(interval);
-				startCountdown(nextSessionDay, true, (tillNextMonday > 0));
-				return;
-			} else {
-				bForce = false;
-			}
-			sDefaultStartDate = new Intl.DateTimeFormat('en-US', options).format(nextSessionDay);
 		}
+	} else {
+		if (session_count % 14 === 0) {
+			// mass baptist day at 8am
+			document.getElementsByClassName("arial-fnt")[0].innerHTML = 'MASS BAPTISM';
+			// document.getElementsByClassName("info-loc")[0].style.display = 'none';
+			document.querySelector(".info-sess .sessions").style.display = 'none';
+			document.querySelector(".info-sess .social-medias").style.display = 'none';
+			document.querySelector(".daytime .weektime").innerHTML = '8 AM PHT';
+			baptismDay = true;
+		}
+
+		var isWeekend = nextSessionDay.getDay() === 6 || nextSessionDay.getDay() === 0;
+		if (isWeekend) {
+			// console.log(isWeekend);
+			var tillNextMonday = 0;
+			// Got to weekdays when next day is Saturday (6) or Sunday (0)
+			do {
+				nextSessionDay.setDate(nextSessionDay.getDate() + 1); // Move to the next day
+				tillNextMonday++;
+			} while (nextSessionDay.getDay() === 0 || nextSessionDay.getDay() === 6);
+			// console.log(nextSessionDay);
+
+			document.getElementById("session-day").innerHTML = '<strong>Day ' + (session_count + 1) + ', Tune-in Monday</strong>';
+			if (notificationShown == false) {
+				notificationShown = true;
+				showNotification('Tune-in Monday', 'Watch via MCGI YouTube Channel', specificYoutubeChannel);
+			}
+
+			var formattedDate = formatDateToFJY(nextSessionDay);
+			var dateTextContent = formattedDate;
+			if (nextSessionDay.getMonth() != 4) {
+				dateTextContent = addDotAfterThirdCharacter(formattedDate);
+			}
+			document.getElementsByClassName("date-value")[0].textContent = dateTextContent;
+			var sWeekDay = new Intl.DateTimeFormat('en-US', { weekday: 'long' }).format(nextSessionDay);
+			document.getElementsByClassName('weekday')[0].textContent = sWeekDay;
+			clearInterval(interval);
+			startCountdown(nextSessionDay, true, (tillNextMonday > 0));
+			return;
+		} else {
+			bForce = false;
+		}
+		// sDefaultStartDate = new Date(new Intl.DateTimeFormat('en-US', options).format(nextSessionDay));
 	}
 	// console.log(sDefaultStartDate);
 
