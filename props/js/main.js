@@ -356,7 +356,7 @@ function addDotAfterThirdCharacter(str) {
 	return str.slice(0, 3) + '.' + str.slice(3);
 }
 
-var notificationShown = false, interval, savedStartSession, savedEndSession;
+var notificationShown = false, interval, savedStartSession, savedEndSession, savedCurrentDay;
 var notificationStartSoon = false, baptismDay = false;
 function startCountdown(startDate, bForce, tillNextMonday) {
 	var now = new Date();
@@ -410,12 +410,12 @@ function startCountdown(startDate, bForce, tillNextMonday) {
 			// console.log(new Date(now), now, end.getTime(), end, programDuration, tillNextMonday);
 			if (now > end.getTime() && now < programDuration) {
 				document.getElementById("countdown").innerHTML = "On going";
-				getDayCount(savedStartSession, end);
+				getDayCount(sDefaultStartDate, savedCurrentDay);
 				/* reset and update counter when program ended */
 				clearInterval(interval);
 				startCountdown(start);
 			} else {
-				getDayCount(savedStartSession, end, true);
+				getDayCount(sDefaultStartDate, savedCurrentDay, true);
 			}
 			return;
 		}
@@ -428,7 +428,7 @@ function startCountdown(startDate, bForce, tillNextMonday) {
 		// console.log((pass || bForce) || tillNextMonday == false);
 		if ((pass || bForce) || tillNextMonday == false) {
 			if (hours != 0 || minutes != 0 || seconds != 0) {
-				getDayCount(savedStartSession, end);
+				getDayCount(sDefaultStartDate, savedCurrentDay);
 				document.getElementById("countdown").innerHTML =
 					`<div class="countdown-segment"><span class="countdown-label">Hours</span><span class="countdown-number hours">${hours}</span></div>` +
 					`<div class="countdown-segment"><span class="countdown-label">Minutes</span><span class="countdown-number">${minutes}</span></div>` +
@@ -468,8 +468,8 @@ function startCountdown(startDate, bForce, tillNextMonday) {
 	}, 1000);
 }
 
+var sDefaultStartDate = '04/22/2024 19:00:00';
 function setDateEvent() {
-	var sDefaultStartDate = '04/22/2024 19:00:00';
 	var monthsCount = countMonths(sDefaultStartDate);
 	// console.log(monthsCount);
 	// var monthsCount = 2;
@@ -504,6 +504,7 @@ function setDateEvent() {
 		var savedSessionEndDate = new Date(new Date(dEnd).setHours(8, 0, 0, 0));
 		savedStartSession = savedSessionStartDate;
 		savedEndSession = savedSessionEndDate;
+		savedCurrentDay = nextSessionDay;
 		sDefaultStartDate = new Date(new Date(sDefaultStartDate).setHours(19, 0, 0, 0));
 		var sDefaultEndDate = new Date(new Date(sDefaultStartDate).setDate(new Date(sDefaultStartDate).getDate() + 18)); // calculate end date including weekends
 		sDefaultEndDate = new Date(sDefaultEndDate.setHours(8, 0, 0, 0));
