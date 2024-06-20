@@ -370,28 +370,28 @@ function startCountdown(startDate, bForce, tillNextMonday) {
 			end = new Date(now);
 		}
 
-		if (tillNextMonday == undefined) {
-			if (baptismDay == false) {
-				end.setHours(21, 0, 0, 0); // set to 9pm
-			} else {
-				end.setHours(8, 0, 0, 0); // set to 8am
-			}
+		if (tillNextMonday != undefined) bForce = false;
+		if (baptismDay) {
+			end.setHours(8, 0, 0, 0); // set to 8am
 		} else {
-			bForce = false;
-			if (baptismDay) {
-				end.setHours(8, 0, 0, 0); // set to 8am
+			end.setHours(19, 0, 0, 0); // set to 7pm
+			// console.log(now.getTime(), end.getTime());
+			if (now.getTime() > end.getTime()) {
+				end.setHours(21, 0, 0, 0); // set to 9pm
 			}
 		}
 	} else {
 		// If the start date is in the past or today, set the countdown to 8 days from the start date
 		// end = new Date(start.getTime() + 8 * 24 * 60 * 60 * 1000); // Add 8 days to start date
 		end = new Date(new Date(start).setHours(19, 0, 0, 0)); // set to 7pm
-		// console.log(start, end);
 	}
+	// console.log(now.getTime(), end.getTime(), now.getTime() > end.getTime());
+	// console.log(start, end);
 
 	function updateCountdown(end, tillNextMonday) {
 		var now = new Date().getTime();
-		var distance = end - now;
+		var distance = end.getTime() - now;
+		// console.log(distance, now, end.getTime());
 
 		if (distance < 0) {
 			var programDuration = new Date(end.getTime() + 2 * 60 * 60 * 1000); // plus two hours to end time
