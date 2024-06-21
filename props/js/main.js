@@ -302,6 +302,8 @@ function getDayCount(startDate, endDate, bEnded) {
 			}
 			if (session_count % 14 === 0) {
 				sTitle = 'Last session tonight';
+			} else if (session_count % 5 === 0) {
+				sTitle = 'Tune-in Monday';
 			} else if (session_count % 15 === 0) {
 				sTitle = 'Doctrine Acceptance';
 			}
@@ -414,7 +416,7 @@ function startCountdown(startDate, bForce, tillNextMonday) {
 		var seconds = Math.floor((distance % (1000 * 60)) / 1000);
 		// console.log(pass, bForce, end, tillNextMonday);
 		// console.log((pass || bForce) || tillNextMonday == false);
-		if ((pass || bForce) || tillNextMonday == false) {
+		if (((pass || bForce) || tillNextMonday == false) && session_count % 5 !== 0) {
 			if (hours != 0 || minutes != 0 || seconds != 0) {
 				getDayCount(sDefaultStartDate, savedCurrentDay);
 				document.getElementById("countdown").innerHTML =
