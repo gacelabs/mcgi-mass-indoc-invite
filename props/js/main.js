@@ -286,29 +286,24 @@ function getDayCount(startDate, endDate, bEnded) {
 		startCountdown(nextDay, true, (tillNextMonday > 0));
 		// console.log(nextDay, true, tillNextMonday);
 	} else {
-		var programDuration = new Date(endDate.getTime() + 2 * 60 * 60 * 1000); // plus two hours to end time
-		var sTitle = 'Session started';
-		if (startDate < endDate && endDate > programDuration) {
-			document.getElementById("session-day").innerHTML = '<strong>Day ' + session_count + ', Started ' + formatDateToFJY(startDate) + '</strong>';
-		} else {
-			var options = { year: 'numeric', month: '2-digit', day: '2-digit' };
-			var today = new Intl.DateTimeFormat('en-US', options).format(new Date());
-			var end = new Intl.DateTimeFormat('en-US', options).format(endDate);
-
-			if (end == today) {
-				sTitle = 'Tune-in tonight';
-			} else {
-				sTitle = 'Tune-in tomorrow';
-			}
-			if (session_count % 14 === 0) {
-				sTitle = 'Last session tonight';
-			} else if (session_count % 5 === 0) {
-				sTitle = 'Tune-in Monday';
-			} else if (session_count % 15 === 0) {
-				sTitle = 'Doctrine Acceptance';
-			}
-			document.getElementById("session-day").innerHTML = '<strong>Day ' + session_count + ', ' + sTitle + '</strong>';
+		var nowDate = new Date();
+		// var options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+		// var today = new Intl.DateTimeFormat('en-US', options).format(nowDate);
+		// var endDay = new Intl.DateTimeFormat('en-US', options).format(endDate);
+		// console.log(today, endDay, nowDate, endDate);
+		var sTitle = 'Tune-in tomorrow';
+		if (nowDate.getTime() <= endDate.getTime()) {
+			sTitle = 'Tune-in tonight';
 		}
+		if (session_count % 14 === 0) {
+			sTitle = 'Last session tonight';
+		} else if (session_count % 5 === 0) {
+			sTitle = 'Tune-in Monday';
+		} else if (session_count % 15 === 0) {
+			sTitle = 'Doctrine Acceptance';
+		}
+
+		document.getElementById("session-day").innerHTML = '<strong>Day ' + session_count + ', ' + sTitle + '</strong>';
 		if (notificationShown == false) {
 			notificationShown = true;
 			showNotification(sTitle, 'Watch via MCGI YouTube Channel', specificYoutubeChannel);
@@ -396,15 +391,14 @@ function startCountdown(startDate, bForce, tillNextMonday) {
 		// console.log(distance, now, end.getTime());
 
 		if (distance < 0) {
-			var programDuration = new Date(end.getTime() + 2 * 60 * 60 * 1000); // plus two hours to end time
-			// console.log(new Date(now), now, end.getTime(), end, programDuration, tillNextMonday);
-			if (now > end.getTime() && now < programDuration) {
+			if (now < end.getTime()) {
 				document.getElementById("countdown").innerHTML = "On going";
 				getDayCount(sDefaultStartDate, savedCurrentDay);
 				/* reset and update counter when program ended */
 				clearInterval(interval);
 				startCountdown(start);
 			} else {
+				session_count++;
 				getDayCount(sDefaultStartDate, savedCurrentDay, true);
 			}
 			return;
