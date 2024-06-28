@@ -372,11 +372,7 @@ function startCountdown(startDate, bForce, tillNextMonday) {
 			end.setHours(8, 0, 0, 0); // set to 8am
 		} else {
 			end.setHours(19, 0, 0, 0); // set to 7pm
-			/* var options = { year: 'numeric', month: '2-digit', day: '2-digit' };
-			var today = new Intl.DateTimeFormat('en-US', options).format(now);
-			var programEnds = new Intl.DateTimeFormat('en-US', options).format(end);
-			console.log(now, end, today, programEnds); */
-			if (/* today !== programEnds &&  */now.getTime() > end.getTime()) {
+			if (now.getTime() > end.getTime()) {
 				end.setHours(21, 0, 0, 0); // set to 9pm
 			}
 		}
@@ -413,9 +409,10 @@ function startCountdown(startDate, bForce, tillNextMonday) {
 		var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
 		var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
 		var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-		// console.log(pass, bForce, end, tillNextMonday);
+		console.log(pass, bForce, end, tillNextMonday, days);
 		// console.log((pass || bForce) || tillNextMonday == false);
-		if (((pass || bForce) || tillNextMonday == false) && (session_count % 5 !== 0 || days == 0)) {
+		if (((pass || bForce) || tillNextMonday == false) && (session_count % 5 !== 0 && days == 0)) {
+		// if (session_count % 5 !== 0 && days == 0) { /* not friday but days count is zero */
 			if (hours != 0 || minutes != 0 || seconds != 0) {
 				getDayCount(sDefaultStartDate, savedCurrentDay);
 				document.getElementById("countdown").innerHTML =
