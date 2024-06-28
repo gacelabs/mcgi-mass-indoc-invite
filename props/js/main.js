@@ -409,7 +409,7 @@ function startCountdown(startDate, bForce, tillNextMonday) {
 		var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
 		var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
 		var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-		console.log(pass, bForce, end, tillNextMonday, days);
+		// console.log(pass, bForce, end, tillNextMonday, days);
 		// console.log((pass || bForce) || tillNextMonday == false);
 		if (((pass || bForce) || tillNextMonday == false) && (session_count % 5 !== 0 && days == 0)) {
 		// if (session_count % 5 !== 0 && days == 0) { /* not friday but days count is zero */
