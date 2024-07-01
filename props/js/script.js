@@ -167,6 +167,19 @@ function setSessionEvent() {
 
 	console.log("\nCurrent session start date:", currentStartDate, "\nCurrent session end date:", currentEndDate);
 	console.log("\nCurrent session count:", sessionCount, "\nCurrent date:", todaysDate, "\n", "\nProgram starts:", todaysProgramStart, "\nProgram ends:", todaysProgramEnd, "\n\nTomorrow Program starts:", nextProgramStart);
+
+	if (notificationStartSoon == false) {
+		notificationStartSoon = true;
+		if (baptismDate) {
+			showNotification('Mass Baptism', 'Please contact MCGI thru this website', 'https://www.mcgi.org/reach-us/');
+		} else {
+			if (days == 0 && hours == 0) {
+				showNotification('Starting soon - Standby', 'Watch via MCGI YouTube Channel', specificYoutubeChannel);
+			} else {
+				showNotification(sTuneIn, 'Watch via MCGI YouTube Channel', specificYoutubeChannel);
+			}
+		}
+	}
 	
 	intervalCount = setInterval(function () {
 		setTuneInStatus(function () {
@@ -197,14 +210,6 @@ function updateEventCountdown() {
 		}
 	}
 
-	if (notificationStartSoon == false) {
-		notificationStartSoon = true;
-		if (days == 0 && hours == 0) {
-			showNotification('Starting soon - Standby', 'Watch via MCGI YouTube Channel', specificYoutubeChannel);
-		} else {
-			showNotification(sTuneIn, 'Watch via MCGI YouTube Channel', specificYoutubeChannel);
-		}
-	}
 	// console.log(untilResetCount);
 	untilResetCount++;
 	if (untilResetCount == 60) {
