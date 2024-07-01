@@ -215,7 +215,7 @@ function setSessionEvent() {
 }
 
 function updateEventCountdown() {
-	var now = new Date(/* setCurrentDateTime */(todaysDate)).getTime();
+	var now = new Date(setCurrentDateTime(todaysDate)).getTime();
 	var distance = todaysProgramStart.getTime() - now;
 	// console.log(distance, new Date(now), start);
 	if (distance < 0) {
