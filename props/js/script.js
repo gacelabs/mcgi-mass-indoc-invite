@@ -33,7 +33,8 @@ var todaysProgramEnd = new Date(new Date(todaysDate).setHours(21, 0, 0, 0));
 var nextProgramStart = addDaysToDate(todaysProgramStart, 1);
 /* is morning? */
 var isMorning = function (todaysDate) {
-	return todaysDate.getTime() < todaysProgramStart.getTime();
+	var currHr = new Intl.DateTimeFormat('en-US', { hour12: true, hour: "numeric", timeZone: 'Asia/Manila' }).format(todaysDate);
+	return todaysDate.getTime() < todaysProgramStart.getTime() && currHr.indexOf('AM') >= 0;
 }
 /* program just started */
 var isOngoing = function (todaysDate) {
@@ -66,7 +67,6 @@ function setEventDateTimeSession(todaysDate, countSess) {
 	var sWeekDay = new Intl.DateTimeFormat('en-US', { weekday: 'long', timeZone: 'Asia/Manila' }).format(todaysProgramStart);
 	document.getElementsByClassName('weekday')[0].textContent = sWeekDay;
 	var sDayTime = new Intl.DateTimeFormat('en-US', { hour12: true, hour: "numeric", timeZone: 'Asia/Manila' }).format(todaysProgramStart);
-	// console.log(sDayTime);
 	document.querySelector(".daytime .weektime").innerHTML = sDayTime + ' PHT';
 }
 
@@ -100,7 +100,6 @@ function setTuneInStatus(callBack) {
 			setMassBaptism();
 		}
 	} else { /* not yet started */
-		sTuneIn = 'Tune-in tonight';
 		if (isWeekend || sessionCount % 5 === 0) { /* every weekends or fridays */
 			sTuneIn = 'Tune-in Monday';
 		} else if (sessionCount == 1) {
@@ -113,11 +112,15 @@ function setTuneInStatus(callBack) {
 			} else if (sessionCount % 15 === 0) {
 				sTuneIn = 'Doctrine Acceptance';
 				setMassBaptism();
+			} else {
+				sTuneIn = 'Tune-in tonight';
 			}
 		} else {
+			var hasChangedDate = false;
 			if (sessionCount % 14 === 0) {
 				todaysProgramStart = new Date(new Date(nextProgramStart).setHours(8, 0, 0, 0));
 				todaysProgramEnd = new Date(new Date(nextProgramStart).setHours(12, 0, 0, 0));
+				hasChangedDate = true;
 			} else if (sessionCount % 15 === 0) {
 				var givenDate = new Date(currentEndDate);
 				var dateAfter10Days = addDaysToDate(givenDate, 10);
@@ -128,28 +131,30 @@ function setTuneInStatus(callBack) {
 				// console.log(currentStartDate, currentEndDate);
 				localStorage.setItem('currentStartDate', currentStartDate);
 
-				todaysDate = setCurrentDateTime(currentStartDate);
-				todaysProgramStart = new Date(new Date(todaysDate).setHours(19, 0, 0, 0));
-				todaysProgramEnd = new Date(new Date(todaysDate).setHours(21, 0, 0, 0));
+				todaysProgramStart = new Date(new Date(setCurrentDateTime(currentStartDate)).setHours(19, 0, 0, 0));
+				todaysProgramEnd = new Date(new Date(todaysProgramStart).setHours(21, 0, 0, 0));
 				nextProgramStart = nextSession(new Date(todaysProgramStart));
 				sessionCount = 0;
 				setCurrentSessionCount();
+				hasChangedDate = true;
 			}
 
 			setEventDateTimeSession(todaysProgramStart, false);
-			if (consoleLogShown == false) {
+			if (consoleLogShown == false && hasChangedDate) {
 				consoleLogShown = true;
-				// console.clear();
+				console.clear();
 				console.log("\nCurrent session start date:", currentStartDate, "\nCurrent session end date:", currentEndDate);
 				console.log("\nCurrent session count:", sessionCount, "\nCurrent date:", todaysDate, "\n", "\nProgram starts:", todaysProgramStart, "\nProgram ends:", todaysProgramEnd, "\n\nNext Program starts:", nextProgramStart);
 			}
 
-			clearInterval(intervalCount);
-			intervalCount = setInterval(function () {
-				setTuneInStatus(function () {
-					updateEventCountdown();
-				});
-			}, 333);
+			if (hasChangedDate) {
+				clearInterval(intervalCount);
+				intervalCount = setInterval(function () {
+					setTuneInStatus(function () {
+						updateEventCountdown();
+					});
+				}, 333);
+			}
 		}
 	}
 	
