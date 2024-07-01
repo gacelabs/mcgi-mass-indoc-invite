@@ -227,7 +227,8 @@ function updateEventCountdown() {
 	var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
 	var seconds = Math.floor((distance % (1000 * 60)) / 1000);
 	
-	if (onGoing == false) {
+	// console.log(onGoing);
+	if (onGoing === false) {
 		if (days > 0 || hours > 0 || minutes > 0 || seconds > 0) {
 			document.getElementById("countdown").innerHTML =
 				`<div class="countdown-segment"><span class="countdown-label">Days</span><span class="countdown-number days">${days}</span></div>` +
