@@ -1,16 +1,20 @@
-function addDaysToDate(date, days) {
+function addDaysToDate(date, days, minus) {
 	var result = new Date(date);
-	result.setDate(result.getDate() + days);
+	if (minus) {
+		result.setDate(result.getDate() - days);
+	} else {
+		result.setDate(result.getDate() + days);
+	}
 	return result;
 }
 
 function formatDateToFJY(date) {
-	var options = { month: 'short', day: 'numeric', year: 'numeric' };
+	var options = { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'Asia/Manila' };
 	return new Intl.DateTimeFormat('en-US', options).format(date);
 }
 
 function countMonths(startDate) {
-	var today = new Date();
+	var today = new Date(new Date().setHours(19, 0, 0, 0));
 	var start = new Date(startDate);
 
 	var startYear = start.getFullYear();
