@@ -30,7 +30,7 @@ var todaysDate = new Date();
 
 var todaysProgramStart = new Date(new Date(todaysDate).setHours(19, 0, 0, 0));
 var todaysProgramEnd = new Date(new Date(todaysDate).setHours(21, 0, 0, 0));
-var nextProgramStart = addDaysToDate(todaysProgramStart, 1);
+var nextProgramStart = new Date(addDaysToDate(todaysProgramStart, 1));
 /* is morning? */
 var isMorning = function (todaysDate) {
 	var currHr = new Intl.DateTimeFormat('en-US', { hour12: true, hour: "numeric", timeZone: 'Asia/Manila' }).format(todaysDate);
@@ -100,7 +100,7 @@ function setTuneInStatus(callBack) {
 			setMassBaptism();
 		}
 	} else { /* not yet started */
-		if (isWeekend || sessionCount % 5 === 0) { /* every weekends or fridays */
+		if (isWeekend || (sessionCount != 15 && sessionCount % 5 === 0)) { /* every weekends or fridays */
 			sTuneIn = 'Tune-in Monday';
 		} else if (sessionCount == 1) {
 			var sWeekDay = new Intl.DateTimeFormat('en-US', { weekday: 'long', timeZone: 'Asia/Manila' }).format(todaysProgramStart);
@@ -121,11 +121,8 @@ function setTuneInStatus(callBack) {
 				sTuneIn = 'Tune-in tonight';
 			}
 		} else {
-			if (sessionCount % 14 === 0) {
-				todaysProgramStart = new Date(new Date(nextProgramStart).setHours(8, 0, 0, 0));
-				todaysProgramEnd = new Date(new Date(nextProgramStart).setHours(12, 0, 0, 0));
+			if (todaysDate > currentEndDate) {
 				hasChangedDate = true;
-			} else if (sessionCount % 15 === 0) {
 				var givenDate = new Date(currentEndDate);
 				var dateAfter10Days = addDaysToDate(givenDate, 10);
 				currentStartDate = new Date(new Date(dateAfter10Days).setHours(19, 0, 0, 0));
@@ -140,7 +137,16 @@ function setTuneInStatus(callBack) {
 				nextProgramStart = nextSession(new Date(todaysProgramStart));
 				sessionCount = 0;
 				setCurrentSessionCount();
-				hasChangedDate = true;
+			} else {
+				if (nextProgramStart.getDay() === 6 || nextProgramStart.getDay() === 0) {
+					nextProgramStart = addDaysToDate(nextProgramStart, 1, true);
+				}
+				if (sessionCount == 15 && sessionCount % 5 === 0) {
+					todaysProgramStart = new Date(new Date(nextProgramStart).setHours(8, 0, 0, 0));
+					todaysProgramEnd = new Date(new Date(nextProgramStart).setHours(12, 0, 0, 0));
+					sTuneIn = 'Doctrine Acceptance';
+					setMassBaptism();
+				}
 			}
 		}
 
@@ -186,11 +192,14 @@ function setSessionEvent() {
 
 	var dEnd = new Date(currentStartDate).setDate(new Date(currentStartDate).getDate() + 18); // calculate end date including weekends
 	currentEndDate = new Date(new Date(dEnd).setHours(12, 0, 0, 0));
-
+	// console.log(todaysDate, todaysProgramStart);
 	if (todaysDate > todaysProgramStart) {
 		todaysProgramStart = new Date(new Date(addDaysToDate(todaysDate, 1)).setHours(19, 0, 0, 0));
 		todaysProgramEnd = new Date(new Date(addDaysToDate(todaysDate, 1)).setHours(21, 0, 0, 0));
 		nextProgramStart = addDaysToDate(todaysProgramStart, 1);
+		if (nextProgramStart.getDay() === 6 || nextProgramStart.getDay() === 0) {
+			nextProgramStart = todaysProgramStart;
+		}
 	}
 
 	setEventDateTimeSession(todaysProgramStart);
@@ -206,7 +215,7 @@ function setSessionEvent() {
 }
 
 function updateEventCountdown() {
-	var now = new Date(setCurrentDateTime(todaysDate)).getTime();
+	var now = new Date(/* setCurrentDateTime */(todaysDate)).getTime();
 	var distance = todaysProgramStart.getTime() - now;
 	// console.log(distance, new Date(now), start);
 	if (distance < 0) {
@@ -218,13 +227,15 @@ function updateEventCountdown() {
 	var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
 	var seconds = Math.floor((distance % (1000 * 60)) / 1000);
 	
-	if (days > 0 || hours > 0 || minutes > 0 || seconds > 0) {
-		document.getElementById("countdown").innerHTML =
-			`<div class="countdown-segment"><span class="countdown-label">Days</span><span class="countdown-number days">${days}</span></div>` +
-			`<div class="countdown-segment"><span class="countdown-label">Hours</span><span class="countdown-number hours">${hours}</span></div>` +
-			`<div class="countdown-segment"><span class="countdown-label">Minutes</span><span class="countdown-number">${minutes}</span></div>` +
-			`<div class="countdown-segment"><span class="countdown-label">Seconds</span><span class="countdown-number">${seconds}</span></div>` +
-			`<div style="margin-top: -10px;"><span class="countdown-label">To go</span></div>`;
+	if (onGoing == false) {
+		if (days > 0 || hours > 0 || minutes > 0 || seconds > 0) {
+			document.getElementById("countdown").innerHTML =
+				`<div class="countdown-segment"><span class="countdown-label">Days</span><span class="countdown-number days">${days}</span></div>` +
+				`<div class="countdown-segment"><span class="countdown-label">Hours</span><span class="countdown-number hours">${hours}</span></div>` +
+				`<div class="countdown-segment"><span class="countdown-label">Minutes</span><span class="countdown-number">${minutes}</span></div>` +
+				`<div class="countdown-segment"><span class="countdown-label">Seconds</span><span class="countdown-number">${seconds}</span></div>` +
+				`<div style="margin-top: -10px;"><span class="countdown-label">To go</span></div>`;
+		}
 	}
 
 	if (notificationStartSoon == false) {
