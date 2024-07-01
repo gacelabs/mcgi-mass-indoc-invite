@@ -23,7 +23,7 @@ var todaysDate = new Date();
 /* start of "for testing purposes" */
 	/* this current date */
 	// var todaysDate = setCurrentDateTime(new Date('2024-06-28'));
-	// var todaysDate = setCurrentDateTime(new Date('2024-07-01'));
+	// var todaysDate = setCurrentDateTime(new Date('2024-07-05'));
 	/* program time adjustments */
 	// todaysDate = new Date(new Date(todaysDate).setHours(13, 0, 0, 0));
 /* end of "for testing purposes" */
@@ -106,17 +106,21 @@ function setTuneInStatus(callBack) {
 			var sWeekDay = new Intl.DateTimeFormat('en-US', { weekday: 'long', timeZone: 'Asia/Manila' }).format(todaysProgramStart);
 			sTuneIn = 'Starting on ' + sWeekDay;
 		}
+		var hasChangedDate = false;
 		if (isMorning(todaysDate)) {
 			if (sessionCount % 14 === 0) {
 				sTuneIn = 'Last session tune-in tonight';
 			} else if (sessionCount % 15 === 0) {
 				sTuneIn = 'Doctrine Acceptance';
+				hasChangedDate = true;
+				todaysProgramStart = new Date(new Date(todaysProgramStart).setHours(8, 0, 0, 0));
+				todaysProgramEnd = new Date(new Date(todaysProgramStart).setHours(12, 0, 0, 0));
+				nextProgramStart = todaysProgramStart;
 				setMassBaptism();
 			} else {
 				sTuneIn = 'Tune-in tonight';
 			}
 		} else {
-			var hasChangedDate = false;
 			if (sessionCount % 14 === 0) {
 				todaysProgramStart = new Date(new Date(nextProgramStart).setHours(8, 0, 0, 0));
 				todaysProgramEnd = new Date(new Date(nextProgramStart).setHours(12, 0, 0, 0));
@@ -138,23 +142,23 @@ function setTuneInStatus(callBack) {
 				setCurrentSessionCount();
 				hasChangedDate = true;
 			}
+		}
 
-			setEventDateTimeSession(todaysProgramStart, false);
-			if (consoleLogShown == false && hasChangedDate) {
-				consoleLogShown = true;
-				console.clear();
-				console.log("\nCurrent session start date:", currentStartDate, "\nCurrent session end date:", currentEndDate);
-				console.log("\nCurrent session count:", sessionCount, "\nCurrent date:", todaysDate, "\n", "\nProgram starts:", todaysProgramStart, "\nProgram ends:", todaysProgramEnd, "\n\nNext Program starts:", nextProgramStart);
-			}
+		setEventDateTimeSession(todaysProgramStart, false);
+		if (consoleLogShown == false && hasChangedDate) {
+			consoleLogShown = true;
+			console.clear();
+			console.log("\nCurrent session start date:", currentStartDate, "\nCurrent session end date:", currentEndDate);
+			console.log("\nCurrent session count:", sessionCount, "\nCurrent date:", todaysDate, "\n", "\nProgram starts:", todaysProgramStart, "\nProgram ends:", todaysProgramEnd, "\n\nNext Program starts:", nextProgramStart);
+		}
 
-			if (hasChangedDate) {
-				clearInterval(intervalCount);
-				intervalCount = setInterval(function () {
-					setTuneInStatus(function () {
-						updateEventCountdown();
-					});
-				}, 333);
-			}
+		if (hasChangedDate) {
+			clearInterval(intervalCount);
+			intervalCount = setInterval(function () {
+				setTuneInStatus(function () {
+					updateEventCountdown();
+				});
+			}, 333);
 		}
 	}
 	
@@ -203,8 +207,11 @@ function setSessionEvent() {
 
 function updateEventCountdown() {
 	var now = new Date(setCurrentDateTime(todaysDate)).getTime();
-	var distance = Math.abs(todaysProgramStart.getTime() - now);
+	var distance = todaysProgramStart.getTime() - now;
 	// console.log(distance, new Date(now), start);
+	if (distance < 0) {
+		distance = todaysProgramStart.getTime() - todaysDate.getTime();
+	}
 
 	var days = Math.floor(distance / (1000 * 60 * 60 * 24));
 	var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
