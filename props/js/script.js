@@ -24,7 +24,7 @@ var todaysDate = new Date();
 	// var todaysDate = setCurrentDateTime(new Date('2024-06-28'));
 	// var todaysDate = setCurrentDateTime(new Date('2024-07-04'));
 	/* program time adjustments */
-	// todaysDate = new Date(new Date(todaysDate).setHours(24, 0, 0, 0));
+	// todaysDate = new Date(new Date(todaysDate).setHours(22, 0, 0, 0));
 /* end of "for testing purposes" */
 
 var todaysProgramStart = new Date(new Date(todaysDate).setHours(19, 0, 0, 0));
@@ -52,11 +52,7 @@ function setCurrentSessionCount() {
 }
 
 function setEventDateTimeSession(todaysDate) {
-	var dEnd = (new Date(currentStartDate).setDate(new Date(currentStartDate).getDate() + 18)); // calculate end date including weekends
-	currentEndDate = new Date(new Date(dEnd).setHours(8, 0, 0, 0));
-	// console.log(monthsCount, currentStartDate, currentEndDate, todaysDate);
 	setCurrentSessionCount();
-
 	var formattedDate = formatDateToFJY(todaysDate);
 	var dateTextContent = formattedDate;
 	if (todaysDate.getMonth() != 4) {
@@ -127,7 +123,7 @@ function setTuneInStatus(callBack) {
 			setEventDateTimeSession(nextProgramStart);
 			clearInterval(intervalCount);
 			intervalCount = setInterval(function () {
-				updateEventCountdown(todaysProgramStart);
+				updateEventCountdown();
 			}, 1000);
 		}
 	}
@@ -148,6 +144,9 @@ function setSessionEvent() {
 		localStorage.setItem('currentStartDate', currentStartDate);
 	}
 
+	var dEnd = (new Date(currentStartDate).setDate(new Date(currentStartDate).getDate() + 18)); // calculate end date including weekends
+	currentEndDate = new Date(new Date(dEnd).setHours(12, 0, 0, 0));
+	// console.log(monthsCount, currentStartDate, currentEndDate, todaysDate);
 	setEventDateTimeSession(todaysDate);
 
 	if (sessionCount % 15 === 0) {
@@ -171,12 +170,12 @@ function setSessionEvent() {
 	
 	intervalCount = setInterval(function () {
 		setTuneInStatus(function () {
-			updateEventCountdown(todaysProgramStart);
+			updateEventCountdown();
 		});
 	}, 1000);
 }
 
-function updateEventCountdown(start) {
+function updateEventCountdown() {
 	todaysDate = setCurrentDateTime(todaysDate);
 	var now = new Date(todaysDate).getTime();
 	var distance = todaysProgramStart.getTime() - now;
@@ -207,14 +206,15 @@ function updateEventCountdown(start) {
 		}
 	}
 	// console.log(untilResetCount);
-	/* untilResetCount++;
-	if (untilResetCount == 59) {
-		// console.info('reset ram every 60 seconds');
+	untilResetCount++;
+	if (untilResetCount == 60) {
+		console.info('reset ram every 60 seconds');
 		untilResetCount = 0;
 		clearInterval(intervalCount);
 		intervalCount = setInterval(function () {
-			setTuneInStatus();
-			updateEventCountdown(todaysProgramStart);
+			setTuneInStatus(function () {
+				updateEventCountdown();
+			});
 		}, 1000);
-	} */
+	}
 }
