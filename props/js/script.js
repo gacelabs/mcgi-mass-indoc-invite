@@ -1,7 +1,7 @@
 var intervalCount;
 var currentStartDate = localStorage.getItem('currentStartDate') == null ? new Date(new Date('2024-04-22').setHours(19, 0, 0, 0)) : new Date(localStorage.getItem('currentStartDate'));
 var currentEndDate = null;
-var sessionCount = 0, untilResetCount = 0, days = 0, hours = 0, minutes = 0, seconds;
+var sessionCount = 0, lastSessionCount = 0, untilResetCount = 0, days = 0, hours = 0, minutes = 0, seconds;
 var notificationStartSoon = false, baptismDate = false, onGoing = false, consoleLogShown = false;
 var specificYoutubeChannel = 'https://m.youtube.com/@MCGIChannel';
 var specificFacebookChannel = 'https://m.facebook.com/MCGI.org';
@@ -179,6 +179,7 @@ function setSessionEvent() {
 	}
 
 	setCurrentSessionCount();
+	lastSessionCount = sessionCount;
 	if (sessionCount === 15) {
 		setMassBaptism();
 		baptismDate = true;
@@ -198,7 +199,16 @@ function updateEventCountdown() {
 	var now = new Date(setCurrentDateTime(todaysDate)).getTime();
 	var distance = todaysProgramStart.getTime() - now;
 	if (distance < 0 && !isOngoing(todaysDate)) { /* this means program ended */
-		todaysProgramStart = nextProgramStart;
+		if (sessionCount <= 14) sessionCount++;
+		todaysProgramStart = nextSession(new Date(addDaysToDate(todaysDate, 1)));
+		/* if someone change the todaysDate in console and its greater than currentEndDate set todaysDate to currentEndDate instead */
+		if (todaysProgramStart > currentEndDate) {
+			todaysDate = setCurrentDateTime(new Date());
+			todaysProgramStart = new Date(new Date(todaysDate).setHours(19, 0, 0, 0));
+			todaysProgramEnd = new Date(new Date(todaysProgramStart).setHours(21, 0, 0, 0));
+			sessionCount = lastSessionCount;
+		}
+		// console.log([14, 15].includes(sessionCount), sessionCount);
 		if ([14, 15].includes(sessionCount)) {
 			todaysProgramStart = new Date(new Date(todaysProgramStart).setHours(8, 0, 0, 0));
 			todaysProgramEnd = new Date(new Date(todaysProgramStart).setHours(12, 0, 0, 0));
@@ -207,12 +217,15 @@ function updateEventCountdown() {
 			todaysProgramEnd = new Date(new Date(todaysProgramStart).setHours(21, 0, 0, 0));
 		}
 		nextProgramStart = nextSession(todaysProgramStart);
-		if (sessionCount <= 14) {
-			sessionCount++;
-		}
 		setEventDateTimeSession(todaysProgramStart);
 		logEventDetails();
 		// console.log(distance, new Date(now));
+	} else if (todaysDate < todaysProgramStart) {
+		todaysDate = setCurrentDateTime(new Date(todaysProgramStart));
+		todaysProgramStart = new Date(new Date(todaysDate).setHours(19, 0, 0, 0));
+		todaysProgramEnd = new Date(new Date(todaysProgramStart).setHours(21, 0, 0, 0));
+		nextProgramStart = nextSession(todaysProgramStart);
+		sessionCount = lastSessionCount;
 	}
 
 	days = Math.floor(distance / (1000 * 60 * 60 * 24));
