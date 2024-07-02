@@ -193,7 +193,6 @@ function setSessionEvent() {
 function updateEventCountdown() {
 	var now = new Date(setCurrentDateTime(todaysDate)).getTime();
 	var distance = todaysProgramStart.getTime() - now;
-	// console.log(distance, new Date(now));
 	if (distance < 0) { /* this means program ended */
 		todaysProgramStart = nextProgramStart;
 		if ([14, 15].includes(sessionCount)) {
@@ -204,9 +203,14 @@ function updateEventCountdown() {
 			todaysProgramEnd = new Date(new Date(todaysProgramStart).setHours(21, 0, 0, 0));
 		}
 		nextProgramStart = nextSession(todaysProgramStart);
-
+		if (sessionCount <= 14) {
+			sessionCount++;
+		} else {
+			sessionCount = 1;
+		}
 		setEventDateTimeSession(todaysProgramStart);
 		logEventDetails();
+		// console.log(distance, new Date(now));
 	}
 
 	days = Math.floor(distance / (1000 * 60 * 60 * 24));
