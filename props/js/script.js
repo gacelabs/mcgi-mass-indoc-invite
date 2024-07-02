@@ -23,9 +23,9 @@ var todaysDate = new Date();
 /* start of "for testing purposes" */
 	/* this current date */
 	// var todaysDate = setCurrentDateTime(new Date('2024-06-28'));
-	// var todaysDate = setCurrentDateTime(new Date('2024-07-15'));
+	// var todaysDate = setCurrentDateTime(new Date('2024-07-05'));
 	/* program time adjustments */
-	// todaysDate = new Date(new Date(todaysDate).setHours(18, 0, 0, 0));
+	// todaysDate = new Date(new Date(todaysDate).setHours(15, 0, 0, 0));
 /* end of "for testing purposes" */
 
 var todaysProgramStart = new Date(new Date(todaysDate).setHours(19, 0, 0, 0));
@@ -109,25 +109,29 @@ function setTuneInStatus(fnCallBack) {
 				sTuneIn = 'Doctrine acceptance';
 			}
 		} else {
-			if (days == 0 && hours >= 1 && hours <= 3) {
-				sTuneIn = 'Tune-in later';
-			} else {
-				if (sessionCount % 14 === 0) {
-					sTuneIn = 'Last session tune-in tomorrow';
-				} else if (sessionCount % 15 === 0) {
-					sTuneIn = 'Doctrine acceptance tomorrow';
-				}
+			if (sessionCount % 14 === 0) {
+				sTuneIn = 'Last session tune-in tomorrow';
+			} else if (sessionCount % 15 === 0) {
+				sTuneIn = 'Doctrine acceptance tomorrow';
 			}
 		}
-		/* override all when every weekends or fridays & the day 1 session */
-		if (isWeekend || sessionCount % 5 === 0) {
-			sTuneIn = 'Tune-in Monday';
-		} else if (sessionCount == 1) {
-			if (days == 0 && hours >= 1 && hours <= 3) {
-				sTuneIn = 'Tune-in later';
-			} else {
-				var sWeekDay = new Intl.DateTimeFormat('en-US', { weekday: 'long', timeZone: 'Asia/Manila' }).format(todaysProgramStart);
-				sTuneIn = 'Starting on ' + sWeekDay;
+		if (days == 0 && hours >= 1 && hours <= 3) {
+			sTuneIn = 'Starting in...';
+		} else {
+			/* override all when every weekends or fridays & the day 1 session */
+			if (isWeekend || (sessionCount !== 15 && sessionCount % 5 === 0)) {
+				if (formatDateToFJY(todaysDate) === formatDateToFJY(todaysProgramStart) && todaysDate < todaysProgramStart) {
+					sTuneIn = 'Tune-in today';
+				} else {
+					sTuneIn = 'Tune-in Monday';
+				}
+			} else if (sessionCount == 1) {
+				if (formatDateToFJY(todaysDate) === formatDateToFJY(todaysProgramStart) && todaysDate < todaysProgramStart) {
+					sTuneIn = 'Tune-in today';
+				} else {
+					var sWeekDay = new Intl.DateTimeFormat('en-US', { weekday: 'long', timeZone: 'Asia/Manila' }).format(todaysProgramStart);
+					sTuneIn = 'Starting on ' + sWeekDay;
+				}
 			}
 		}
 	}
@@ -170,7 +174,7 @@ function setSessionEvent() {
 		var dateAfter18Days = addDaysToDate(nextProgramStart, 18);
 		currentEndDate = new Date(dateAfter18Days.setHours(12, 0, 0, 0));
 
-		todaysProgramStart = new Date(new Date(nextProgramStart).setHours(19, 0, 0, 0));
+		todaysProgramStart = currentStartDate;
 		todaysProgramEnd = new Date(new Date(todaysProgramStart).setHours(21, 0, 0, 0));
 	}
 
@@ -193,7 +197,7 @@ function setSessionEvent() {
 function updateEventCountdown() {
 	var now = new Date(setCurrentDateTime(todaysDate)).getTime();
 	var distance = todaysProgramStart.getTime() - now;
-	if (distance < 0) { /* this means program ended */
+	if (distance < 0 && !isOngoing(todaysDate)) { /* this means program ended */
 		todaysProgramStart = nextProgramStart;
 		if ([14, 15].includes(sessionCount)) {
 			todaysProgramStart = new Date(new Date(todaysProgramStart).setHours(8, 0, 0, 0));
@@ -205,8 +209,6 @@ function updateEventCountdown() {
 		nextProgramStart = nextSession(todaysProgramStart);
 		if (sessionCount <= 14) {
 			sessionCount++;
-		} else {
-			sessionCount = 1;
 		}
 		setEventDateTimeSession(todaysProgramStart);
 		logEventDetails();
@@ -222,15 +224,17 @@ function updateEventCountdown() {
 	if (onGoing === false) {
 		if (days > 0 || hours > 0 || minutes > 0 || seconds > 0) {
 			document.getElementById("countdown").innerHTML =
-				`<div class="countdown-segment"><span class="countdown-label">Days</span><span class="countdown-number days">${days}</span></div>` +
-				`<div class="countdown-segment"><span class="countdown-label">Hours</span><span class="countdown-number hours">${hours}</span></div>` +
-				`<div class="countdown-segment"><span class="countdown-label">Minutes</span><span class="countdown-number">${minutes}</span></div>` +
-				`<div class="countdown-segment"><span class="countdown-label">Seconds</span><span class="countdown-number">${seconds}</span></div>` +
-				`<div style="margin-top: -10px;"><span class="countdown-label">To go</span></div>`;
+			`<div class="countdown-segment"><span class="countdown-label">Days</span><span class="countdown-number days">${days}</span></div>` +
+			`<div class="countdown-segment"><span class="countdown-label">Hours</span><span class="countdown-number hours">${hours}</span></div>` +
+			`<div class="countdown-segment"><span class="countdown-label">Minutes</span><span class="countdown-number">${minutes}</span></div>` +
+			`<div class="countdown-segment"><span class="countdown-label">Seconds</span><span class="countdown-number">${seconds}</span></div>` +
+			`<div style="margin-top: -10px;"><span class="countdown-label">To go</span></div>`;
 		}
 	}
 
+	/* set day status */
 	setTuneInStatus();
+
 	if (notificationStartSoon == false) {
 		notificationStartSoon = true;
 		if (baptismDate) {
@@ -251,9 +255,7 @@ function updateEventCountdown() {
 		untilResetCount = 0;
 		clearInterval(intervalCount);
 		intervalCount = setInterval(function () {
-			setTuneInStatus(function () {
-				updateEventCountdown();
-			});
+			updateEventCountdown();
 		}, 1000);
 	}
 }
