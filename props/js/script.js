@@ -135,7 +135,7 @@ function setTuneInStatus(fnCallBack) {
 				if (formatDateToFJY(todaysDate) === formatDateToFJY(todaysProgramStart) && todaysDate < todaysProgramStart) {
 					sTuneIn = 'Tune-in today';
 				} else {
-					sTuneIn = 'will start in...';
+					sTuneIn = 'Will start in...';
 				}
 			}
 		}
