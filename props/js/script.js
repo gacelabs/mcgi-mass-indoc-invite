@@ -251,7 +251,7 @@ function updateEventCountdown() {
 		`<div class="countdown-segment"><span class="countdown-label">Seconds</span><span class="countdown-number">${seconds}</span></div>`;
 		if (onGoing) {
 			countdownUI[0].style.display = 'none';
-		} else {
+		} else if (sessionCount > 1) {
 			countdownUI[0].innerHTML += `<div style="margin-top: -10px;"><span class="countdown-label">To go</span></div>`;
 		}
 	}
