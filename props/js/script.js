@@ -128,7 +128,7 @@ function setTuneInStatus(fnCallBack) {
 			sTuneIn = 'Starting in...';
 		} else {
 			/* override all when every weekends or fridays & the day 1 session */
-			if (isWeekend || (sessionCount !== 15 && todaysDate.getDay() === 5)) {
+			if ((isWeekend || todaysDate.getDay() === 5) && ![1, 15].includes(sessionCount)) {
 				if (formatDateToFJY(todaysDate) === formatDateToFJY(todaysProgramStart) && todaysDate < todaysProgramStart) {
 					sTuneIn = 'Tune-in ' + (isTonight ? 'tonight' : 'today');
 				} else {
