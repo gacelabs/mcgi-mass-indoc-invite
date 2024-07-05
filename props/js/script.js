@@ -6,9 +6,9 @@ var currentEndDate = null;
 var sessionCount = 0, lastSessionCount = 0, untilResetCount = 0, days = 0, hours = 0, minutes = 0, seconds = 0;
 var notificationStartSoon = false, baptismDate = false, onGoing = false, consoleLogShown = false, isTest = false;
 
-var specificYoutubeChannel = 'https://m.youtube.com/@MCGIChannel';
-var specificFacebookChannel = 'https://m.facebook.com/MCGI.org';
-var sTuneIn = 'Tune-in ';
+var specificYoutubeChannel = 'https://www.youtube.com/@MCGIChannel';
+var specificFacebookChannel = 'https://www.facebook.com/MCGI.org';
+var sTuneIn = '';
 
 var setCurrentDateTime = function (sDate) {
 	var now = new Date();
@@ -26,10 +26,9 @@ var todaysDate = new Date();
 
 /* start of "for testing purposes" */
 	/* this current date */
-	// var todaysDate = setCurrentDateTime(new Date('2024-06-28'));
-	// var todaysDate = setCurrentDateTime(new Date('2024-10-24')); isTest = true;
+	// var todaysDate = setCurrentDateTime(new Date('2024-07-17')); isTest = true;
 	/* program time adjustments */
-	// todaysDate = new Date(new Date(todaysDate).setHours(24, 0, 0, 0));
+	// todaysDate = new Date(new Date(todaysDate).setHours(18, 0, 0, 0));
 /* end of "for testing purposes" */
 
 var todaysProgramStart = new Date(new Date(todaysDate).setHours(19, 0, 0, 0));
@@ -39,11 +38,16 @@ var nextProgramStart = new Date(addDaysToDate(todaysProgramStart, 1));
 /* is morning? */
 var isMorning = function (todaysDate) {
 	var currHr = new Intl.DateTimeFormat('en-US', { hour: "numeric", hour12: false, timeZone: 'Asia/Manila' }).format(todaysDate);
-	return todaysDate.getTime() < todaysProgramStart.getTime() && parseInt(currHr) <= 19;
+	return todaysDate.getTime() < todaysProgramStart.getTime() && parseInt(currHr) >= 6 && parseInt(currHr) <= 17;
 }
 /* program just started */
-var isOngoing = function (todaysDate) {
-	return todaysDate.getTime() >= todaysProgramStart.getTime() && todaysDate.getTime() <= todaysProgramEnd.getTime();
+var isProgramOngoing = function (todaysDate) {
+	var currHr = new Intl.DateTimeFormat('en-US', { hour: "numeric", hour12: false, timeZone: 'Asia/Manila' }).format(todaysDate);
+	if (baptismDate) {
+		return todaysDate.getTime() >= todaysProgramStart.getTime() && todaysDate.getTime() <= todaysProgramEnd.getTime() && (parseInt(currHr) >= 8 && parseInt(currHr) <= 12);
+	} else {
+		return todaysDate.getTime() >= todaysProgramStart.getTime() && todaysDate.getTime() <= todaysProgramEnd.getTime() && (parseInt(currHr) >= 19 && parseInt(currHr) <= 21);
+	}
 }
 
 function logEventDetails(bClear) {
@@ -103,44 +107,40 @@ function setTuneInStatus(fnCallBack) {
 	var isWeekend = todaysDate.getDay() === 6 || todaysDate.getDay() === 0;
 	onGoing = false;
 	var currHr = new Intl.DateTimeFormat('en-US', { hour: "numeric", hour12: false, timeZone: 'Asia/Manila' }).format(todaysProgramStart);
-	var isTonight = parseInt(currHr) >= 15;
+	var isEvening = parseInt(currHr) >= 18 && parseInt(currHr) <= 23;
 
-	if (isOngoing(todaysDate)) { /* program still playing */
+	if (isProgramOngoing(todaysDate)) { /* program still playing */
 		sTuneIn = 'Session on going...';
 		onGoing = true;
 	} else { /* program not yet started or just ended */
 		countdownUI[0].style.display = 'block';
-		if (isMorning(todaysDate)) {
-			sTuneIn = 'Tune-in tonight';
-			if (sessionCount % 14 === 0) {
-				sTuneIn = 'Last session tune-in tonight';
-			} else if (sessionCount % 15 === 0) {
-				sTuneIn = 'Doctrine acceptance ' + (isTonight ? 'tonight' : 'today');
-			}
-		} else {
-			if (sessionCount % 14 === 0) {
-				sTuneIn = 'Last session tune-in tomorrow';
-			} else if (sessionCount % 15 === 0) {
-				sTuneIn = 'Doctrine acceptance tomorrow';
-			}
-		}
-		if (days == 0 && (hours >= 1 && hours <= 3)) {
+		// console.log(days, hours);
+		if (days == 0 && hours === 1) {
 			sTuneIn = 'Starting in...';
 		} else {
+			if (isMorning(todaysDate)) {
+				sTuneIn = 'Tune-in tonight';
+				if (sessionCount % 14 === 0) {
+					sTuneIn = 'Last session tune-in tonight';
+				} else if (sessionCount % 15 === 0) {
+					sTuneIn = 'Doctrine acceptance tonight';
+				}
+			} else { /* it's evening */
+				sTuneIn = 'Tune-in tomorrow';
+				if (sessionCount % 14 === 0) {
+					sTuneIn = 'Last session tune-in tomorrow';
+				} else if (sessionCount % 15 === 0) {
+					sTuneIn = 'Doctrine acceptance tomorrow';
+				}
+			}
 			/* override all when every weekends or fridays & the day 1 session */
 			if ((isWeekend || todaysDate.getDay() === 5) && ![1, 15].includes(sessionCount)) {
-				if (formatDateToFJY(todaysDate) === formatDateToFJY(todaysProgramStart) && todaysDate < todaysProgramStart) {
-					sTuneIn = 'Tune-in ' + (isTonight ? 'tonight' : 'today');
-				} else {
-					var sWeekDay = new Intl.DateTimeFormat('en-US', { weekday: 'long', timeZone: 'Asia/Manila' }).format(todaysProgramStart);
-					sTuneIn = 'Tune-in ' + sWeekDay;
-				}
+				var sWeekDay = new Intl.DateTimeFormat('en-US', { weekday: 'long', timeZone: 'Asia/Manila' }).format(todaysProgramStart);
+				sTuneIn = 'Tune-in ' + sWeekDay;
 			} else if (sessionCount == 1) {
-				if (formatDateToFJY(todaysDate) === formatDateToFJY(todaysProgramStart) && todaysDate < todaysProgramStart) {
-					sTuneIn = 'Tune-in ' + (isTonight ? 'tonight' : 'today');
-				} else {
-					sTuneIn = 'Will start in...';
-				}
+				sTuneIn = 'Will start in...';
+			} else if (formatDateToFJY(todaysDate) === formatDateToFJY(todaysProgramStart) && todaysDate < todaysProgramStart) {
+				sTuneIn = 'Tune-in ' + (isEvening ? 'tonight' : 'today');
 			}
 		}
 	}
@@ -198,11 +198,12 @@ function setSessionEvent() {
 	
 	setEventDateTimeSession(todaysProgramStart);
 	logEventDetails(false);
-
+	
 	intervalCount = setInterval(function () {
+		updateEventCountdown();
 		/* set day status */
 		setTuneInStatus();
-		updateEventCountdown();
+		runNotification();
 	}, 1000);
 }
 
@@ -213,7 +214,7 @@ function updateEventCountdown() {
 		var now = new Date(setCurrentDateTime(todaysDate)).getTime();
 	}
 	var distance = todaysProgramStart.getTime() - now;
-	if (distance <= 0 && !isOngoing(todaysDate)) { /* this means program ended */
+	if (distance <= 0 && !isProgramOngoing(todaysDate)) { /* this means program ended */
 		if (sessionCount <= 14) sessionCount++;
 		todaysProgramStart = nextSession(new Date(addDaysToDate(todaysDate, 1)));
 		/* if someone change the todaysDate in console and its greater than currentEndDate set todaysDate to currentEndDate instead */
@@ -250,29 +251,8 @@ function updateEventCountdown() {
 		`<div class="countdown-segment"><span class="countdown-label">Seconds</span><span class="countdown-number">${seconds}</span></div>`;
 		if (onGoing) {
 			countdownUI[0].style.display = 'none';
-		} else if (sessionCount > 1) {
+		} else if (sessionCount > 1 && hours > 1) {
 			countdownUI[0].innerHTML += `<div style="margin-top: -10px;"><span class="countdown-label">To go</span></div>`;
-		}
-	}
-
-	if (notificationStartSoon == false) {
-		notificationStartSoon = true;
-		if (baptismDate) {
-			showNotification('Mass Baptism', 'Please contact MCGI thru this website', 'https://www.mcgi.org/reach-us/');
-		} else {
-			if (days == 0 && hours == 0) {
-				showNotification('Starting soon - Standby', 'Watch via MCGI YouTube Channel', specificYoutubeChannel);
-			} else {
-				if (sessionCount !== 1) {
-					showNotification(sTuneIn, 'Watch via MCGI YouTube Channel', specificYoutubeChannel);
-				} else {
-					if (days >= 1) {
-						showNotification(sTuneIn + ' ' + days + ' day' + (days > 1 ? 's' : ''), 'Visit their YouTube Channel', specificYoutubeChannel);
-					} else if (hours >= 1) {
-						showNotification(sTuneIn + ' ' + hours + ' hour' + (hours > 1 ? 's' : ''), 'Watch via MCGI YouTube Channel', specificYoutubeChannel);
-					}
-				}
-			}
 		}
 	}
 
@@ -286,6 +266,34 @@ function updateEventCountdown() {
 			/* set day status */
 			setTuneInStatus();
 			updateEventCountdown();
+			runNotification();
 		}, 1000);
+	}
+}
+
+function runNotification() {
+	if (notificationStartSoon == false) {
+		notificationStartSoon = true;
+		if (baptismDate) {
+			showNotification('Mass Baptism', 'Please contact MCGI thru this website', 'https://www.mcgi.org/reach-us/');
+		} else {
+			if (days == 0 && hours == 0) {
+				showNotification('Starting soon - Standby', 'Watch via MCGI YouTube Channel', specificYoutubeChannel);
+			} else {
+				if (sessionCount !== 1) {
+					if (days >= 1) {
+						showNotification(sTuneIn + ' ' + days + ' day' + (days > 1 ? 's' : ''), 'Watch via MCGI YouTube Channel', specificYoutubeChannel);
+					} else if (hours >= 1) {
+						showNotification(sTuneIn + ' ' + hours + ' hour' + (hours > 1 ? 's' : ''), 'Watch via MCGI YouTube Channel', specificYoutubeChannel);
+					}
+				} else {
+					if (days >= 1) {
+						showNotification(sTuneIn + ' ' + days + ' day' + (days > 1 ? 's' : ''), 'Visit their YouTube Channel', specificYoutubeChannel);
+					} else if (hours >= 1) {
+						showNotification(sTuneIn + ' ' + hours + ' hour' + (hours > 1 ? 's' : ''), 'Watch via MCGI YouTube Channel', specificYoutubeChannel);
+					}
+				}
+			}
+		}
 	}
 }
