@@ -27,7 +27,7 @@ var todaysDate = new Date();
 /* start of "for testing purposes" */
 	/* this current date */
 	// var todaysDate = setCurrentDateTime(new Date('2024-06-28'));
-	// var todaysDate = setCurrentDateTime(new Date('2024-07-05'));
+	// var todaysDate = setCurrentDateTime(new Date('2024-07-15'));
 	/* program time adjustments */
 	// todaysDate = new Date(new Date(todaysDate).setHours(15, 0, 0, 0));
 /* end of "for testing purposes" */
@@ -98,6 +98,7 @@ function nextSession(day) {
 	return day;
 }
 
+var countdownUI = document.querySelectorAll("#countdown");
 function setTuneInStatus(fnCallBack) {
 	var isWeekend = todaysDate.getDay() === 6 || todaysDate.getDay() === 0;
 	onGoing = false;
@@ -106,6 +107,7 @@ function setTuneInStatus(fnCallBack) {
 		sTuneIn = 'Session on going...';
 		onGoing = true;
 	} else { /* program not yet started or just ended */
+		countdownUI[0].style.display = 'block';
 		if (isMorning(todaysDate)) {
 			sTuneIn = 'Tune-in tonight';
 			if (sessionCount % 14 === 0) {
@@ -143,10 +145,6 @@ function setTuneInStatus(fnCallBack) {
 
 	document.getElementById("session-day").innerHTML = '<strong>Day ' + sessionCount + ', ' + sTuneIn + '</strong>';
 	if (typeof fnCallBack == 'function') fnCallBack();
-
-	if (sessionCount !== 1) {
-		document.getElementById("countdown").innerHTML += `<div style="margin-top: -10px;"><span class="countdown-label">To go</span></div>`;
-	}
 }
 
 function setSessionEvent() {
@@ -201,6 +199,8 @@ function setSessionEvent() {
 
 	intervalCount = setInterval(function () {
 		updateEventCountdown();
+		/* set day status */
+		setTuneInStatus();
 	}, 1000);
 }
 
@@ -243,18 +243,18 @@ function updateEventCountdown() {
 	seconds = Math.floor((distance % (1000 * 60)) / 1000);
 	
 	// console.log(onGoing);
-	if (onGoing === false) {
-		if (days > 0 || hours > 0 || minutes > 0 || seconds > 0) {
-			document.getElementById("countdown").innerHTML =
-			`<div class="countdown-segment"><span class="countdown-label">Days</span><span class="countdown-number days">${days}</span></div>` +
-			`<div class="countdown-segment"><span class="countdown-label">Hours</span><span class="countdown-number hours">${hours}</span></div>` +
-			`<div class="countdown-segment"><span class="countdown-label">Minutes</span><span class="countdown-number">${minutes}</span></div>` +
-			`<div class="countdown-segment"><span class="countdown-label">Seconds</span><span class="countdown-number">${seconds}</span></div>`;
+	if (days > 0 || hours > 0 || minutes > 0 || seconds > 0) {
+		countdownUI[0].innerHTML =
+		`<div class="countdown-segment"><span class="countdown-label">Days</span><span class="countdown-number days">${days}</span></div>` +
+		`<div class="countdown-segment"><span class="countdown-label">Hours</span><span class="countdown-number hours">${hours}</span></div>` +
+		`<div class="countdown-segment"><span class="countdown-label">Minutes</span><span class="countdown-number">${minutes}</span></div>` +
+		`<div class="countdown-segment"><span class="countdown-label">Seconds</span><span class="countdown-number">${seconds}</span></div>`;
+		if (onGoing) {
+			countdownUI[0].style.display = 'none';
+		} else {
+			countdownUI[0].innerHTML += `<div style="margin-top: -10px;"><span class="countdown-label">To go</span></div>`;
 		}
 	}
-
-	/* set day status */
-	setTuneInStatus();
 
 	if (notificationStartSoon == false) {
 		notificationStartSoon = true;
@@ -285,6 +285,8 @@ function updateEventCountdown() {
 		clearInterval(intervalCount);
 		intervalCount = setInterval(function () {
 			updateEventCountdown();
+			/* set day status */
+			setTuneInStatus();
 		}, 1000);
 	}
 }
