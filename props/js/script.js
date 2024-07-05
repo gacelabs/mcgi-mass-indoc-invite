@@ -267,7 +267,11 @@ function updateEventCountdown() {
 				if (sessionCount !== 1) {
 					showNotification(sTuneIn, 'Watch via MCGI YouTube Channel', specificYoutubeChannel);
 				} else {
-					showNotification(sTuneIn + ' ' + days + ' day(s)', 'Watch via MCGI YouTube Channel', specificYoutubeChannel);
+					if (days >= 1) {
+						showNotification(sTuneIn + ' ' + days + ' day' + (days > 1 ? 's' : ''), 'Visit their YouTube Channel', specificYoutubeChannel);
+					} else if (hours >= 1) {
+						showNotification(sTuneIn + ' ' + hours + ' hour' + (hours > 1 ? 's' : ''), 'Watch via MCGI YouTube Channel', specificYoutubeChannel);
+					}
 				}
 			}
 		}
