@@ -4,7 +4,7 @@ var currentStartDate = localStorage.getItem('currentStartDate') == null ? new Da
 var currentEndDate = null;
 
 var sessionCount = 0, lastSessionCount = 0, untilResetCount = 0, days = 0, hours = 0, minutes = 0, seconds = 0;
-var notificationStartSoon = false, baptismDate = false, onGoing = false, consoleLogShown = false;
+var notificationStartSoon = false, baptismDate = false, onGoing = false, consoleLogShown = false, isTest = false;
 
 var specificYoutubeChannel = 'https://m.youtube.com/@MCGIChannel';
 var specificFacebookChannel = 'https://m.facebook.com/MCGI.org';
@@ -27,9 +27,9 @@ var todaysDate = new Date();
 /* start of "for testing purposes" */
 	/* this current date */
 	// var todaysDate = setCurrentDateTime(new Date('2024-06-28'));
-	// var todaysDate = setCurrentDateTime(new Date('2024-07-15'));
+	// var todaysDate = setCurrentDateTime(new Date('2024-10-24')); isTest = true;
 	/* program time adjustments */
-	// todaysDate = new Date(new Date(todaysDate).setHours(15, 0, 0, 0));
+	// todaysDate = new Date(new Date(todaysDate).setHours(24, 0, 0, 0));
 /* end of "for testing purposes" */
 
 var todaysProgramStart = new Date(new Date(todaysDate).setHours(19, 0, 0, 0));
@@ -38,8 +38,8 @@ var nextProgramStart = new Date(addDaysToDate(todaysProgramStart, 1));
 
 /* is morning? */
 var isMorning = function (todaysDate) {
-	var currHr = new Intl.DateTimeFormat('en-US', { hour12: true, hour: "numeric", timeZone: 'Asia/Manila' }).format(todaysDate);
-	return todaysDate.getTime() < todaysProgramStart.getTime() && currHr.indexOf('AM') >= 0;
+	var currHr = new Intl.DateTimeFormat('en-US', { hour: "numeric", hour12: false, timeZone: 'Asia/Manila' }).format(todaysDate);
+	return todaysDate.getTime() < todaysProgramStart.getTime() && parseInt(currHr) <= 19;
 }
 /* program just started */
 var isOngoing = function (todaysDate) {
@@ -102,6 +102,8 @@ var countdownUI = document.querySelectorAll("#countdown");
 function setTuneInStatus(fnCallBack) {
 	var isWeekend = todaysDate.getDay() === 6 || todaysDate.getDay() === 0;
 	onGoing = false;
+	var currHr = new Intl.DateTimeFormat('en-US', { hour: "numeric", hour12: false, timeZone: 'Asia/Manila' }).format(todaysProgramStart);
+	var isTonight = parseInt(currHr) >= 15;
 
 	if (isOngoing(todaysDate)) { /* program still playing */
 		sTuneIn = 'Session on going...';
@@ -113,7 +115,7 @@ function setTuneInStatus(fnCallBack) {
 			if (sessionCount % 14 === 0) {
 				sTuneIn = 'Last session tune-in tonight';
 			} else if (sessionCount % 15 === 0) {
-				sTuneIn = 'Doctrine acceptance today';
+				sTuneIn = 'Doctrine acceptance ' + (isTonight ? 'tonight' : 'today');
 			}
 		} else {
 			if (sessionCount % 14 === 0) {
@@ -126,16 +128,16 @@ function setTuneInStatus(fnCallBack) {
 			sTuneIn = 'Starting in...';
 		} else {
 			/* override all when every weekends or fridays & the day 1 session */
-			if (isWeekend || (sessionCount !== 15 && sessionCount % 5 === 0)) {
+			var sWeekDay = new Intl.DateTimeFormat('en-US', { weekday: 'long', timeZone: 'Asia/Manila' }).format(todaysProgramStart);
+			if (isWeekend || (sessionCount !== 15 && sWeekDay.toLowerCase() === 'firday')) {
 				if (formatDateToFJY(todaysDate) === formatDateToFJY(todaysProgramStart) && todaysDate < todaysProgramStart) {
-					sTuneIn = 'Tune-in today';
+					sTuneIn = 'Tune-in ' + (isTonight ? 'tonight' : 'today');
 				} else {
-					var sWeekDay = new Intl.DateTimeFormat('en-US', { weekday: 'long', timeZone: 'Asia/Manila' }).format(todaysProgramStart);
 					sTuneIn = 'Tune-in ' + sWeekDay;
 				}
 			} else if (sessionCount == 1) {
 				if (formatDateToFJY(todaysDate) === formatDateToFJY(todaysProgramStart) && todaysDate < todaysProgramStart) {
-					sTuneIn = 'Tune-in today';
+					sTuneIn = 'Tune-in ' + (isTonight ? 'tonight' : 'today');
 				} else {
 					sTuneIn = 'Will start in...';
 				}
@@ -148,7 +150,7 @@ function setTuneInStatus(fnCallBack) {
 }
 
 function setSessionEvent() {
-	var monthsCount = countMonths(currentStartDate);
+	var monthsCount = countMonths(currentStartDate, todaysDate);
 	if (monthsCount > 0) {
 		for (let index = 0; index < monthsCount; index++) {
 			var givenDate = new Date(currentStartDate);
@@ -167,7 +169,7 @@ function setSessionEvent() {
 	
 	var dEnd = new Date(currentStartDate).setDate(new Date(currentStartDate).getDate() + 18); /* calculate end date including weekends */
 	currentEndDate = new Date(new Date(dEnd).setHours(12, 0, 0, 0));
-
+	// console.log(todaysDate, currentStartDate, currentEndDate, nextProgramStart);
 	if (todaysDate > currentEndDate) {
 		/* this means current event was finished */
 		sessionCount = 0;
@@ -205,15 +207,18 @@ function setSessionEvent() {
 }
 
 function updateEventCountdown() {
-	var now = new Date(setCurrentDateTime(todaysDate)).getTime();
+	if (isTest) {
+		var now = new Date(todaysDate).getTime();
+	} else {
+		var now = new Date(setCurrentDateTime(todaysDate)).getTime();
+	}
 	var distance = todaysProgramStart.getTime() - now;
 	if (distance <= 0 && !isOngoing(todaysDate)) { /* this means program ended */
 		if (sessionCount <= 14) sessionCount++;
 		todaysProgramStart = nextSession(new Date(addDaysToDate(todaysDate, 1)));
 		/* if someone change the todaysDate in console and its greater than currentEndDate set todaysDate to currentEndDate instead */
 		if (todaysProgramStart > currentEndDate) {
-			todaysDate = setCurrentDateTime(new Date());
-			todaysProgramStart = new Date(new Date(todaysDate).setHours(19, 0, 0, 0));
+			todaysProgramStart = new Date(new Date(todaysProgramStart).setHours(19, 0, 0, 0));
 			todaysProgramEnd = new Date(new Date(todaysProgramStart).setHours(21, 0, 0, 0));
 			sessionCount = lastSessionCount;
 		}
@@ -229,12 +234,6 @@ function updateEventCountdown() {
 		setEventDateTimeSession(todaysProgramStart);
 		logEventDetails();
 		// console.log(distance, new Date(now));
-	/* } else if (todaysDate < todaysProgramStart) {
-		// todaysDate = setCurrentDateTime(new Date(todaysProgramStart));
-		todaysProgramStart = new Date(new Date(todaysProgramStart).setHours(19, 0, 0, 0));
-		todaysProgramEnd = new Date(new Date(todaysProgramStart).setHours(21, 0, 0, 0));
-		nextProgramStart = nextSession(todaysProgramStart);
-		sessionCount = lastSessionCount; */
 	}
 
 	days = Math.floor(distance / (1000 * 60 * 60 * 24));

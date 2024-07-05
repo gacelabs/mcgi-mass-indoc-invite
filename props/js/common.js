@@ -13,8 +13,8 @@ function formatDateToFJY(date) {
 	return new Intl.DateTimeFormat('en-US', options).format(date);
 }
 
-function countMonths(startDate) {
-	var today = new Date(new Date().setHours(19, 0, 0, 0));
+function countMonths(startDate, today) {
+	var today = new Date(new Date(today).setHours(19, 0, 0, 0));
 	var start = new Date(startDate);
 
 	var startYear = start.getFullYear();
