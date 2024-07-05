@@ -111,7 +111,7 @@ function setTuneInStatus(fnCallBack) {
 			if (sessionCount % 14 === 0) {
 				sTuneIn = 'Last session tune-in tonight';
 			} else if (sessionCount % 15 === 0) {
-				sTuneIn = 'Doctrine acceptance';
+				sTuneIn = 'Doctrine acceptance today';
 			}
 		} else {
 			if (sessionCount % 14 === 0) {
@@ -120,7 +120,7 @@ function setTuneInStatus(fnCallBack) {
 				sTuneIn = 'Doctrine acceptance tomorrow';
 			}
 		}
-		if (days == 0 && hours >= 1 && hours <= 3) {
+		if (days == 0 && (hours >= 1 && hours <= 3)) {
 			sTuneIn = 'Starting in...';
 		} else {
 			/* override all when every weekends or fridays & the day 1 session */
@@ -128,14 +128,14 @@ function setTuneInStatus(fnCallBack) {
 				if (formatDateToFJY(todaysDate) === formatDateToFJY(todaysProgramStart) && todaysDate < todaysProgramStart) {
 					sTuneIn = 'Tune-in today';
 				} else {
-					sTuneIn = 'Tune-in Monday';
+					var sWeekDay = new Intl.DateTimeFormat('en-US', { weekday: 'long', timeZone: 'Asia/Manila' }).format(todaysProgramStart);
+					sTuneIn = 'Tune-in ' + sWeekDay;
 				}
 			} else if (sessionCount == 1) {
 				if (formatDateToFJY(todaysDate) === formatDateToFJY(todaysProgramStart) && todaysDate < todaysProgramStart) {
 					sTuneIn = 'Tune-in today';
 				} else {
-					var sWeekDay = new Intl.DateTimeFormat('en-US', { weekday: 'long', timeZone: 'Asia/Manila' }).format(todaysProgramStart);
-					sTuneIn = 'Starting on ' + sWeekDay;
+					sTuneIn = 'will start in...';
 				}
 			}
 		}
@@ -143,6 +143,10 @@ function setTuneInStatus(fnCallBack) {
 
 	document.getElementById("session-day").innerHTML = '<strong>Day ' + sessionCount + ', ' + sTuneIn + '</strong>';
 	if (typeof fnCallBack == 'function') fnCallBack();
+
+	if (sTuneIn.toLowerCase() !== 'will start in...') {
+		document.getElementById("countdown").innerHTML += `<div style="margin-top: -10px;"><span class="countdown-label">To go</span></div>`;
+	}
 }
 
 function setSessionEvent() {
@@ -245,8 +249,7 @@ function updateEventCountdown() {
 			`<div class="countdown-segment"><span class="countdown-label">Days</span><span class="countdown-number days">${days}</span></div>` +
 			`<div class="countdown-segment"><span class="countdown-label">Hours</span><span class="countdown-number hours">${hours}</span></div>` +
 			`<div class="countdown-segment"><span class="countdown-label">Minutes</span><span class="countdown-number">${minutes}</span></div>` +
-			`<div class="countdown-segment"><span class="countdown-label">Seconds</span><span class="countdown-number">${seconds}</span></div>` +
-			`<div style="margin-top: -10px;"><span class="countdown-label">To go</span></div>`;
+			`<div class="countdown-segment"><span class="countdown-label">Seconds</span><span class="countdown-number">${seconds}</span></div>`;
 		}
 	}
 
