@@ -144,7 +144,7 @@ function setTuneInStatus(fnCallBack) {
 	document.getElementById("session-day").innerHTML = '<strong>Day ' + sessionCount + ', ' + sTuneIn + '</strong>';
 	if (typeof fnCallBack == 'function') fnCallBack();
 
-	if (sTuneIn.toLowerCase() !== 'will start in...') {
+	if (sessionCount !== 1) {
 		document.getElementById("countdown").innerHTML += `<div style="margin-top: -10px;"><span class="countdown-label">To go</span></div>`;
 	}
 }
@@ -264,7 +264,11 @@ function updateEventCountdown() {
 			if (days == 0 && hours == 0) {
 				showNotification('Starting soon - Standby', 'Watch via MCGI YouTube Channel', specificYoutubeChannel);
 			} else {
-				showNotification(sTuneIn, 'Watch via MCGI YouTube Channel', specificYoutubeChannel);
+				if (sessionCount !== 1) {
+					showNotification(sTuneIn, 'Watch via MCGI YouTube Channel', specificYoutubeChannel);
+				} else {
+					showNotification(sTuneIn + ' ' + days + ' day(s)', 'Watch via MCGI YouTube Channel', specificYoutubeChannel);
+				}
 			}
 		}
 	}
