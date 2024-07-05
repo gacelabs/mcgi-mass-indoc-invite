@@ -221,8 +221,8 @@ function updateEventCountdown() {
 		logEventDetails();
 		// console.log(distance, new Date(now));
 	} else if (todaysDate < todaysProgramStart) {
-		todaysDate = setCurrentDateTime(new Date(todaysProgramStart));
-		todaysProgramStart = new Date(new Date(todaysDate).setHours(19, 0, 0, 0));
+		// todaysDate = setCurrentDateTime(new Date(todaysProgramStart));
+		todaysProgramStart = new Date(new Date(todaysProgramStart).setHours(19, 0, 0, 0));
 		todaysProgramEnd = new Date(new Date(todaysProgramStart).setHours(21, 0, 0, 0));
 		nextProgramStart = nextSession(todaysProgramStart);
 		sessionCount = lastSessionCount;
