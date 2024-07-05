@@ -169,7 +169,7 @@ function setSessionEvent() {
 	currentEndDate = new Date(new Date(dEnd).setHours(12, 0, 0, 0));
 
 	if (todaysDate > currentEndDate) {
-		/* this means current event has finish */
+		/* this means current event was finished */
 		sessionCount = 0;
 		var givenDate = new Date(currentEndDate);
 		var dateAfter10Days = addDaysToDate(givenDate, 10);
