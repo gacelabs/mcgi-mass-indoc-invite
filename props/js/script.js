@@ -8,7 +8,7 @@ var notificationStartSoon = false, baptismDate = false, onGoing = false, console
 
 var specificYoutubeChannel = 'https://m.youtube.com/@MCGIChannel';
 var specificFacebookChannel = 'https://m.facebook.com/MCGI.org';
-var sTuneIn = 'Tune-in tomorrow';
+var sTuneIn = 'Tune-in ';
 
 var setCurrentDateTime = function (sDate) {
 	var now = new Date();
@@ -128,11 +128,11 @@ function setTuneInStatus(fnCallBack) {
 			sTuneIn = 'Starting in...';
 		} else {
 			/* override all when every weekends or fridays & the day 1 session */
-			var sWeekDay = new Intl.DateTimeFormat('en-US', { weekday: 'long', timeZone: 'Asia/Manila' }).format(todaysProgramStart);
-			if (isWeekend || (sessionCount !== 15 && sWeekDay.toLowerCase() === 'firday')) {
+			if (isWeekend || (sessionCount !== 15 && todaysDate.getDay() === 5)) {
 				if (formatDateToFJY(todaysDate) === formatDateToFJY(todaysProgramStart) && todaysDate < todaysProgramStart) {
 					sTuneIn = 'Tune-in ' + (isTonight ? 'tonight' : 'today');
 				} else {
+					var sWeekDay = new Intl.DateTimeFormat('en-US', { weekday: 'long', timeZone: 'Asia/Manila' }).format(todaysProgramStart);
 					sTuneIn = 'Tune-in ' + sWeekDay;
 				}
 			} else if (sessionCount == 1) {
