@@ -98,16 +98,16 @@ var users = [], isLocalDev = window.location.host.indexOf('local.') >= 0;
 				// Error callback
 				switch (error.code) {
 					case error.PERMISSION_DENIED:
-						console.log("User denied the request for Geolocation.");
+						console.error("User denied the request for Geolocation.");
 						break;
 					case error.POSITION_UNAVAILABLE:
-						console.log("Location information is unavailable.");
+						console.error("Location information is unavailable.");
 						break;
 					case error.TIMEOUT:
-						console.log("The request to get user location timed out.");
+						console.error("The request to get user location timed out.");
 						break;
 					case error.UNKNOWN_ERROR:
-						console.log("An unknown error occurred.");
+						console.error("An unknown error occurred.");
 						break;
 				}
 			}

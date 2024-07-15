@@ -4,7 +4,7 @@ var currentStartDate = localStorage.getItem('currentStartDate') == null ? new Da
 var currentEndDate = null;
 
 var sessionCount = 0, lastSessionCount = 0, untilResetCount = 0, days = 0, hours = 0, minutes = 0, seconds = 0;
-var notificationStartSoon = false, baptismDate = false, onGoing = false, consoleLogShown = false, isTest = false;
+var isNotificationRendered = false, baptismDate = false, onGoing = false, consoleLogShown = false, isTest = false;
 
 var specificYoutubeChannel = 'https://www.youtube.com/@MCGIChannel';
 var specificFacebookChannel = 'https://www.facebook.com/MCGI.org';
@@ -26,9 +26,9 @@ var todaysDate = new Date();
 
 /* start of "for testing purposes" */
 	/* this current date */
-	// var todaysDate = setCurrentDateTime(new Date('2024-07-17')); isTest = true;
+	// var todaysDate = setCurrentDateTime(new Date('2024-07-15')); isTest = true;
 	/* program time adjustments */
-	// todaysDate = new Date(new Date(todaysDate).setHours(18, 0, 0, 0));
+	// todaysDate = new Date(new Date(todaysDate).setHours(23, 0, 0, 0));
 /* end of "for testing purposes" */
 
 var todaysProgramStart = new Date(new Date(todaysDate).setHours(19, 0, 0, 0));
@@ -68,6 +68,13 @@ function setCurrentSessionCount() {
 		thisDate.setDate(thisDate.getDate() + 1); // Move to the next day
 	}
 	if (sessionCount == 0) sessionCount = 1;
+	lastSessionCount = sessionCount;
+	if (sessionCount === 15) {
+		setMassBaptism();
+		baptismDate = true;
+		todaysProgramStart = new Date(new Date(todaysProgramStart).setHours(8, 0, 0, 0));
+		todaysProgramEnd = new Date(new Date(todaysProgramStart).setHours(12, 0, 0, 0));
+	}
 }
 
 function setEventDateTimeSession(todaysDate) {
@@ -188,14 +195,6 @@ function setSessionEvent() {
 	}
 
 	setCurrentSessionCount();
-	lastSessionCount = sessionCount;
-	if (sessionCount === 15) {
-		setMassBaptism();
-		baptismDate = true;
-		todaysProgramStart = new Date(new Date(todaysProgramStart).setHours(8, 0, 0, 0));
-		todaysProgramEnd = new Date(new Date(todaysProgramStart).setHours(12, 0, 0, 0));
-	}
-	
 	setEventDateTimeSession(todaysProgramStart);
 	logEventDetails(false);
 	
@@ -232,8 +231,11 @@ function updateEventCountdown() {
 			todaysProgramEnd = new Date(new Date(todaysProgramStart).setHours(21, 0, 0, 0));
 		}
 		nextProgramStart = nextSession(todaysProgramStart);
+		setCurrentSessionCount();
 		setEventDateTimeSession(todaysProgramStart);
 		logEventDetails();
+		isNotificationRendered = false;
+		runNotification();
 		// console.log(distance, new Date(now));
 	}
 
@@ -263,17 +265,17 @@ function updateEventCountdown() {
 		untilResetCount = 0;
 		clearInterval(intervalCount);
 		intervalCount = setInterval(function () {
+			updateEventCountdown();
 			/* set day status */
 			setTuneInStatus();
-			updateEventCountdown();
 			runNotification();
 		}, 1000);
 	}
 }
 
 function runNotification() {
-	if (notificationStartSoon == false) {
-		notificationStartSoon = true;
+	if (isNotificationRendered == false) {
+		isNotificationRendered = true;
 		if (baptismDate) {
 			showNotification('Mass Baptism', 'Please contact MCGI thru this website', 'https://www.mcgi.org/reach-us/');
 		} else {
@@ -281,11 +283,7 @@ function runNotification() {
 				showNotification('Starting soon - Standby', 'Watch via MCGI YouTube Channel', specificYoutubeChannel);
 			} else {
 				if (sessionCount !== 1) {
-					if (days >= 1) {
-						showNotification(sTuneIn + ' ' + days + ' day' + (days > 1 ? 's' : ''), 'Watch via MCGI YouTube Channel', specificYoutubeChannel);
-					} else if (hours >= 1) {
-						showNotification(sTuneIn + ' ' + hours + ' hour' + (hours > 1 ? 's' : ''), 'Watch via MCGI YouTube Channel', specificYoutubeChannel);
-					}
+					showNotification(sTuneIn, 'Watch via MCGI YouTube Channel', specificYoutubeChannel);
 				} else {
 					if (days >= 1) {
 						showNotification(sTuneIn + ' ' + days + ' day' + (days > 1 ? 's' : ''), 'Visit their YouTube Channel', specificYoutubeChannel);
