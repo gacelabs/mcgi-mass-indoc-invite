@@ -4,14 +4,19 @@ var currentStartDate = localStorage.getItem('currentStartDate') == null ? new Da
 var currentEndDate = null;
 
 var sessionCount = 0, lastSessionCount = 0, untilResetCount = 0, days = 0, hours = 0, minutes = 0, seconds = 0;
-var isNotificationRendered = false, baptismDate = false, onGoing = false, consoleLogShown = false, isTest = false;
+var notificationStartSoon = false, baptismDate = false, onGoing = false, startingIn = false, consoleLogShown = false, isTest = false;
 
-var specificYoutubeChannel = 'https://www.youtube.com/@MCGIChannel';
-var specificFacebookChannel = 'https://www.facebook.com/MCGI.org';
-var sTuneIn = '';
+var specificYoutubeChannel = 'https://m.youtube.com/@MCGIChannel';
+var specificFacebookChannel = 'https://m.facebook.com/MCGI.org';
+var sTuneIn = 'Tune-in ';
+var countdownUI = document.querySelectorAll("#countdown");
 
 var setCurrentDateTime = function (sDate) {
-	var now = new Date();
+	if (isTest) {
+		var now = new Date(sDate);
+	} else {
+		var now = new Date();
+	}
 	var hours = now.getHours();
 	var minutes = now.getMinutes();
 	var seconds = now.getSeconds();
@@ -25,24 +30,23 @@ var setCurrentDateTime = function (sDate) {
 var todaysDate = new Date();
 
 /* start of "for testing purposes" */
-	/* this current date */
-	// var todaysDate = setCurrentDateTime(new Date('2024-07-15')); isTest = true;
-	/* program time adjustments */
-	// todaysDate = new Date(new Date(todaysDate).setHours(23, 0, 0, 0));
+/* this current date */
+	// var todaysDate = setCurrentDateTime(new Date('2024-07-19')); isTest = true;
+	// todaysDate = new Date(new Date(todaysDate).setHours(18, 16, 0, 0));
 /* end of "for testing purposes" */
 
 var todaysProgramStart = new Date(new Date(todaysDate).setHours(19, 0, 0, 0));
-var todaysProgramEnd = new Date(new Date(todaysDate).setHours(21, 0, 0, 0));
+var todaysProgramEnd = new Date(new Date(todaysDate).setHours(21, 15, 0, 0));
 var nextProgramStart = new Date(addDaysToDate(todaysProgramStart, 1));
 
 /* is morning? */
 var isMorning = function (todaysDate) {
-	var currHr = new Intl.DateTimeFormat('en-US', { hour: "numeric", hour12: false, timeZone: 'Asia/Manila' }).format(todaysDate);
-	return todaysDate.getTime() < todaysProgramStart.getTime() && parseInt(currHr) >= 6 && parseInt(currHr) <= 17;
+	var currHr = new Intl.DateTimeFormat('en-US', { hour: "numeric", hour12: false, timeZone: 'Asia/Manila' }).format(setCurrentDateTime(todaysDate));
+	return todaysDate.getTime() < todaysProgramStart.getTime() && parseInt(currHr) >= 0 && parseInt(currHr) <= 17;
 }
 /* program just started */
-var isProgramOngoing = function (todaysDate) {
-	var currHr = new Intl.DateTimeFormat('en-US', { hour: "numeric", hour12: false, timeZone: 'Asia/Manila' }).format(todaysDate);
+var isOngoing = function (todaysDate) {
+	var currHr = new Intl.DateTimeFormat('en-US', { hour: "numeric", hour12: false, timeZone: 'Asia/Manila' }).format(setCurrentDateTime(todaysDate));
 	if (baptismDate) {
 		return todaysDate.getTime() >= todaysProgramStart.getTime() && todaysDate.getTime() <= todaysProgramEnd.getTime() && (parseInt(currHr) >= 8 && parseInt(currHr) <= 12);
 	} else {
@@ -69,12 +73,6 @@ function setCurrentSessionCount() {
 	}
 	if (sessionCount == 0) sessionCount = 1;
 	lastSessionCount = sessionCount;
-	if (sessionCount === 15) {
-		setMassBaptism();
-		baptismDate = true;
-		todaysProgramStart = new Date(new Date(todaysProgramStart).setHours(8, 0, 0, 0));
-		todaysProgramEnd = new Date(new Date(todaysProgramStart).setHours(12, 0, 0, 0));
-	}
 }
 
 function setEventDateTimeSession(todaysDate) {
@@ -101,53 +99,55 @@ function setMassBaptism() {
 
 function nextSession(day) {
 	if (day.getDay() === 6 || day.getDay() === 0) {
-		// Got to weekdays when next day is Saturday (6) or Sunday (0)
 		do {
+			// Got to weekdays when next day is Saturday (6) or Sunday (0)
 			day.setDate(day.getDate() + 1); // Move to the next day
 		} while (day.getDay() === 0 || day.getDay() === 6);
 	}
 	return day;
 }
 
-var countdownUI = document.querySelectorAll("#countdown");
 function setTuneInStatus(fnCallBack) {
-	var isWeekend = todaysDate.getDay() === 6 || todaysDate.getDay() === 0;
 	onGoing = false;
-	var currHr = new Intl.DateTimeFormat('en-US', { hour: "numeric", hour12: false, timeZone: 'Asia/Manila' }).format(todaysProgramStart);
-	var isEvening = parseInt(currHr) >= 18 && parseInt(currHr) <= 23;
+	startingIn = false;
 
-	if (isProgramOngoing(todaysDate)) { /* program still playing */
+	if (isOngoing(todaysDate)) { /* program still playing */
 		sTuneIn = 'Session on going...';
 		onGoing = true;
 	} else { /* program not yet started or just ended */
 		countdownUI[0].style.display = 'block';
-		// console.log(days, hours);
-		if (days == 0 && hours === 1) {
+		if (isMorning(todaysDate)) {
+			sTuneIn = 'Tune-in tonight';
+			if (sessionCount === 14) {
+				sTuneIn = 'Last session tune-in tonight';
+			} else if (sessionCount === 15) {
+				sTuneIn = 'Doctrine acceptance today';
+			}
+		} else { /* evening */
+			sTuneIn = 'Tune-in tomorrow';
+			if (sessionCount === 14) {
+				sTuneIn = 'Last session tune-in tomorrow';
+			} else if (sessionCount === 15) {
+				sTuneIn = 'Doctrine acceptance tomorrow';
+			}
+		}
+		if (days == 0 && (hours >= 0 && hours <= 3)) {
 			sTuneIn = 'Starting in...';
+			startingIn = true;
 		} else {
-			if (isMorning(todaysDate)) {
-				sTuneIn = 'Tune-in tonight';
-				if (sessionCount % 14 === 0) {
-					sTuneIn = 'Last session tune-in tonight';
-				} else if (sessionCount % 15 === 0) {
-					sTuneIn = 'Doctrine acceptance tonight';
-				}
-			} else { /* it's evening */
-				sTuneIn = 'Tune-in tomorrow';
-				if (sessionCount % 14 === 0) {
-					sTuneIn = 'Last session tune-in tomorrow';
-				} else if (sessionCount % 15 === 0) {
-					sTuneIn = 'Doctrine acceptance tomorrow';
+			var isWeekend = todaysDate.getDay() === 6 || todaysDate.getDay() === 0;
+			/* override when every weekends or fridays */
+			if ((isWeekend || todaysDate.getDay() === 5) && ![1, 15].includes(sessionCount)) {
+				var whenProgramEnds = new Date(new Date(todaysDate).setHours(21, 15, 0, 0));
+				// console.log(todaysDate.getTime(), whenProgramEnds.getTime(), todaysDate.getDay());
+				if (todaysDate > whenProgramEnds && todaysDate.getDay() === 5) {
+					var sWeekDay = new Intl.DateTimeFormat('en-US', { weekday: 'long', timeZone: 'Asia/Manila' }).format(todaysProgramStart);
+					sTuneIn = 'Tune-in ' + sWeekDay;
 				}
 			}
-			/* override all when every weekends or fridays & the day 1 session */
-			if ((isWeekend || todaysDate.getDay() === 5) && ![1, 15].includes(sessionCount)) {
-				var sWeekDay = new Intl.DateTimeFormat('en-US', { weekday: 'long', timeZone: 'Asia/Manila' }).format(todaysProgramStart);
-				sTuneIn = 'Tune-in ' + sWeekDay;
-			} else if (sessionCount == 1) {
+			/* override with the day 1 session */
+			if (sessionCount == 1) {
 				sTuneIn = 'Will start in...';
-			} else if (formatDateToFJY(todaysDate) === formatDateToFJY(todaysProgramStart) && todaysDate < todaysProgramStart) {
-				sTuneIn = 'Tune-in ' + (isEvening ? 'tonight' : 'today');
 			}
 		}
 	}
@@ -173,7 +173,7 @@ function setSessionEvent() {
 		currentStartDate = new Date(dateBefore28Days);
 	}
 	localStorage.setItem('currentStartDate', currentStartDate);
-	
+
 	var dEnd = new Date(currentStartDate).setDate(new Date(currentStartDate).getDate() + 18); /* calculate end date including weekends */
 	currentEndDate = new Date(new Date(dEnd).setHours(12, 0, 0, 0));
 	// console.log(todaysDate, currentStartDate, currentEndDate, nextProgramStart);
@@ -191,51 +191,54 @@ function setSessionEvent() {
 		currentEndDate = new Date(dateAfter18Days.setHours(12, 0, 0, 0));
 
 		todaysProgramStart = currentStartDate;
-		todaysProgramEnd = new Date(new Date(todaysProgramStart).setHours(21, 0, 0, 0));
+		todaysProgramEnd = new Date(new Date(todaysProgramStart).setHours(21, 15, 0, 0));
 	}
 
 	setCurrentSessionCount();
+	if (sessionCount === 15) {
+		setMassBaptism();
+		baptismDate = true;
+		todaysProgramStart = new Date(new Date(todaysProgramStart).setHours(8, 0, 0, 0));
+		todaysProgramEnd = new Date(new Date(todaysProgramStart).setHours(12, 0, 0, 0));
+	}
+
 	setEventDateTimeSession(todaysProgramStart);
 	logEventDetails(false);
-	
+
 	intervalCount = setInterval(function () {
-		updateEventCountdown();
 		/* set day status */
 		setTuneInStatus();
-		runNotification();
+		updateEventCountdown();
 	}, 1000);
 }
 
 function updateEventCountdown() {
-	if (isTest) {
-		var now = new Date(todaysDate).getTime();
-	} else {
-		var now = new Date(setCurrentDateTime(todaysDate)).getTime();
-	}
+	var now = new Date(setCurrentDateTime(todaysDate)).getTime();
 	var distance = todaysProgramStart.getTime() - now;
-	if (distance <= 0 && !isProgramOngoing(todaysDate)) { /* this means program ended */
+	if (distance <= 0 && !isOngoing(todaysDate)) { /* this means program ended */
 		if (sessionCount <= 14) sessionCount++;
 		todaysProgramStart = nextSession(new Date(addDaysToDate(todaysDate, 1)));
 		/* if someone change the todaysDate in console and its greater than currentEndDate set todaysDate to currentEndDate instead */
 		if (todaysProgramStart > currentEndDate) {
 			todaysProgramStart = new Date(new Date(todaysProgramStart).setHours(19, 0, 0, 0));
-			todaysProgramEnd = new Date(new Date(todaysProgramStart).setHours(21, 0, 0, 0));
+			todaysProgramEnd = new Date(new Date(todaysProgramStart).setHours(21, 15, 0, 0));
 			sessionCount = lastSessionCount;
 		}
 		// console.log([14, 15].includes(sessionCount), sessionCount);
 		if ([14, 15].includes(sessionCount)) {
 			todaysProgramStart = new Date(new Date(todaysProgramStart).setHours(8, 0, 0, 0));
 			todaysProgramEnd = new Date(new Date(todaysProgramStart).setHours(12, 0, 0, 0));
+			if (sessionCount === 15 && baptismDate == false) {
+				baptismDate = true;
+				setMassBaptism();
+			}
 		} else {
 			todaysProgramStart = new Date(new Date(todaysProgramStart).setHours(19, 0, 0, 0));
-			todaysProgramEnd = new Date(new Date(todaysProgramStart).setHours(21, 0, 0, 0));
+			todaysProgramEnd = new Date(new Date(todaysProgramStart).setHours(21, 15, 0, 0));
 		}
-		nextProgramStart = nextSession(todaysProgramStart);
-		setCurrentSessionCount();
+		nextProgramStart = nextSession(new Date(addDaysToDate(todaysProgramStart, 1)));
 		setEventDateTimeSession(todaysProgramStart);
 		logEventDetails();
-		isNotificationRendered = false;
-		runNotification();
 		// console.log(distance, new Date(now));
 	}
 
@@ -243,39 +246,23 @@ function updateEventCountdown() {
 	hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
 	minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
 	seconds = Math.floor((distance % (1000 * 60)) / 1000);
-	
+
 	// console.log(onGoing);
 	if (days > 0 || hours > 0 || minutes > 0 || seconds > 0) {
 		countdownUI[0].innerHTML =
-		`<div class="countdown-segment"><span class="countdown-label">Days</span><span class="countdown-number days">${days}</span></div>` +
-		`<div class="countdown-segment"><span class="countdown-label">Hours</span><span class="countdown-number hours">${hours}</span></div>` +
-		`<div class="countdown-segment"><span class="countdown-label">Minutes</span><span class="countdown-number">${minutes}</span></div>` +
-		`<div class="countdown-segment"><span class="countdown-label">Seconds</span><span class="countdown-number">${seconds}</span></div>`;
+			`<div class="countdown-segment"><span class="countdown-label">Days</span><span class="countdown-number days">${days}</span></div>` +
+			`<div class="countdown-segment"><span class="countdown-label">Hours</span><span class="countdown-number hours">${hours}</span></div>` +
+			`<div class="countdown-segment"><span class="countdown-label">Minutes</span><span class="countdown-number">${minutes}</span></div>` +
+			`<div class="countdown-segment"><span class="countdown-label">Seconds</span><span class="countdown-number">${seconds}</span></div>`;
 		if (onGoing) {
 			countdownUI[0].style.display = 'none';
-		} else if (sessionCount > 1 && hours > 1) {
+		} else if (sessionCount > 1 && startingIn == false) {
 			countdownUI[0].innerHTML += `<div style="margin-top: -10px;"><span class="countdown-label">To go</span></div>`;
 		}
 	}
 
-	// console.log(untilResetCount);
-	untilResetCount++;
-	if (untilResetCount == 60) {
-		// console.info('reset ram every 60 seconds');
-		untilResetCount = 0;
-		clearInterval(intervalCount);
-		intervalCount = setInterval(function () {
-			updateEventCountdown();
-			/* set day status */
-			setTuneInStatus();
-			runNotification();
-		}, 1000);
-	}
-}
-
-function runNotification() {
-	if (isNotificationRendered == false) {
-		isNotificationRendered = true;
+	if (notificationStartSoon == false) {
+		notificationStartSoon = true;
 		if (baptismDate) {
 			showNotification('Mass Baptism', 'Please contact MCGI thru this website', 'https://www.mcgi.org/reach-us/');
 		} else {
@@ -293,5 +280,18 @@ function runNotification() {
 				}
 			}
 		}
+	}
+
+	// console.log(untilResetCount);
+	untilResetCount++;
+	if (untilResetCount == 60) {
+		// console.info('reset ram every 60 seconds');
+		untilResetCount = 0;
+		clearInterval(intervalCount);
+		intervalCount = setInterval(function () {
+			/* set day status */
+			setTuneInStatus();
+			updateEventCountdown();
+		}, 1000);
 	}
 }
