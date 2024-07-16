@@ -144,9 +144,8 @@ function setTuneInStatus(fnCallBack) {
 					var sWeekDay = new Intl.DateTimeFormat('en-US', { weekday: 'long', timeZone: 'Asia/Manila' }).format(todaysProgramStart);
 					sTuneIn = 'Tune-in ' + sWeekDay;
 				}
-			}
-			/* override with the day 1 session */
-			if (sessionCount == 1) {
+			} else if (sessionCount == 1) {
+				/* override with the day 1 session */
 				sTuneIn = 'Will start in...';
 			}
 		}
