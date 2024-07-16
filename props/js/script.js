@@ -269,7 +269,11 @@ function updateEventCountdown() {
 				showNotification('Starting soon - Standby', 'Watch via MCGI YouTube Channel', specificYoutubeChannel);
 			} else {
 				if (sessionCount !== 1) {
-					showNotification(sTuneIn, 'Watch via MCGI YouTube Channel', specificYoutubeChannel);
+					if (startingIn == false) {
+						showNotification(sTuneIn, 'Watch via MCGI YouTube Channel', specificYoutubeChannel);
+					} else {
+						notificationStartSoon = false;
+					}
 				} else {
 					if (days >= 1) {
 						showNotification(sTuneIn + ' ' + days + ' day' + (days > 1 ? 's' : ''), 'Visit their YouTube Channel', specificYoutubeChannel);
