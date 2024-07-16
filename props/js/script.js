@@ -31,7 +31,7 @@ var todaysDate = new Date();
 
 /* start of "for testing purposes" */
 /* this current date */
-	// var todaysDate = setCurrentDateTime(new Date('2024-07-19')); isTest = true;
+	// var todaysDate = setCurrentDateTime(new Date('2024-07-16')); isTest = true;
 	// todaysDate = new Date(new Date(todaysDate).setHours(18, 16, 0, 0));
 /* end of "for testing purposes" */
 
@@ -131,14 +131,16 @@ function setTuneInStatus(fnCallBack) {
 				sTuneIn = 'Doctrine acceptance tomorrow';
 			}
 		}
-		if (days == 0 && (hours >= 0 && hours <= 3)) {
+		
+		var whenProgramEnds = new Date(new Date(todaysDate).setHours(21, 15, 0, 0));
+		if (days == 0 && (hours >= 0 && hours <= 3) && todaysDate < whenProgramEnds) {
+			console.log(days, hours);
 			sTuneIn = 'Starting in...';
 			startingIn = true;
 		} else {
 			var isWeekend = todaysDate.getDay() === 6 || todaysDate.getDay() === 0;
 			/* override when every weekends or fridays */
 			if ((isWeekend || todaysDate.getDay() === 5) && ![1, 15].includes(sessionCount)) {
-				var whenProgramEnds = new Date(new Date(todaysDate).setHours(21, 15, 0, 0));
 				// console.log(todaysDate.getTime(), whenProgramEnds.getTime(), todaysDate.getDay());
 				if (todaysDate > whenProgramEnds && todaysDate.getDay() === 5) {
 					var sWeekDay = new Intl.DateTimeFormat('en-US', { weekday: 'long', timeZone: 'Asia/Manila' }).format(todaysProgramStart);
