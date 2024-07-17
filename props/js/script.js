@@ -111,6 +111,11 @@ function setTuneInStatus(fnCallBack) {
 	onGoing = false;
 	startingIn = false;
 	var now = setCurrentDateTime(todaysDate);
+	var currHr = new Intl.DateTimeFormat('en-US', { hour: "numeric", hour12: false, timeZone: 'Asia/Manila' }).format(now);
+	if (parseInt(currHr) === 0) { /* when its midnight change the todaysDate value */
+		todaysDate = setCurrentDateTime(todaysDate);
+		now = setCurrentDateTime(todaysDate);
+	}
 
 	if (isOngoing(now)) { /* program still playing */
 		sTuneIn = 'Session on going...';
