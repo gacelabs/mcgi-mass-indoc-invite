@@ -40,17 +40,17 @@ var todaysProgramEnd = new Date(new Date(todaysDate).setHours(21, 15, 0, 0));
 var nextProgramStart = new Date(addDaysToDate(todaysProgramStart, 1));
 
 /* is morning? */
-var isMorning = function (todaysDate) {
-	var currHr = new Intl.DateTimeFormat('en-US', { hour: "numeric", hour12: false, timeZone: 'Asia/Manila' }).format(setCurrentDateTime(todaysDate));
-	return todaysDate.getTime() < todaysProgramStart.getTime() && parseInt(currHr) >= 0 && parseInt(currHr) <= 17;
+var isMorning = function (now) {
+	var currHr = new Intl.DateTimeFormat('en-US', { hour: "numeric", hour12: false, timeZone: 'Asia/Manila' }).format(now);
+	return now.getTime() < todaysProgramStart.getTime() && parseInt(currHr) >= 0 && parseInt(currHr) <= 17;
 }
 /* program just started */
-var isOngoing = function (todaysDate) {
-	var currHr = new Intl.DateTimeFormat('en-US', { hour: "numeric", hour12: false, timeZone: 'Asia/Manila' }).format(setCurrentDateTime(todaysDate));
+var isOngoing = function (now) {
+	var currHr = new Intl.DateTimeFormat('en-US', { hour: "numeric", hour12: false, timeZone: 'Asia/Manila' }).format(now);
 	if (baptismDate) {
-		return todaysDate.getTime() >= todaysProgramStart.getTime() && todaysDate.getTime() <= todaysProgramEnd.getTime() && (parseInt(currHr) >= 8 && parseInt(currHr) <= 12);
+		return now.getTime() >= todaysProgramStart.getTime() && now.getTime() <= todaysProgramEnd.getTime() && (parseInt(currHr) >= 8 && parseInt(currHr) <= 12);
 	} else {
-		return todaysDate.getTime() >= todaysProgramStart.getTime() && todaysDate.getTime() <= todaysProgramEnd.getTime() && (parseInt(currHr) >= 19 && parseInt(currHr) <= 21);
+		return now.getTime() >= todaysProgramStart.getTime() && now.getTime() <= todaysProgramEnd.getTime() && (parseInt(currHr) >= 19 && parseInt(currHr) <= 21);
 	}
 }
 
@@ -110,13 +110,14 @@ function nextSession(day) {
 function setTuneInStatus(fnCallBack) {
 	onGoing = false;
 	startingIn = false;
+	var now = setCurrentDateTime(todaysDate);
 
-	if (isOngoing(todaysDate)) { /* program still playing */
+	if (isOngoing(now)) { /* program still playing */
 		sTuneIn = 'Session on going...';
 		onGoing = true;
 	} else { /* program not yet started or just ended */
 		countdownUI[0].style.display = 'block';
-		if (isMorning(todaysDate)) {
+		if (isMorning(now)) {
 			sTuneIn = 'Tune-in tonight';
 			if (sessionCount === 14) {
 				sTuneIn = 'Last session tune-in tonight';
@@ -132,17 +133,17 @@ function setTuneInStatus(fnCallBack) {
 			}
 		}
 		
-		var whenProgramEnds = new Date(new Date(todaysDate).setHours(21, 15, 0, 0));
-		if (days == 0 && (hours >= 0 && hours <= 3) && todaysDate < whenProgramEnds) {
+		var whenProgramEnds = new Date(new Date(now).setHours(21, 15, 0, 0));
+		if (days == 0 && (hours >= 0 && hours <= 3) && now < whenProgramEnds) {
 			console.log(days, hours);
 			sTuneIn = 'Starting in...';
 			startingIn = true;
 		} else {
-			var isWeekend = todaysDate.getDay() === 6 || todaysDate.getDay() === 0;
+			var isWeekend = now.getDay() === 6 || now.getDay() === 0;
 			/* override when every weekends or fridays */
-			if ((isWeekend || todaysDate.getDay() === 5) && ![1, 15].includes(sessionCount)) {
-				// console.log(todaysDate.getTime(), whenProgramEnds.getTime(), todaysDate.getDay());
-				if (todaysDate > whenProgramEnds && todaysDate.getDay() === 5) {
+			if ((isWeekend || now.getDay() === 5) && ![1, 15].includes(sessionCount)) {
+				// console.log(now.getTime(), whenProgramEnds.getTime(), now.getDay());
+				if (now > whenProgramEnds && now.getDay() === 5) {
 					var sWeekDay = new Intl.DateTimeFormat('en-US', { weekday: 'long', timeZone: 'Asia/Manila' }).format(todaysProgramStart);
 					sTuneIn = 'Tune-in ' + sWeekDay;
 				}
