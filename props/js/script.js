@@ -220,9 +220,9 @@ function setSessionEvent() {
 }
 
 function updateEventCountdown() {
-	var now = new Date(setCurrentDateTime(todaysDate)).getTime();
-	var distance = todaysProgramStart.getTime() - now;
-	if (distance <= 0 && !isOngoing(todaysDate)) { /* this means program ended */
+	var now = new Date(setCurrentDateTime(todaysDate));
+	var distance = todaysProgramStart.getTime() - now.getTime();
+	if (distance <= 0 && !isOngoing(now)) { /* this means program ended */
 		if (sessionCount <= 14) sessionCount++;
 		todaysProgramStart = nextSession(new Date(addDaysToDate(todaysDate, 1)));
 		/* if someone change the todaysDate in console and its greater than currentEndDate set todaysDate to currentEndDate instead */
