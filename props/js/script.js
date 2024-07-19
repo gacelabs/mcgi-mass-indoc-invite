@@ -8,7 +8,7 @@ var notificationStartSoon = false, baptismDate = false, onGoing = false, startin
 
 var specificYoutubeChannel = 'https://m.youtube.com/@MCGIChannel';
 var specificFacebookChannel = 'https://m.facebook.com/MCGI.org';
-var sTuneIn = 'Tune-in ';
+var sTuneIn = '';
 var countdownUI = document.querySelectorAll("#countdown");
 
 var setCurrentDateTime = function (sDate) {
@@ -31,7 +31,7 @@ var todaysDate = new Date();
 
 /* start of "for testing purposes" */
 /* this current date */
-	// var todaysDate = setCurrentDateTime(new Date('2024-07-19')); isTest = true;
+	// var todaysDate = setCurrentDateTime(new Date('2024-07-22')); isTest = true;
 	// todaysDate = new Date(new Date(todaysDate).setHours(21, 16, 0, 0));
 /* end of "for testing purposes" */
 
@@ -121,7 +121,6 @@ function setTuneInStatus(fnCallBack) {
 		sTuneIn = 'Session on going...';
 		onGoing = true;
 	} else { /* program not yet started or just ended */
-		countdownUI[0].style.display = 'block';
 		if (isMorning(now)) {
 			sTuneIn = 'Tune-in tonight';
 			if (sessionCount === 14) {
@@ -139,7 +138,7 @@ function setTuneInStatus(fnCallBack) {
 		}
 		
 		var whenProgramEnds = new Date(new Date(todaysProgramStart).setHours(21, 15, 0, 0));
-		if (days == 0 && (hours >= 0 && hours <= 3) && now < whenProgramEnds) {
+		if (days == 0 && (hours >= 0 && hours <= 3) && now < whenProgramEnds && (formatDateToFJY(now) === formatDateToFJY(todaysProgramStart))) {
 			// console.log(days, hours);
 			sTuneIn = 'Starting in...';
 			startingIn = true;
@@ -157,9 +156,11 @@ function setTuneInStatus(fnCallBack) {
 				sTuneIn = 'Will start in...';
 			}
 		}
+		countdownUI[0].style.display = 'block';
 	}
-
-	document.getElementById("session-day").innerHTML = '<strong>Day ' + sessionCount + ', ' + sTuneIn + '</strong>';
+	if (sTuneIn.length) {
+		document.getElementById("session-day").innerHTML = '<strong>Day ' + sessionCount + ', ' + sTuneIn + '</strong>';
+	}
 	if (typeof fnCallBack == 'function') fnCallBack();
 }
 
