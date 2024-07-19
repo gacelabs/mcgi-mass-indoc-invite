@@ -6,8 +6,8 @@ var currentEndDate = null;
 var sessionCount = 0, lastSessionCount = 0, untilResetCount = 0, days = 0, hours = 0, minutes = 0, seconds = 0;
 var notificationStartSoon = false, baptismDate = false, onGoing = false, startingIn = false, consoleLogShown = false, isTest = false;
 
-var specificYoutubeChannel = 'https://m.youtube.com/@MCGIChannel';
-var specificFacebookChannel = 'https://m.facebook.com/MCGI.org';
+var specificYoutubeChannel = mobileCheck() ? 'https://m.youtube.com/@MCGIChannel' : 'https://www.youtube.com/@MCGIChannel';
+var specificFacebookChannel = mobileCheck() ? 'https://m.facebook.com/MCGI.org' : 'https://www.facebook.com/MCGI.org';
 var sTuneIn = '';
 var countdownUI = document.querySelectorAll("#countdown");
 

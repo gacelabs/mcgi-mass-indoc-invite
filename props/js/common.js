@@ -129,7 +129,7 @@ function showNotification(title, body, redirectUrl) {
 						alert('Notifications is off, allow it and reload the page.');
 					} else {
 						console.warn('Notifications not allowed for local environment.');
-						console.log(title, ':', body);
+						console.log(title, ':', body, ':', redirectUrl);
 					}
 				}
 			}
