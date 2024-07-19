@@ -31,13 +31,13 @@ var todaysDate = new Date();
 
 /* start of "for testing purposes" */
 /* this current date */
-	// var todaysDate = setCurrentDateTime(new Date('2024-07-16')); isTest = true;
-	// todaysDate = new Date(new Date(todaysDate).setHours(18, 16, 0, 0));
+	// var todaysDate = setCurrentDateTime(new Date('2024-07-19')); isTest = true;
+	// todaysDate = new Date(new Date(todaysDate).setHours(21, 16, 0, 0));
 /* end of "for testing purposes" */
 
-var todaysProgramStart = new Date(new Date(todaysDate).setHours(19, 0, 0, 0));
-var todaysProgramEnd = new Date(new Date(todaysDate).setHours(21, 15, 0, 0));
-var nextProgramStart = new Date(addDaysToDate(todaysProgramStart, 1));
+var todaysProgramStart = nextMondaySession(new Date(new Date(todaysDate).setHours(19, 0, 0, 0)));
+var todaysProgramEnd = new Date(new Date(todaysProgramStart).setHours(21, 15, 0, 0));
+var nextProgramStart = nextMondaySession(new Date(addDaysToDate(todaysProgramStart, 1)));
 
 /* is morning? */
 var isMorning = function (now) {
@@ -97,7 +97,7 @@ function setMassBaptism() {
 	document.querySelector(".info-sess .social-medias").style.display = 'none';
 }
 
-function nextSession(day) {
+function nextMondaySession(day) {
 	if (day.getDay() === 6 || day.getDay() === 0) {
 		do {
 			// Got to weekdays when next day is Saturday (6) or Sunday (0)
@@ -138,17 +138,17 @@ function setTuneInStatus(fnCallBack) {
 			}
 		}
 		
-		var whenProgramEnds = new Date(new Date(now).setHours(21, 15, 0, 0));
+		var whenProgramEnds = new Date(new Date(todaysProgramStart).setHours(21, 15, 0, 0));
 		if (days == 0 && (hours >= 0 && hours <= 3) && now < whenProgramEnds) {
-			console.log(days, hours);
+			// console.log(days, hours);
 			sTuneIn = 'Starting in...';
 			startingIn = true;
 		} else {
 			var isWeekend = now.getDay() === 6 || now.getDay() === 0;
 			/* override when every weekends or fridays */
 			if ((isWeekend || now.getDay() === 5) && ![1, 15].includes(sessionCount)) {
-				// console.log(now.getTime(), whenProgramEnds.getTime(), now.getDay());
-				if (now > whenProgramEnds && now.getDay() === 5) {
+				// console.log(now, whenProgramEnds, now.getDay());
+				if (now < whenProgramEnds) {
 					var sWeekDay = new Intl.DateTimeFormat('en-US', { weekday: 'long', timeZone: 'Asia/Manila' }).format(todaysProgramStart);
 					sTuneIn = 'Tune-in ' + sWeekDay;
 				}
@@ -224,7 +224,7 @@ function updateEventCountdown() {
 	var distance = todaysProgramStart.getTime() - now.getTime();
 	if (distance <= 0 && !isOngoing(now)) { /* this means program ended */
 		if (sessionCount <= 14) sessionCount++;
-		todaysProgramStart = nextSession(new Date(addDaysToDate(todaysDate, 1)));
+		todaysProgramStart = nextMondaySession(new Date(addDaysToDate(todaysDate, 1)));
 		/* if someone change the todaysDate in console and its greater than currentEndDate set todaysDate to currentEndDate instead */
 		if (todaysProgramStart > currentEndDate) {
 			todaysProgramStart = new Date(new Date(todaysProgramStart).setHours(19, 0, 0, 0));
@@ -243,7 +243,7 @@ function updateEventCountdown() {
 			todaysProgramStart = new Date(new Date(todaysProgramStart).setHours(19, 0, 0, 0));
 			todaysProgramEnd = new Date(new Date(todaysProgramStart).setHours(21, 15, 0, 0));
 		}
-		nextProgramStart = nextSession(new Date(addDaysToDate(todaysProgramStart, 1)));
+		nextProgramStart = nextMondaySession(new Date(addDaysToDate(todaysProgramStart, 1)));
 		setEventDateTimeSession(todaysProgramStart);
 		logEventDetails();
 		// console.log(distance, new Date(now));
