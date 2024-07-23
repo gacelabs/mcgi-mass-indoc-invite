@@ -214,9 +214,9 @@ function setSessionEvent() {
 	logEventDetails(false);
 
 	intervalCount = setInterval(function () {
+		updateEventCountdown();
 		/* set day status */
 		setTuneInStatus();
-		updateEventCountdown();
 	}, 1000);
 }
 
@@ -301,9 +301,9 @@ function updateEventCountdown() {
 		untilResetCount = 0;
 		clearInterval(intervalCount);
 		intervalCount = setInterval(function () {
+			updateEventCountdown();
 			/* set day status */
 			setTuneInStatus();
-			updateEventCountdown();
 		}, 1000);
 	}
 }
