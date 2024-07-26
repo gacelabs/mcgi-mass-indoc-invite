@@ -117,6 +117,7 @@ function setTuneInStatus(fnCallBack) {
 		isMidnight = true;
 		todaysDate = setCurrentDateTime(todaysDate);
 		now = setCurrentDateTime(todaysDate);
+		logEventDetails();
 	}
 
 	if (isOngoing(now)) { /* program still playing */
