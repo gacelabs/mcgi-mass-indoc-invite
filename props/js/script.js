@@ -4,7 +4,7 @@ var currentStartDate = localStorage.getItem('currentStartDate') == null ? new Da
 var currentEndDate = null;
 
 var sessionCount = 0, lastSessionCount = 0, untilResetCount = 0, days = 0, hours = 0, minutes = 0, seconds = 0;
-var notificationStartSoon = false, baptismDate = false, onGoing = false, startingIn = false, consoleLogShown = false, isTest = false;
+var notificationStartSoon = false, baptismDate = false, onGoing = false, startingIn = false, consoleLogShown = false, isTest = false, isMidnight = false;
 
 var specificYoutubeChannel = mobileCheck() ? 'https://m.youtube.com/@MCGIChannel' : 'https://www.youtube.com/@MCGIChannel';
 var specificFacebookChannel = mobileCheck() ? 'https://m.facebook.com/MCGI.org' : 'https://www.facebook.com/MCGI.org';
@@ -31,8 +31,8 @@ var todaysDate = new Date();
 
 /* start of "for testing purposes" */
 /* this current date */
-	// var todaysDate = setCurrentDateTime(new Date('2024-07-22')); isTest = true;
-	// todaysDate = new Date(new Date(todaysDate).setHours(21, 16, 0, 0));
+	var todaysDate = setCurrentDateTime(new Date('2024-07-26')); isTest = true;
+	todaysDate = new Date(new Date(todaysDate).setHours(23, 0, 0, 0));
 /* end of "for testing purposes" */
 
 var todaysProgramStart = nextMondaySession(new Date(new Date(todaysDate).setHours(19, 0, 0, 0)));
@@ -111,8 +111,10 @@ function setTuneInStatus(fnCallBack) {
 	onGoing = false;
 	startingIn = false;
 	var now = setCurrentDateTime(todaysDate);
-	var currHr = new Intl.DateTimeFormat('en-US', { hour: "numeric", hour12: false, timeZone: 'Asia/Manila' }).format(now);
-	if (parseInt(currHr) === 0) { /* when its midnight change the todaysDate value */
+	var currHr = new Intl.DateTimeFormat('en-US', { hour: "numeric", hour12: true, timeZone: 'Asia/Manila' }).format(now);
+	// console.log(parseInt(currHr));
+	if ((parseInt(currHr) === 12 && currHr.indexOf('AM') >= 0) && isMidnight === false) { /* when its midnight change the todaysDate value */
+		isMidnight = true;
 		todaysDate = setCurrentDateTime(todaysDate);
 		now = setCurrentDateTime(todaysDate);
 	}
