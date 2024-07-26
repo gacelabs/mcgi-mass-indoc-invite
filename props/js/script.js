@@ -31,8 +31,8 @@ var todaysDate = new Date();
 
 /* start of "for testing purposes" */
 /* this current date */
-	var todaysDate = setCurrentDateTime(new Date('2024-07-26')); isTest = true;
-	todaysDate = new Date(new Date(todaysDate).setHours(23, 0, 0, 0));
+	// var todaysDate = setCurrentDateTime(new Date('2024-07-26')); isTest = true;
+	// todaysDate = new Date(new Date(todaysDate).setHours(23, 0, 0, 0));
 /* end of "for testing purposes" */
 
 var todaysProgramStart = nextMondaySession(new Date(new Date(todaysDate).setHours(19, 0, 0, 0)));
