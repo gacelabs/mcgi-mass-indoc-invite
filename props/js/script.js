@@ -13,14 +13,16 @@ var countdownUI = document.querySelectorAll("#countdown");
 
 var setCurrentDateTime = function (sDate) {
 	if (isTest) {
+		var dDate = new Date(sDate);
 		var now = new Date(sDate);
 	} else {
+		var dDate = new Date();
 		var now = new Date();
 	}
 	var hours = now.getHours();
 	var minutes = now.getMinutes();
 	var seconds = now.getSeconds();
-	var dDate = new Date(sDate);
+
 	dDate.setHours(hours);
 	dDate.setMinutes(minutes);
 	dDate.setSeconds(seconds);
