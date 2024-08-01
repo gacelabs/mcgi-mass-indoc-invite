@@ -29,11 +29,11 @@ var setCurrentDateTime = function (sDate) {
 	return dDate;
 }
 
+/* current date */
 var todaysDate = new Date();
 
 /* start of "for testing purposes" */
-/* this current date */
-	// var todaysDate = setCurrentDateTime(new Date('2024-07-26')); isTest = true;
+	// isTest = true; todaysDate = setCurrentDateTime(new Date('2024-07-26'));
 	// todaysDate = new Date(new Date(todaysDate).setHours(23, 0, 0, 0));
 /* end of "for testing purposes" */
 
@@ -238,6 +238,9 @@ function setSessionEvent() {
 		baptismDate = true;
 		todaysProgramStart = new Date(new Date(todaysProgramStart).setHours(8, 0, 0, 0));
 		todaysProgramEnd = new Date(new Date(todaysProgramStart).setHours(12, 0, 0, 0));
+		var givenDate = new Date(todaysProgramStart);
+		var dateAfter10Days = addDaysToDate(givenDate, 10);
+		nextProgramStart = nextMondaySession(new Date(new Date(dateAfter10Days).setHours(19, 0, 0, 0)));
 	}
 
 	setEventDateTimeSession(todaysProgramStart);
@@ -266,15 +269,22 @@ function updateEventCountdown() {
 		if ([14, 15].includes(sessionCount)) {
 			todaysProgramStart = new Date(new Date(todaysProgramStart).setHours(8, 0, 0, 0));
 			todaysProgramEnd = new Date(new Date(todaysProgramStart).setHours(12, 0, 0, 0));
-			if (sessionCount === 15 && baptismDate == false) {
-				baptismDate = true;
-				setMassBaptism();
+			if (sessionCount === 15) {
+				if (baptismDate == false) {
+					baptismDate = true;
+					setMassBaptism();
+				}
+				var givenDate = new Date(todaysProgramStart);
+				var dateAfter10Days = addDaysToDate(givenDate, 10);
+				nextProgramStart = nextMondaySession(new Date(new Date(dateAfter10Days).setHours(19, 0, 0, 0)));
+			} else {
+				nextProgramStart = nextMondaySession(new Date(addDaysToDate(todaysProgramStart, 1)));
 			}
 		} else {
 			todaysProgramStart = new Date(new Date(todaysProgramStart).setHours(19, 0, 0, 0));
 			todaysProgramEnd = new Date(new Date(todaysProgramStart).setHours(21, 15, 0, 0));
+			nextProgramStart = nextMondaySession(new Date(addDaysToDate(todaysProgramStart, 1)));
 		}
-		nextProgramStart = nextMondaySession(new Date(addDaysToDate(todaysProgramStart, 1)));
 		setEventDateTimeSession(todaysProgramStart);
 		logEventDetails();
 		// console.log(distance, new Date(now));
