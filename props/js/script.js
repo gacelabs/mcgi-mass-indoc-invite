@@ -1,6 +1,11 @@
 var intervalCount;
 
-var currentStartDate = localStorage.getItem('currentStartDate') == null ? new Date(new Date('2024-04-22').setHours(19, 0, 0, 0)) : new Date(localStorage.getItem('currentStartDate'));
+var forNewSched = new Date();
+if (forNewSched.getFullYear() == 2024 && forNewSched.getMonth() == 10) {
+	var currentStartDate = new Date(new Date('2024-10-29').setHours(19, 0, 0, 0));
+} else {
+	var currentStartDate = localStorage.getItem('currentStartDate') == null ? new Date(new Date('2024-04-22').setHours(19, 0, 0, 0)) : new Date(localStorage.getItem('currentStartDate'));
+}
 var currentEndDate = null;
 
 var sessionCount = 0, lastSessionCount = 0, untilResetCount = 0, days = 0, hours = 0, minutes = 0, seconds = 0;
