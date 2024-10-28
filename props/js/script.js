@@ -1,15 +1,14 @@
 var intervalCount;
-
-var forNewSched = new Date();
-if (forNewSched.getFullYear() == 2024 && forNewSched.getMonth() == 9) {
-	var currentStartDate = new Date(new Date('2024-10-29').setHours(19, 0, 0, 0));
-} else {
-	var currentStartDate = localStorage.getItem('currentStartDate') == null ? new Date(new Date('2024-04-22').setHours(19, 0, 0, 0)) : new Date(localStorage.getItem('currentStartDate'));
-}
-var currentEndDate = null;
-
 var sessionCount = 0, lastSessionCount = 0, untilResetCount = 0, days = 0, hours = 0, minutes = 0, seconds = 0;
 var notificationStartSoon = false, baptismDate = false, onGoing = false, startingIn = false, consoleLogShown = false, isTest = false, isMidnight = false;
+
+var forNewSched = new Date();
+if (forNewSched.getFullYear() == 2024 && forNewSched.getMonth() >= 9) {
+	var currentStartDate = new Date(new Date('2024-10-29').setHours(19, 0, 0, 0));
+	localStorage.setItem('currentStartDate', currentStartDate);
+}
+var currentStartDate = localStorage.getItem('currentStartDate') == null ? new Date(new Date('2024-04-22').setHours(19, 0, 0, 0)) : new Date(localStorage.getItem('currentStartDate'));
+var currentEndDate = null;
 
 var specificYoutubeChannel = mobileCheck() ? 'https://m.youtube.com/@MCGIChannel' : 'https://www.youtube.com/@MCGIChannel';
 var specificFacebookChannel = mobileCheck() ? 'https://m.facebook.com/MCGI.org' : 'https://www.facebook.com/MCGI.org';
