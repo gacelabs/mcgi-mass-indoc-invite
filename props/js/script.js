@@ -2,12 +2,12 @@ var intervalCount;
 var sessionCount = 0, lastSessionCount = 0, untilResetCount = 0, days = 0, hours = 0, minutes = 0, seconds = 0;
 var notificationStartSoon = false, baptismDate = false, onGoing = false, startingIn = false, consoleLogShown = false, isTest = false, isMidnight = false;
 
-var forNewSched = new Date();
-if (forNewSched.getFullYear() == 2024 && forNewSched.getMonth() >= 9) {
-	var currentStartDate = new Date(new Date('2024-10-29').setHours(19, 0, 0, 0));
+// var forNewSched = new Date();
+// if (forNewSched.getFullYear() == 2024 && forNewSched.getMonth() >= 9) {
+	var currentStartDate = new Date(new Date('2024-10-28').setHours(19, 0, 0, 0));
 	localStorage.setItem('currentStartDate', currentStartDate);
-}
-var currentStartDate = localStorage.getItem('currentStartDate') == null ? new Date(new Date('2024-04-22').setHours(19, 0, 0, 0)) : new Date(localStorage.getItem('currentStartDate'));
+// }
+// var currentStartDate = localStorage.getItem('currentStartDate') == null ? new Date(new Date('2024-04-22').setHours(19, 0, 0, 0)) : new Date(localStorage.getItem('currentStartDate'));
 var currentEndDate = null;
 
 var specificYoutubeChannel = mobileCheck() ? 'https://m.youtube.com/@MCGIChannel' : 'https://www.youtube.com/@MCGIChannel';
@@ -203,7 +203,7 @@ function setSessionEvent() {
 	if (monthsCount > 0) {
 		for (let index = 0; index < monthsCount; index++) {
 			var givenDate = new Date(currentStartDate);
-			var dateAfter28Days = addDaysToDate(givenDate, 28);
+			var dateAfter28Days = addDaysToDate(givenDate, 21);
 			currentStartDate = new Date(dateAfter28Days);
 		}
 	}
@@ -211,7 +211,7 @@ function setSessionEvent() {
 	if (currentStartDate > todaysDate) {
 		/* this means current event not yet finish */
 		var givenDate = new Date(currentStartDate);
-		var dateBefore28Days = addDaysToDate(givenDate, 28, true);
+		var dateBefore28Days = addDaysToDate(givenDate, 21, true);
 		currentStartDate = new Date(dateBefore28Days);
 	}
 	localStorage.setItem('currentStartDate', currentStartDate);
@@ -223,7 +223,7 @@ function setSessionEvent() {
 		/* this means current event was finished */
 		sessionCount = 0;
 		var givenDate = new Date(currentEndDate);
-		var dateAfter10Days = addDaysToDate(givenDate, 10);
+		var dateAfter10Days = addDaysToDate(givenDate, 3);
 		nextProgramStart = new Date(new Date(dateAfter10Days).setHours(19, 0, 0, 0));
 
 		currentStartDate = nextProgramStart;
@@ -243,7 +243,7 @@ function setSessionEvent() {
 		todaysProgramStart = new Date(new Date(todaysProgramStart).setHours(8, 0, 0, 0));
 		todaysProgramEnd = new Date(new Date(todaysProgramStart).setHours(12, 0, 0, 0));
 		var givenDate = new Date(todaysProgramStart);
-		var dateAfter10Days = addDaysToDate(givenDate, 10);
+		var dateAfter10Days = addDaysToDate(givenDate, 3);
 		nextProgramStart = nextMondaySession(new Date(new Date(dateAfter10Days).setHours(19, 0, 0, 0)));
 	}
 
