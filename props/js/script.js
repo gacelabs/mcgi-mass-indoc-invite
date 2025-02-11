@@ -70,6 +70,7 @@ function logEventDetails(bClear) {
 function setCurrentSessionCount() {
 	var thisDate = new Date(currentStartDate);
 	// console.log(thisDate, todaysProgramStart);
+	alert(thisDate + "-" +todaysProgramStart);
 	while (thisDate <= todaysProgramStart) {
 		var dayOfWeek = thisDate.getDay();
 		if (dayOfWeek !== 6 && dayOfWeek !== 0) { // Exclude Saturday (6) and Sunday (0)
