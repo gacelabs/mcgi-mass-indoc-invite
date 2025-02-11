@@ -75,6 +75,7 @@ function setCurrentSessionCount() {
 		var dayOfWeek = thisDate.getDay();
 		if (dayOfWeek !== 6 && dayOfWeek !== 0) { // Exclude Saturday (6) and Sunday (0)
 			sessionCount++;
+			alert(sessionCount);
 		}
 		thisDate.setDate(thisDate.getDate() + 1); // Move to the next day
 	}
