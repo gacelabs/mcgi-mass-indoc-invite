@@ -236,7 +236,7 @@ function setSessionEvent() {
 		todaysProgramEnd = new Date(new Date(todaysProgramStart).setHours(21, 15, 0, 0));
 	}
 
-	setCurrentSessionCount();
+	setCurrentSessionCount(); alert(sessionCount)
 	if (sessionCount === 15) {
 		setMassBaptism();
 		baptismDate = true;
@@ -246,7 +246,8 @@ function setSessionEvent() {
 		var dateAfter10Days = addDaysToDate(givenDate, 3);
 		nextProgramStart = nextMondaySession(new Date(new Date(dateAfter10Days).setHours(19, 0, 0, 0)));
 	}
-
+	alert(sessionCount)
+	
 	setEventDateTimeSession(todaysProgramStart);
 	logEventDetails(false);
 
