@@ -71,12 +71,12 @@ function setCurrentSessionCount() {
 	var thisDate = new Date(currentStartDate);
 	todaysProgramStart = new Date(new Date(todaysDate).setHours(19, 0, 0, 0));
 	// console.log(thisDate, todaysProgramStart);
-	alert(thisDate + "-" +todaysProgramStart);
+	// alert(thisDate + "-" +todaysProgramStart);
 	while (thisDate <= todaysProgramStart) {
 		var dayOfWeek = thisDate.getDay();
 		if (dayOfWeek !== 6 && dayOfWeek !== 0) { // Exclude Saturday (6) and Sunday (0)
 			sessionCount++;
-			alert(sessionCount);
+			// alert(sessionCount);
 		}
 		thisDate.setDate(thisDate.getDate() + 1); // Move to the next day
 	}
@@ -239,7 +239,7 @@ function setSessionEvent() {
 		todaysProgramEnd = new Date(new Date(todaysProgramStart).setHours(21, 15, 0, 0));
 	}
 
-	setCurrentSessionCount(); alert(sessionCount)
+	setCurrentSessionCount(); // alert(sessionCount)
 	if (sessionCount === 15) {
 		setMassBaptism();
 		baptismDate = true;
@@ -249,7 +249,7 @@ function setSessionEvent() {
 		var dateAfter10Days = addDaysToDate(givenDate, 3);
 		nextProgramStart = nextMondaySession(new Date(new Date(dateAfter10Days).setHours(19, 0, 0, 0)));
 	}
-	alert(sessionCount)
+	// alert(sessionCount)
 	
 	setEventDateTimeSession(todaysProgramStart);
 	logEventDetails(false);
