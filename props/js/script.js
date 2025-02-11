@@ -168,9 +168,7 @@ function setTuneInStatus(fnCallBack) {
 		countdownUI[0].style.display = 'block';
 	}
 
-	if (sTuneIn.length) {
-   sessionCount++;
-		document.getElementById("session-day").innerHTML = '<strong>Day ' + sessionCount + ', ' + sTuneIn + '</strong>';
+	if (sTuneIn.length) {	document.getElementById("session-day").innerHTML = '<strong>Day ' + sessionCount + ', ' + sTuneIn + '</strong>';
 		if (notificationStartSoon == false) {
 			notificationStartSoon = true;
 			if (baptismDate) {
