@@ -266,7 +266,7 @@ function updateEventCountdown() {
 		if (todaysProgramStart > currentEndDate) {
 			todaysProgramStart = new Date(new Date(todaysProgramStart).setHours(19, 0, 0, 0));
 			todaysProgramEnd = new Date(new Date(todaysProgramStart).setHours(21, 15, 0, 0));
-			sessionCount = lastSessionCount;
+			// sessionCount = lastSessionCount;
 		}
 		// console.log([14, 15].includes(sessionCount), sessionCount);
 		if ([14, 15].includes(sessionCount)) {
