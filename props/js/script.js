@@ -69,7 +69,7 @@ function logEventDetails(bClear) {
 
 function setCurrentSessionCount() {
 	var thisDate = new Date(currentStartDate);
-	todaysProgramStart = new Date(todaysDate).setHours(19, 0, 0, 0)
+	todaysProgramStart = new Date(new Date(todaysDate).setHours(19, 0, 0, 0));
 	// console.log(thisDate, todaysProgramStart);
 	alert(thisDate + "-" +todaysProgramStart);
 	while (thisDate <= todaysProgramStart) {
