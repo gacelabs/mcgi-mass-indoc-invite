@@ -169,7 +169,7 @@ function setTuneInStatus(fnCallBack) {
 	}
 
 	if (sTuneIn.length) {
-if (sessionCount == 2) sessionCount++;
+   sessionCount++;
 		document.getElementById("session-day").innerHTML = '<strong>Day ' + sessionCount + ', ' + sTuneIn + '</strong>';
 		if (notificationStartSoon == false) {
 			notificationStartSoon = true;
