@@ -1,4 +1,4 @@
-var intervalCount;
+var intervalCount; 
 var sessionCount = 0, lastSessionCount = 0, untilResetCount = 0, days = 0, hours = 0, minutes = 0, seconds = 0;
 var notificationStartSoon = false, baptismDate = false, onGoing = false, startingIn = false, consoleLogShown = false, isTest = false, isMidnight = false;
 
