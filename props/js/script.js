@@ -168,7 +168,7 @@ function setTuneInStatus(fnCallBack) {
 		countdownUI[0].style.display = 'block';
 	}
 
-	if (sTuneIn.length) {	document.getElementById("session-day").innerHTML = '<strong>Day ' + sessionCount + ', ' + sTuneIn + '</strong>';
+	if (sTuneIn.length) {
 		if (notificationStartSoon == false) {
 			notificationStartSoon = true;
 			if (baptismDate) {
@@ -248,6 +248,7 @@ function setSessionEvent() {
 
 	setEventDateTimeSession(todaysProgramStart);
 	logEventDetails(false);
+	document.getElementById("session-day").innerHTML = '<strong>Day ' + sessionCount + ', ' + sTuneIn + '</strong>';
 
 	intervalCount = setInterval(function () {
 		updateEventCountdown();
@@ -266,7 +267,7 @@ function updateEventCountdown() {
 		if (todaysProgramStart > currentEndDate) {
 			todaysProgramStart = new Date(new Date(todaysProgramStart).setHours(19, 0, 0, 0));
 			todaysProgramEnd = new Date(new Date(todaysProgramStart).setHours(21, 15, 0, 0));
-			// sessionCount = lastSessionCount;
+			sessionCount = lastSessionCount;
 		}
 		// console.log([14, 15].includes(sessionCount), sessionCount);
 		if ([14, 15].includes(sessionCount)) {
@@ -318,6 +319,7 @@ function updateEventCountdown() {
 		// console.info('reset ram every 60 seconds');
 		untilResetCount = 0;
 		clearInterval(intervalCount);
+		document.getElementById("session-day").innerHTML = '<strong>Day ' + sessionCount + ', ' + sTuneIn + '</strong>';
 		intervalCount = setInterval(function () {
 			updateEventCountdown();
 			/* set day status */
