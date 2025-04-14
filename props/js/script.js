@@ -172,7 +172,7 @@ function setTuneInStatus(fnCallBack) {
 	}
 
 	if (sTuneIn.length) {
-		document.getElementById("session-day").innerHTML = '<strong>Day ' + sessionCount + ', ' + sTuneIn + '</strong>';
+	if (sessionCount > 15) sessionCount -= 15;	document.getElementById("session-day").innerHTML = '<strong>Day ' + sessionCount + ', ' + sTuneIn + '</strong>';
 		if (notificationStartSoon == false) {
 			notificationStartSoon = true;
 			if (baptismDate) {
