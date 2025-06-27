@@ -40,10 +40,10 @@ function reqNotification(title, body, redirectUrl) {
 					for (var key in reg) {
 						if (Object.hasOwnProperty.call(reg, key)) {
 							var registration = reg[key];
-							if (registration.scope == 'https://gacelabs.github.io/mcgi-mass-indoc-invite/props/js/') {
+							if (registration.scope == 'https://digitup.online/props/js/') {
 								var options = {
 									body: body,
-									icon: '/mcgi-mass-indoc-invite/props/images/logo.png',
+									icon: '/props/images/logo.png',
 									data: {
 										redirectUrl: redirectUrl // Pass the redirect URL to the notification data
 									}
@@ -74,7 +74,7 @@ function reqNotification(title, body, redirectUrl) {
 }
 
 if ('serviceWorker' in navigator && 'PushManager' in window) {
-	navigator.serviceWorker.register('https://gacelabs.github.io/mcgi-mass-indoc-invite/props/js/service-worker.js')
+	navigator.serviceWorker.register('https://digitup.online/props/js/service-worker.js')
 	.then(function (registration) {
 		console.log('Service Worker registered with scope:', registration.scope);
 		setTimeout(() => {
@@ -98,7 +98,7 @@ function showNotification(title, body, redirectUrl) {
 			} else {
 				var options = {
 					body: body,
-					icon: '/mcgi-mass-indoc-invite/props/images/logo.png'
+					icon: '/props/images/logo.png'
 				};
 				// Check if the user has granted permission to show notifications
 				if (Notification.permission === "granted") {
