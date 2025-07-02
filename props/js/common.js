@@ -40,7 +40,7 @@ function reqNotification(title, body, redirectUrl) {
 					for (var key in reg) {
 						if (Object.hasOwnProperty.call(reg, key)) {
 							var registration = reg[key];
-							if (registration.scope == 'https://digitup.online/props/js/') {
+							if (registration.scope == 'https://gacelabs.github.io/mcgi-mass-indoc-invite/props/js/') {
 								var options = {
 									body: body,
 									icon: '/props/images/logo.png',
@@ -74,7 +74,7 @@ function reqNotification(title, body, redirectUrl) {
 }
 
 if ('serviceWorker' in navigator && 'PushManager' in window) {
-	navigator.serviceWorker.register('https://digitup.online/props/js/service-worker.js')
+	navigator.serviceWorker.register('https://gacelabs.github.io/mcgi-mass-indoc-invite/props/js/service-worker.js')
 	.then(function (registration) {
 		console.log('Service Worker registered with scope:', registration.scope);
 		setTimeout(() => {
