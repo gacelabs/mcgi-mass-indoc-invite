@@ -206,11 +206,11 @@ function setSessionEvent() {
 	if (monthsCount > 0) {
 		for (let index = 0; index < monthsCount; index++) {
 			var givenDate = new Date(currentStartDate);
-			var dateAfter28Days = addDaysToDate(givenDate, 21);
-			currentStartDate = new Date(dateAfter28Days);
+			var dateAfter21Days = addDaysToDate(givenDate, 21);
+			currentStartDate = new Date(dateAfter21Days);
 		}
 	}
-	console.log(monthsCount, currentStartDate, todaysDate);
+	// console.log(monthsCount, currentStartDate, todaysDate);
 	if (currentStartDate > todaysDate) {
 		/* this means current event not yet finish */
 		var givenDate = new Date(currentStartDate);
@@ -226,8 +226,8 @@ function setSessionEvent() {
 		/* this means current event was finished */
 		sessionCount = 0;
 		var givenDate = new Date(currentEndDate);
-		var dateAfter10Days = addDaysToDate(givenDate, 3);
-		nextProgramStart = new Date(new Date(dateAfter10Days).setHours(19, 0, 0, 0));
+		var dateAfter3Days = addDaysToDate(givenDate, 3);
+		nextProgramStart = new Date(new Date(dateAfter3Days).setHours(19, 0, 0, 0));
 
 		currentStartDate = nextProgramStart;
 		localStorage.setItem('currentStartDate', currentStartDate);
@@ -246,8 +246,8 @@ function setSessionEvent() {
 		todaysProgramStart = new Date(new Date(todaysProgramStart).setHours(8, 0, 0, 0));
 		todaysProgramEnd = new Date(new Date(todaysProgramStart).setHours(12, 0, 0, 0));
 		var givenDate = new Date(todaysProgramStart);
-		var dateAfter10Days = addDaysToDate(givenDate, 3);
-		nextProgramStart = nextMondaySession(new Date(new Date(dateAfter10Days).setHours(19, 0, 0, 0)));
+		var dateAfter3Days = addDaysToDate(givenDate, 3);
+		nextProgramStart = nextMondaySession(new Date(new Date(dateAfter3Days).setHours(19, 0, 0, 0)));
 	}
 	// alert(sessionCount)
 	if (sessionCount > 15) sessionCount = 1;
@@ -284,8 +284,8 @@ function updateEventCountdown() {
 					setMassBaptism();
 				}
 				var givenDate = new Date(todaysProgramStart);
-				var dateAfter10Days = addDaysToDate(givenDate, 10);
-				nextProgramStart = nextMondaySession(new Date(new Date(dateAfter10Days).setHours(19, 0, 0, 0)));
+				var dateAfter3Days = addDaysToDate(givenDate, 10);
+				nextProgramStart = nextMondaySession(new Date(new Date(dateAfter3Days).setHours(19, 0, 0, 0)));
 			} else {
 				nextProgramStart = nextMondaySession(new Date(addDaysToDate(todaysProgramStart, 1)));
 			}
