@@ -37,7 +37,7 @@ var setCurrentDateTime = function (sDate) {
 var todaysDate = new Date();
 
 /* start of "for testing purposes" */
-	// isTest = true; todaysDate = setCurrentDateTime(new Date('2024-07-26'));
+	// isTest = true; todaysDate = setCurrentDateTime(new Date('2025-09-04'));
 	// todaysDate = new Date(new Date(todaysDate).setHours(23, 0, 0, 0));
 /* end of "for testing purposes" */
 
@@ -100,10 +100,15 @@ function setEventDateTimeSession(todaysDate) {
 
 function setMassBaptism() {
 	document.getElementsByClassName("arial-fnt")[0].innerHTML = 'MASS BAPTISM';
-	document.querySelector('address .locale').innerHTML = '<span class="locale-name">MCGI Chapel</span>';
-	document.getElementsByClassName('locale-address')[0].textContent = '189 MacArthur Hwy, Apalit, 2016 Pampanga';
-	document.querySelector(".info-sess .sessions").style.display = 'none';
-	document.querySelector(".info-sess .social-medias").style.display = 'none';
+	document.querySelector('address .locale-name').innerHTML = 'MCGI Chapel';
+	document.querySelector('address .locale-address').innerHTML = '189 MACARTHUR HWY, APALIT, 2016 PAMPANGA'
+	document.querySelector('address .fn-event').removeAttribute('onclick');
+	document.querySelector('address .fn-event').onclick = function () {
+		openInNewTab({ textContent: "MCGI Chapel, 189 MacArthur Hwy, Apalit, 2016 Pampanga" });
+	};
+	document.querySelector('.invite-fnt').innerHTML = 'For those who want to accept the Doctrine attend our';
+	// document.querySelector(".info-sess .sessions").style.display = 'none';
+	// document.querySelector(".info-sess .social-medias").style.display = 'none';
 }
 
 function nextMondaySession(day) {
@@ -231,7 +236,10 @@ function setSessionEvent() {
 
 	var dEnd = new Date(currentStartDate).setDate(new Date(currentStartDate).getDate() + 18); /* calculate end date including weekends */
 	currentEndDate = new Date(new Date(dEnd).setHours(12, 0, 0, 0));
+	todaysProgramStart = nextMondaySession(new Date(new Date(todaysDate).setHours(19, 0, 0, 0)));
+	todaysProgramEnd = new Date(new Date(todaysProgramStart).setHours(21, 15, 0, 0));
 	nextProgramStart = nextMondaySession(new Date(addDaysToDate(todaysProgramStart, 1)));
+
 	// console.log(todaysDate, currentStartDate, currentEndDate, nextProgramStart);
 	if (todaysDate > currentEndDate) {
 		/* this means current event was finished */
