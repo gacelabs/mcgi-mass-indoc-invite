@@ -59,7 +59,7 @@ function reqNotification(title, body, redirectUrl) {
 							if (registration.scope == 'https://gacelabs.github.io/mcgi-mass-indoc-invite/props/js/') {
 								var options = {
 									body: body,
-									icon: '/props/images/logo.png',
+									icon: '/mcgi-mass-indoc-invite/props/images/logo.png',
 									data: {
 										redirectUrl: redirectUrl // Pass the redirect URL to the notification data
 									}
@@ -114,7 +114,7 @@ function showNotification(title, body, redirectUrl) {
 			} else {
 				var options = {
 					body: body,
-					icon: '/props/images/logo.png'
+					icon: '/mcgi-mass-indoc-invite/props/images/logo.png'
 				};
 				// Check if the user has granted permission to show notifications
 				if (Notification.permission === "granted") {
