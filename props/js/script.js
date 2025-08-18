@@ -1,5 +1,5 @@
 var intervalCount; 
-var sessionCount = 1, lastSessionCount = 1, untilResetCount = 0, days = 0, hours = 0, minutes = 0, seconds = 0;
+var sessionCount = 0, lastSessionCount = 0, untilResetCount = 0, days = 0, hours = 0, minutes = 0, seconds = 0;
 var notificationStartSoon = false, baptismDate = false, onGoing = false, startingIn = false, consoleLogShown = false, isTest = false, isMidnight = false;
 
 // var forNewSched = new Date();
@@ -37,7 +37,8 @@ var setCurrentDateTime = function (sDate) {
 var todaysDate = new Date();
 
 /* start of "for testing purposes" */
-	// isTest = true; todaysDate = setCurrentDateTime(new Date('2025-09-04'));
+	// isTest = true; 
+	// todaysDate = setCurrentDateTime(new Date('2025-09-04'));
 	// todaysDate = new Date(new Date(todaysDate).setHours(23, 0, 0, 0));
 /* end of "for testing purposes" */
 
@@ -76,7 +77,7 @@ function setCurrentSessionCount() {
 		var dayOfWeek = thisDate.getDay();
 		if (dayOfWeek !== 6 && dayOfWeek !== 0) { // Exclude Saturday (6) and Sunday (0)
 			sessionCount++;
-			// if (sessionCount > 15) sessionCount = 1;
+			// if (sessionCount > 15) sessionCount = 0;
 		}
 		thisDate.setDate(thisDate.getDate() + 1); // Move to the next day
 	}
@@ -99,16 +100,37 @@ function setEventDateTimeSession(todaysDate) {
 }
 
 function setMassBaptism() {
-	document.getElementsByClassName("arial-fnt")[0].innerHTML = 'MASS BAPTISM';
-	document.querySelector('address .locale-name').innerHTML = 'MCGI Chapel';
-	document.querySelector('address .locale-address').innerHTML = '189 MACARTHUR HWY, APALIT, 2016 PAMPANGA'
-	document.querySelector('address .fn-event').removeAttribute('onclick');
-	document.querySelector('address .fn-event').onclick = function () {
-		openInNewTab({ textContent: "MCGI Chapel, 189 MacArthur Hwy, Apalit, 2016 Pampanga" });
-	};
-	document.querySelector('.invite-fnt').innerHTML = 'For those who want to accept the Doctrine attend our';
-	// document.querySelector(".info-sess .sessions").style.display = 'none';
-	// document.querySelector(".info-sess .social-medias").style.display = 'none';
+	if (document.querySelector('address .locale-name').innerText != 'MCGI Chapel') {
+		document.getElementsByClassName("arial-fnt")[0].innerHTML = 'MASS BAPTISM';
+		document.querySelector('address .locale-name').innerHTML = 'MCGI Chapel';
+		document.querySelector('address .locale-address').innerHTML = '189 MACARTHUR HWY, APALIT, 2016 PAMPANGA'
+		document.querySelector('address .fn-event').removeAttribute('onclick');
+		document.querySelector('address .fn-event').onclick = function () {
+			openInNewTab({ textContent: "MCGI Chapel, 189 MacArthur Hwy, Apalit, 2016 Pampanga" });
+		};
+		document.querySelector('.invite-fnt').innerHTML = 'For those who want to accept the Doctrine attend our';
+		document.querySelector(".daytime .weektime").innerHTML = '8AM PHT';
+		baptismDate = true;
+		// document.querySelector(".info-sess .sessions").style.display = 'none';
+		// document.querySelector(".info-sess .social-medias").style.display = 'none';
+	}
+}
+
+function setMassIndoctrination() {
+	if (document.querySelector('address .locale-name').innerText != 'LOCALE OF MUZON') {
+		document.getElementsByClassName("arial-fnt")[0].innerHTML = 'MASS INDOCTRINATION';
+		document.querySelector('address .locale-name').innerHTML = 'LOCALE OF MUZON';
+		document.querySelector('address .locale-address').innerHTML = 'SITIO 40 MUZONVILLE, BRGY MUZON SJDM BULACAN'
+		document.querySelector('address .fn-event').removeAttribute('onclick');
+		document.querySelector('address .fn-event').onclick = function () {
+			openInNewTab({ textContent: "Locale of Muzon Sitio 40 Muzon Ville, Brgy Muzon SJDM Bulacan 3023" });
+		};
+		document.querySelector('.invite-fnt').innerHTML = 'We cordially invite you to attend our';
+		document.querySelector(".daytime .weektime").innerHTML = '7PM PHT';
+		baptismDate = false;
+		// document.querySelector(".info-sess .sessions").style.display = 'block';
+		// document.querySelector(".info-sess .social-medias").style.display = 'block';
+	}
 }
 
 function nextMondaySession(day) {
@@ -261,7 +283,6 @@ function setSessionEvent() {
 	setCurrentSessionCount(); // alert(sessionCount)
 	if (sessionCount === 15) {
 		setMassBaptism();
-		baptismDate = true;
 		todaysProgramStart = new Date(new Date(todaysProgramStart).setHours(8, 0, 0, 0));
 		todaysProgramEnd = new Date(new Date(todaysProgramStart).setHours(12, 0, 0, 0));
 		var givenDate = new Date(todaysProgramStart);
@@ -283,14 +304,16 @@ function setSessionEvent() {
 function updateEventCountdown() {
 	var now = new Date(setCurrentDateTime(todaysDate));
 	var distance = todaysProgramStart.getTime() - now.getTime();
-	if (distance <= 0 && !isOngoing(now)) { /* this means program ended */
+	if (distance <= 0 && !isOngoing(now)) { // this means program ended
 		if (sessionCount <= 14) sessionCount++;
 		todaysProgramStart = nextMondaySession(new Date(addDaysToDate(todaysDate, 1)));
-		/* if someone change the todaysDate in console and its greater than currentEndDate set todaysDate to currentEndDate instead */
+		// if someone change the todaysDate in console and its greater than currentEndDate set todaysDate to currentEndDate instead
 		if (todaysProgramStart > currentEndDate) {
 			todaysProgramStart = new Date(new Date(todaysProgramStart).setHours(19, 0, 0, 0));
 			todaysProgramEnd = new Date(new Date(todaysProgramStart).setHours(21, 15, 0, 0));
-			sessionCount = lastSessionCount;
+			// sessionCount = lastSessionCount;
+			sessionCount = 0;
+			setCurrentSessionCount();
 		}
 		// console.log([14, 15].includes(sessionCount), sessionCount);
 		if ([14, 15].includes(sessionCount)) {
@@ -298,22 +321,24 @@ function updateEventCountdown() {
 			todaysProgramEnd = new Date(new Date(todaysProgramStart).setHours(12, 0, 0, 0));
 			if (sessionCount === 15) {
 				if (baptismDate == false) {
-					baptismDate = true;
 					setMassBaptism();
 				}
 				var givenDate = new Date(todaysProgramStart);
-				var dateAfter3Days = addDaysToDate(givenDate, 10);
+				var dateAfter3Days = addDaysToDate(givenDate, 3);
 				nextProgramStart = nextMondaySession(new Date(new Date(dateAfter3Days).setHours(19, 0, 0, 0)));
 			} else {
 				nextProgramStart = nextMondaySession(new Date(addDaysToDate(todaysProgramStart, 1)));
 			}
 		} else {
+			setMassIndoctrination();
 			todaysProgramStart = new Date(new Date(todaysProgramStart).setHours(19, 0, 0, 0));
 			todaysProgramEnd = new Date(new Date(todaysProgramStart).setHours(21, 15, 0, 0));
 			nextProgramStart = nextMondaySession(new Date(addDaysToDate(todaysProgramStart, 1)));
 		}
 		setEventDateTimeSession(todaysProgramStart);
-		logEventDetails();
+		setTimeout(() => {
+			logEventDetails();
+		}, 300);
 		// console.log(distance, new Date(now));
 	}
 
@@ -342,7 +367,7 @@ function updateEventCountdown() {
 		// console.info('reset ram every 60 seconds');
 		untilResetCount = 0;
 		clearInterval(intervalCount);
-		if (sessionCount > 15) sessionCount = 1;
+		if (sessionCount > 15) sessionCount = 0;
 		intervalCount = setInterval(function () {
 			updateEventCountdown();
 			/* set day status */
