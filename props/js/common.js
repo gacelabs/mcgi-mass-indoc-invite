@@ -143,7 +143,9 @@ function showNotification(title, body, redirectUrl) {
 
 function openInNewTab(ui) {
 	if (ui) {
-		if (mobileCheck()) {
+		var url = 'https://www.google.com/maps/dir/Your+location/' + encodeURIComponent('MCGI ' + ui.textContent);
+		window.open(url, '_blank').focus();
+		/* if (mobileCheck()) {
 			// console.log(ui.tagName, ui.textContent, ui.classList.value);
 			var sPrepend = '';
 			if (ui.classList.value == 'locale') sPrepend = 'MCGI ';
@@ -173,7 +175,7 @@ function openInNewTab(ui) {
 				console.warn('Request failed!');
 			};
 			xhr.send();
-		}
+		} */
 	}
 }
 

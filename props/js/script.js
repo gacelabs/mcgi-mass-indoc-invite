@@ -172,7 +172,7 @@ function setTuneInStatus(fnCallBack) {
 	}
 
 	if (sTuneIn.length) {
-	if (sessionCount > 15) sessionCount -= 15;	document.getElementById("session-day").innerHTML = '<strong>Day ' + sessionCount + ', ' + sTuneIn + '</strong>';
+		if (sessionCount > 15) sessionCount -= 15;	document.getElementById("session-day").innerHTML = '<strong>Day ' + sessionCount + ', ' + sTuneIn + '</strong>';
 		if (notificationStartSoon == false) {
 			notificationStartSoon = true;
 			if (baptismDate) {
@@ -210,12 +210,12 @@ function setSessionEvent() {
 			currentStartDate = new Date(dateAfter28Days);
 		}
 	}
-	// console.log(monthsCount, currentStartDate, todaysDate);
+	console.log(monthsCount, currentStartDate, todaysDate);
 	if (currentStartDate > todaysDate) {
 		/* this means current event not yet finish */
 		var givenDate = new Date(currentStartDate);
-		var dateBefore28Days = addDaysToDate(givenDate, 21, true);
-		currentStartDate = new Date(dateBefore28Days);
+		var dateBefore21Days = addDaysToDate(givenDate, 21, true);
+		currentStartDate = new Date(dateBefore21Days);
 	}
 	localStorage.setItem('currentStartDate', currentStartDate);
 
@@ -250,6 +250,7 @@ function setSessionEvent() {
 		nextProgramStart = nextMondaySession(new Date(new Date(dateAfter10Days).setHours(19, 0, 0, 0)));
 	}
 	// alert(sessionCount)
+	if (sessionCount > 15) sessionCount = 1;
 	
 	setEventDateTimeSession(todaysProgramStart);
 	logEventDetails(false);
@@ -323,6 +324,7 @@ function updateEventCountdown() {
 		// console.info('reset ram every 60 seconds');
 		untilResetCount = 0;
 		clearInterval(intervalCount);
+		if (sessionCount > 15) sessionCount = 1;
 		intervalCount = setInterval(function () {
 			updateEventCountdown();
 			/* set day status */

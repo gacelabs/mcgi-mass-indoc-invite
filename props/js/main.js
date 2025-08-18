@@ -6,7 +6,7 @@ var users = [], isLocalDev = window.location.host.indexOf('local.') >= 0;
 			// console.log(arLiveLinks);
 			arLiveLinks.forEach(function (element) {
 				// console.log(element.tagName.toLowerCase());
-				switch (element.tagName.toLowerCase()) {
+				/* switch (element.tagName.toLowerCase()) {
 					case 'link':
 						if (element.rel != 'canonical') {
 							element.href = element.href.replace('/mcgi-mass-indoc-invite/', '/');
@@ -20,7 +20,7 @@ var users = [], isLocalDev = window.location.host.indexOf('local.') >= 0;
 					case 'meta':
 						element.remove();
 						break;
-				}
+				} */
 			});
 		}
 	}
@@ -66,7 +66,7 @@ var users = [], isLocalDev = window.location.host.indexOf('local.') >= 0;
 
 	window.addEventListener('DOMContentLoaded', setSessionEvent);
 
-	window.addEventListener('keypress', function (e) {
+	/* window.addEventListener('keypress', function (e) {
 		// console.log(e);
 		if (e.ctrlKey && e.code == "KeyM") {
 			runLocaleChangeEvent();
@@ -83,7 +83,7 @@ var users = [], isLocalDev = window.location.host.indexOf('local.') >= 0;
 		} else if (numberOfClicks < 3) {
 			secondsResetClick(1);
 		}
-	});
+	}); */
 
 	if (navigator.geolocation) {
 		// Request the user's location
