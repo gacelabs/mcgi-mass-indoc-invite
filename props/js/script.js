@@ -1,5 +1,5 @@
 var intervalCount; 
-var sessionCount = 0, lastSessionCount = 0, untilResetCount = 0, days = 0, hours = 0, minutes = 0, seconds = 0;
+var sessionCount = 1, lastSessionCount = 1, untilResetCount = 0, days = 0, hours = 0, minutes = 0, seconds = 0;
 var notificationStartSoon = false, baptismDate = false, onGoing = false, startingIn = false, consoleLogShown = false, isTest = false, isMidnight = false;
 
 // var forNewSched = new Date();
@@ -76,12 +76,12 @@ function setCurrentSessionCount() {
 		var dayOfWeek = thisDate.getDay();
 		if (dayOfWeek !== 6 && dayOfWeek !== 0) { // Exclude Saturday (6) and Sunday (0)
 			sessionCount++;
-			// alert(sessionCount);
+			// if (sessionCount > 15) sessionCount = 1;
 		}
 		thisDate.setDate(thisDate.getDate() + 1); // Move to the next day
 	}
-	if (sessionCount == 0) sessionCount = 1;
 	lastSessionCount = sessionCount;
+	// alert(sessionCount);
 }
 
 function setEventDateTimeSession(todaysDate) {
@@ -122,7 +122,8 @@ function setTuneInStatus(fnCallBack) {
 	var now = setCurrentDateTime(todaysDate);
 	var currHr = new Intl.DateTimeFormat('en-US', { hour: "numeric", hour12: true, timeZone: 'Asia/Manila' }).format(now);
 	// console.log(parseInt(currHr));
-	if ((parseInt(currHr) === 12 && currHr.indexOf('AM') >= 0) && isMidnight === false) { /* when its midnight change the todaysDate value */
+	if ((parseInt(currHr) === 12 && currHr.indexOf('AM') >= 0) && isMidnight === false) {
+		/* when its midnight change the todaysDate value */
 		isMidnight = true;
 		todaysDate = setCurrentDateTime(todaysDate);
 		now = setCurrentDateTime(todaysDate);
@@ -203,24 +204,34 @@ function setTuneInStatus(fnCallBack) {
 
 function setSessionEvent() {
 	var monthsCount = countMonths(currentStartDate, todaysDate);
+	// console.log(monthsCount, currentStartDate, todaysDate);
 	if (monthsCount > 0) {
-		for (let index = 0; index < monthsCount; index++) {
+		for (let index = 0; index <= monthsCount; index++) {
 			var givenDate = new Date(currentStartDate);
 			var dateAfter21Days = addDaysToDate(givenDate, 21);
 			currentStartDate = new Date(dateAfter21Days);
 		}
+		if (currentStartDate.getMonth() != todaysDate.getMonth()) {
+			var monthsCount = countMonths(currentStartDate, todaysDate);
+			for (let index = 0; index <= monthsCount; index++) {
+				var givenDate = new Date(currentStartDate);
+				var dateAfter21Days = addDaysToDate(givenDate, 21);
+				currentStartDate = new Date(dateAfter21Days);
+			}
+		}
 	}
-	// console.log(monthsCount, currentStartDate, todaysDate);
 	if (currentStartDate > todaysDate) {
 		/* this means current event not yet finish */
 		var givenDate = new Date(currentStartDate);
 		var dateBefore21Days = addDaysToDate(givenDate, 21, true);
 		currentStartDate = new Date(dateBefore21Days);
 	}
+	// console.log(monthsCount, currentStartDate, todaysDate);
 	localStorage.setItem('currentStartDate', currentStartDate);
 
 	var dEnd = new Date(currentStartDate).setDate(new Date(currentStartDate).getDate() + 18); /* calculate end date including weekends */
 	currentEndDate = new Date(new Date(dEnd).setHours(12, 0, 0, 0));
+	nextProgramStart = nextMondaySession(new Date(addDaysToDate(todaysProgramStart, 1)));
 	// console.log(todaysDate, currentStartDate, currentEndDate, nextProgramStart);
 	if (todaysDate > currentEndDate) {
 		/* this means current event was finished */
@@ -250,7 +261,6 @@ function setSessionEvent() {
 		nextProgramStart = nextMondaySession(new Date(new Date(dateAfter3Days).setHours(19, 0, 0, 0)));
 	}
 	// alert(sessionCount)
-	if (sessionCount > 15) sessionCount = 1;
 	
 	setEventDateTimeSession(todaysProgramStart);
 	logEventDetails(false);

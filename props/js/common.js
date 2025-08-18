@@ -13,7 +13,7 @@ function formatDateToFJY(date) {
 	return new Intl.DateTimeFormat('en-US', options).format(date);
 }
 
-function countMonths(startDate, today) {
+function countMonthsV1(startDate, today) {
 	var today = new Date(new Date(today).setHours(19, 0, 0, 0));
 	var start = new Date(startDate);
 
@@ -26,6 +26,22 @@ function countMonths(startDate, today) {
 	var monthsDifference = (todayYear - startYear) * 12 + (todayMonth - startMonth);
 
 	return monthsDifference;
+}
+
+function countMonths(date1, date2) {
+	// Ensure date1 <= date2
+	if (date1 > date2) [date1, date2] = [date2, date1];
+
+	let years = date2.getFullYear() - date1.getFullYear();
+	let months = date2.getMonth() - date1.getMonth();
+	let totalMonths = years * 12 + months;
+
+	// If the day of date2 is less than date1, the last month isn't complete
+	if (date2.getDate() < date1.getDate()) {
+		totalMonths -= 1;
+	}
+
+	return totalMonths;
 }
 
 function addDotAfterThirdCharacter(str) {
