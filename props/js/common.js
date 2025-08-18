@@ -13,7 +13,7 @@ function formatDateToFJY(date) {
 	return new Intl.DateTimeFormat('en-US', options).format(date);
 }
 
-function countMonthsV1(startDate, today) {
+function countMonths(startDate, today) {
 	var today = new Date(new Date(today).setHours(19, 0, 0, 0));
 	var start = new Date(startDate);
 
@@ -28,7 +28,7 @@ function countMonthsV1(startDate, today) {
 	return monthsDifference;
 }
 
-function countMonths(date1, date2) {
+function countMonthsV2(date1, date2) {
 	// Ensure date1 <= date2
 	if (date1 > date2) [date1, date2] = [date2, date1];
 

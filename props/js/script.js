@@ -70,10 +70,10 @@ function logEventDetails(bClear) {
 
 function setCurrentSessionCount() {
 	var thisDate = new Date(currentStartDate);
-	todaysProgramStart = new Date(new Date(todaysDate).setHours(19, 0, 0, 0));
-	// console.log(thisDate, todaysProgramStart);
-	// alert(thisDate + "-" +todaysProgramStart);
-	while (thisDate <= todaysProgramStart) {
+	var toProgramStart = new Date(new Date(todaysDate).setHours(19, 0, 0, 0));
+	// console.log(thisDate, toProgramStart);
+	// alert(thisDate + "-" +toProgramStart);
+	while (thisDate <= toProgramStart) {
 		var dayOfWeek = thisDate.getDay();
 		if (dayOfWeek !== 6 && dayOfWeek !== 0) { // Exclude Saturday (6) and Sunday (0)
 			sessionCount++;
@@ -154,7 +154,7 @@ function setTuneInStatus(fnCallBack) {
 		isMidnight = true;
 		todaysDate = setCurrentDateTime(todaysDate);
 		now = setCurrentDateTime(todaysDate);
-		logEventDetails();
+		// logEventDetails();
 	}
 
 	if (isOngoing(now)) { /* program still playing */
@@ -230,7 +230,7 @@ function setTuneInStatus(fnCallBack) {
 }
 
 function setSessionEvent() {
-	var monthsCount = countMonths(currentStartDate, todaysDate);
+	var monthsCount = countMonthsV2(currentStartDate, todaysDate);
 	// console.log(monthsCount, currentStartDate, todaysDate);
 	if (monthsCount > 0) {
 		for (let index = 0; index <= monthsCount; index++) {
@@ -238,6 +238,7 @@ function setSessionEvent() {
 			var dateAfter21Days = addDaysToDate(givenDate, 21);
 			currentStartDate = new Date(dateAfter21Days);
 		}
+		// console.log(monthsCount, currentStartDate, todaysDate);
 		if (currentStartDate.getMonth() != todaysDate.getMonth()) {
 			var monthsCount = countMonths(currentStartDate, todaysDate);
 			for (let index = 0; index <= monthsCount; index++) {
@@ -247,22 +248,22 @@ function setSessionEvent() {
 			}
 		}
 	}
-	if (currentStartDate > todaysDate) {
-		/* this means current event not yet finish */
-		var givenDate = new Date(currentStartDate);
-		var dateBefore21Days = addDaysToDate(givenDate, 21, true);
-		currentStartDate = new Date(dateBefore21Days);
-	}
+	// if (currentStartDate > todaysDate) {
+	// 	/* this means current event not yet finish */
+	// 	var givenDate = new Date(currentStartDate);
+	// 	var dateBefore21Days = addDaysToDate(givenDate, 21, true);
+	// 	currentStartDate = new Date(dateBefore21Days);
+	// }
 	// console.log(monthsCount, currentStartDate, todaysDate);
 	localStorage.setItem('currentStartDate', currentStartDate);
 
 	var dEnd = new Date(currentStartDate).setDate(new Date(currentStartDate).getDate() + 18); /* calculate end date including weekends */
 	currentEndDate = new Date(new Date(dEnd).setHours(12, 0, 0, 0));
 	todaysProgramStart = nextMondaySession(new Date(new Date(todaysDate).setHours(19, 0, 0, 0)));
-	todaysProgramEnd = new Date(new Date(todaysProgramStart).setHours(21, 15, 0, 0));
-	nextProgramStart = nextMondaySession(new Date(addDaysToDate(todaysProgramStart, 1)));
+	todaysProgramEnd = new Date(new Date(todaysDate).setHours(21, 15, 0, 0));
+	nextProgramStart = nextMondaySession(new Date(addDaysToDate(todaysDate, 1)));
 
-	// console.log(todaysDate, currentStartDate, currentEndDate, nextProgramStart);
+	// console.log(todaysDate, currentStartDate, currentEndDate, todaysProgramStart, todaysProgramEnd, nextProgramStart);
 	if (todaysDate > currentEndDate) {
 		/* this means current event was finished */
 		sessionCount = 0;
@@ -294,6 +295,7 @@ function setSessionEvent() {
 	setEventDateTimeSession(todaysProgramStart);
 	logEventDetails(false);
 
+	// console.log(todaysDate, currentStartDate, currentEndDate, todaysProgramStart, todaysProgramEnd, nextProgramStart);
 	intervalCount = setInterval(function () {
 		updateEventCountdown();
 		/* set day status */
@@ -335,9 +337,9 @@ function updateEventCountdown() {
 			todaysProgramEnd = new Date(new Date(todaysProgramStart).setHours(21, 15, 0, 0));
 			nextProgramStart = nextMondaySession(new Date(addDaysToDate(todaysProgramStart, 1)));
 		}
-		setEventDateTimeSession(todaysProgramStart);
 		setTimeout(() => {
-			logEventDetails();
+			setEventDateTimeSession(todaysProgramStart);
+			// logEventDetails();
 		}, 300);
 		// console.log(distance, new Date(now));
 	}
