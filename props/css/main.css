@@ -447,8 +447,8 @@
 	}
 
 	.date-value {
-		font-size: 11px;
-		margin: auto 20px;
+		font-size: 12px;
+		/* margin: auto 20px; */
 		vertical-align: 0px;
 	}
 
@@ -539,6 +539,7 @@
 
 	.schedule-panel .schedule .small {
 		vertical-align: 7px !important;
+		font-size: 8px !important;
 	}
 
 	.schedule-panel .schedule {
