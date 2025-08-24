@@ -70,10 +70,10 @@ function logEventDetails(bClear) {
 
 function setCurrentSessionCount() {
 	var thisDate = new Date(currentStartDate);
-	var toProgramStart = new Date(new Date(todaysDate).setHours(19, 0, 0, 0));
+	// var toProgramStart = new Date(new Date(todaysDate).setHours(19, 0, 0, 0));
 	// console.log(thisDate, toProgramStart);
 	// alert(thisDate + "-" +toProgramStart);
-	while (thisDate <= toProgramStart) {
+	while (thisDate <= todaysProgramStart) {
 		var dayOfWeek = thisDate.getDay();
 		if (dayOfWeek !== 6 && dayOfWeek !== 0) { // Exclude Saturday (6) and Sunday (0)
 			sessionCount++;
@@ -120,10 +120,10 @@ function setMassIndoctrination() {
 	if (document.querySelector('address .locale-name').innerText != 'LOCALE OF MUZON') {
 		document.getElementsByClassName("arial-fnt")[0].innerHTML = 'MASS INDOCTRINATION';
 		document.querySelector('address .locale-name').innerHTML = 'LOCALE OF MUZON';
-		document.querySelector('address .locale-address').innerHTML = 'SITIO 40 MUZONVILLE, BRGY MUZON SJDM BULACAN'
+		document.querySelector('address .locale-address').innerHTML = 'SITIO 40 MUZONVILLE, BRGY. MUZON SJDM, BULACAN'
 		document.querySelector('address .fn-event').removeAttribute('onclick');
 		document.querySelector('address .fn-event').onclick = function () {
-			openInNewTab({ textContent: "Locale of Muzon Sitio 40 Muzon Ville, Brgy Muzon SJDM Bulacan 3023" });
+			openInNewTab({ textContent: "MCGI Muzon, Sitio 40 Muzon Ville Brgy. Muzon SJDM, 3023 Bulacan" });
 		};
 		document.querySelector('.invite-fnt').innerHTML = 'We cordially invite you to attend our';
 		document.querySelector(".daytime .weektime").innerHTML = '7PM PHT';

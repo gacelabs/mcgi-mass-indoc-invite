@@ -64,9 +64,10 @@
 							<hr class="mx-auto">
 							<address class="address">
 								<span class="locale-name">LOCALE OF MUZON</span><br>
-								<span class="locale-address">SITIO 40 MUZONVILLE, BRGY MUZON SJDM BULACAN</span><br>
-								<span class="fn-event" style="cursor: pointer;" onclick='openInNewTab({textContent:"Locale of Muzon Sitio 40 Muzon Ville, Brgy Muzon SJDM Bulacan 3023"});'><b>SHOW MAP</b> 🗺️</span>
-								<span>or <span class="locale-contacts"><a href="tel:+639420087231" style="color: #212529;"> <b>CALL</b> ☎️ <span style="color: #ff0000;">0942 008 7231</span></a></span></span>
+								<span class="locale-address">SITIO 40 MUZONVILLE, BRGY. MUZON SJDM, BULACAN</span><br>
+								<span class="fn-event" style="cursor: pointer;" onclick='openInNewTab({textContent:"MCGI Muzon, Sitio 40 Muzon Ville Brgy. Muzon SJDM, 3023 Bulacan"});'><b>SHOW MAP</b> 🗺️</span>
+								<span> | <span class="locale-contacts"><a href="tel:+639420087231" style="color: #212529;"> <b>CALL/TEXT</b> ☎️ <span style="color: #ff0000;">0942 008 7231</span></a></span></span>
+								<span> | <span class="locale-contacts"><a href="javascript:;" onclick="scrollToForm()" style="color: #212529;"><b>SEND EMAIL</b> 📧</a></span></span>
 							</address>
 						</div>
 					</div>
@@ -85,20 +86,71 @@
 						</div>
 					</div>
 					<div class="row text-center pb-3">
-						<div class="text-center" id="session-day"></div>
-						<div id="countdown"></div>
+						<div class="text-center" id="session-day"><strong>#########</strong></div>
+						<div id="countdown" style="display: block;">
+							<div class="countdown-segment"><span class="countdown-label">Days</span><span class="countdown-number days">0</span></div>
+							<div class="countdown-segment"><span class="countdown-label">Hours</span><span class="countdown-number hours">0</span></div>
+							<div class="countdown-segment"><span class="countdown-label">Minutes</span><span class="countdown-number">0</span></div>
+							<div class="countdown-segment"><span class="countdown-label">Seconds</span><span class="countdown-number">0</span></div>
+						</div>
 					</div>
 				</div>
 			
 			</section>
 		</main>
 
-		<div class="container">
+		<!-- <div class="container">
 			<div class="row justify-content-center">
 				<a id="change-locale" style="display: none;" class="btn btn-sm btn-secondary col-lg-3">Change LOCALE Address</a>
 			</div>
 			<div class="row justify-content-center">
 				<p class="errors" style="display: none;"></p>
+			</div>
+		</div> -->
+
+		<section class="page-section" style="max-width: fit-content; margin: auto; text-align: center;">
+			<img src="props/images/Collage-MCGI-CARES-1.png" title="MCGI-Cares" alt="MCGI-Cares" class="mcgi-bg-image"  style="border: 1px solid #dadada; height: 20rem; width: 50rem;">
+		</section>
+		
+		<div class="form-wrapper" id="contactForm">
+			<div class="form-container">
+				<h4>Get in touch</h4>
+				<h3 style="text-align: center;">We'll show you how to be part of this special event.</h3>
+				<form method="POST" action="https://formsubmit.co/christianswayofliving@gmail.com">
+					<div id="successMessage" class="success-message">
+						✅ Thank you! Your Inquiry has been submitted successfully.
+					</div>
+					<!-- Full Name + Phone in one row -->
+					<div class="form-row">
+						<div class="form-group">
+							<label for="name">Name</label>
+							<input type="text" id="name" name="name" placeholder="Enter your name" required>
+						</div>
+						<div class="form-group">
+							<label for="phone">Cellphone Number</label>
+							<input type="tel" id="phone" name="phone" placeholder="Enter your cellphone number" required>
+						</div>
+					</div>
+				
+					<!-- Facebook Account + Email in one row -->
+					<div class="form-row">
+						<div class="form-group">
+							<label for="facebook">Facebook Account (optional)</label>
+							<input type="url" id="facebook" name="facebook" placeholder="Facebook profile link">
+						</div>
+						<div class="form-group">
+							<label for="email">Email Address</label>
+							<input type="email" id="email" name="email" placeholder="Enter your email address" required>
+						</div>
+					</div>
+
+					<input type="hidden" name="_subject" value="New MCGI MI Inquiry!">
+					<input type="hidden" name="_next" value="https://gacelabs.github.io/mcgi-mass-indoc-invite/?thank=God">
+					<input type="hidden" name="_template" value="table">
+
+					<!-- Submit Button -->
+					<button type="submit" class="submit-btn">Submit</button>
+				</form>
 			</div>
 		</div>
 	</body>
@@ -109,5 +161,13 @@
 	<script src="props/js/jsonQ.js"></script>
 	<script src="props/js/common.js"></script>
 	<script src="props/js/script.js"></script>
-	<script src="props/js/main.js"></script>
+	<script src="props/js/main.js"></script><!-- Messenger Bubble -->
+	<div class="messenger-bubble" onclick="openMessenger()">💬</div>
+	
+	<script>
+		function openMessenger() {
+			// Replace USERNAME with your personal FB username
+			window.open("https://m.me/edibong.garcia", "_blank");
+		}
+	</script>
 </html>

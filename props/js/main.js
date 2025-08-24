@@ -26,7 +26,7 @@ var users = [], isLocalDev = window.location.host.indexOf('local.') >= 0;
 	}
 
 	var localeInfos = sessionStorage.getItem('locale-informations');
-	if (window.location.search) {
+	/* if (window.location.search) {
 		// console.log('search');
 		var search = decodeURIComponent(location.search.replace(/[+]/g, ' ')).substring(1);
 		var localeInfosSearch = JSON.parse('{"' + decodeURI(search).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"') + '"}');
@@ -44,6 +44,24 @@ var users = [], isLocalDev = window.location.host.indexOf('local.') >= 0;
 		popContacts(localeInfos);
 		var urlParams = new URLSearchParams(localeInfos).toString();
 		window.history.pushState({}, '', '?' + urlParams);
+	} */
+
+	if (window.location.search) {
+		// console.log('search');
+		var search = decodeURIComponent(location.search.replace(/[+]/g, ' ')).substring(1);
+		var json = JSON.parse('{"' + decodeURI(search).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"') + '"}');
+		if (json && json.thank === 'God') {
+			// Simulate successful submission
+			const msg = document.getElementById("successMessage");
+			msg.style.display = "block";
+			// Scroll to success message
+			msg.scrollIntoView({ behavior: "smooth", block: "start" });
+			// Remove the query parameter from the URL without reloading the page
+			if (window.history.replaceState) {
+				const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+				window.history.replaceState({ path: newUrl }, '', newUrl);
+			}
+		}
 	}
 
 	// Create a new XMLHttpRequest object

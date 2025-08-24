@@ -229,3 +229,129 @@ a {
 a.locale-contacts {
 	color: black !important;
 }
+
+/* Messenger Bubble Style */
+.messenger-bubble {
+	position: fixed;
+	bottom: 20px;
+	right: 20px;
+	background-color: #0084FF;
+	color: #fff;
+	border-radius: 50%;
+	width: 60px;
+	height: 60px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 30px;
+	cursor: pointer;
+	box-shadow: 0px 0px 10px 7px rgb(67 74 95);
+	transition: transform 0.2s ease-in-out;
+	z-index: 9999;
+}
+
+.messenger-bubble:hover {
+	transform: scale(1.1);
+	background-color: #006edc;
+}
+
+.form-wrapper {
+	background-color: #ebebec;
+	/* margin: auto 90px; */
+	padding: 5px;
+	display: flex;
+	justify-content: center;
+}
+
+.form-container {
+	background: #fff;
+	padding: 15px;
+	/* border-radius: 12px; */
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+	max-width: 800px;
+	width: 100%;
+}
+
+.form-container h2 {
+	text-align: center;
+	margin-bottom: 20px;
+	color: #333;
+}
+
+.form-row {
+	display: flex;
+	gap: 15px;
+	margin-bottom: 15px;
+}
+
+.form-group {
+	flex: 1;
+}
+
+label {
+	display: block;
+	font-size: 14px;
+	margin-bottom: 5px;
+	color: #555;
+}
+
+input {
+	width: 100%;
+	padding: 10px;
+	border-radius: 8px;
+	border: 1px solid #ccc;
+	outline: none;
+	font-size: 14px;
+}
+
+input:focus {
+	border-color: #0084FF;
+	box-shadow: 0 0 4px rgba(0, 132, 255, 0.3);
+}
+/* Centered styled submit button */
+.submit-btn {
+	display: block;
+	margin: 20px auto 0;
+	background: #28a745;
+	color: white;
+	padding: 12px 30px;
+	border: none;
+	border-radius: 6px;
+	font-size: 16px;
+	cursor: pointer;
+	transition: background 0.3s ease;
+}
+
+.submit-btn:hover {
+	background: #218838;
+}
+
+/* ✅ Responsive Fix */
+@media (max-width: 600px) {
+	.form-row {
+		flex-direction: column;
+	}
+
+	.form-wrapper {
+		padding: 0;
+	}
+
+	.mcgi-bg-image {
+		max-width: 100%;
+		height: auto !important;
+		display: block;
+		margin: auto;
+	}
+}
+
+.success-message {
+	display: none;
+	background: #e6ffed;
+	color: #256d38;
+	border: 1px solid #a3d9a5;
+	padding: 15px;
+	border-radius: 8px;
+	margin-bottom: 20px;
+	font-weight: bold;
+	text-align: center;
+}
